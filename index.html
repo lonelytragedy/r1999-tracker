@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>The 1999: Summon Tracker</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="styles.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="database.js"></script>
+</head>
+
+<body>
+	<h1 class="site-header">
+		<img src="logo.png" alt="Logo" class="site-logo">
+		The 1999: Summon Tracker
+	</h1>
+
+	<div class="box">
+		<div class="box-header">
+			<h3>Управление базой данных</h3>
+			<div class="side-buttons">
+				<a href="guide.html" class="side-btn">📘 Инструкция</a>
+				<a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vSZ_xS_5dfuvV7-yfitOqCw7e8VVkqtfWCAkcFpXLYTvx7XXR7lg2e1wjTLBZJJAleeEKm-f1Y7gNI_/pubhtml"
+					target="_blank"
+					class="side-btn">📜 История баннеров</a>
+			</div>
+		</div>
+
+		<hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
+
+		<div class="file-upload profile-bar">
+			<div>
+				<input type="file" id="fileInput" style="display:none" onchange="loadFromFile(event)">
+				<button onclick="document.getElementById('fileInput').click()">📂 Выбрать файл</button>
+				<span style="font-size:14px; color:#9aa0a6; margin-left:8px;">
+					Загрузить отдельный JSON-файл круток
+				</span>
+			</div>
+
+			<div class="profiles">
+				<select id="profileSelect" onchange="switchProfile(this.value)"></select>
+				<button onclick="addProfile()">➕</button>
+				<button onclick="removeProfile()">➖</button>
+			</div>
+		</div>
+
+		<hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
+
+		<div class="db-buttons">
+			<button onclick="exportDB()">💾 Скачать базу данных</button>
+			<input type="file" id="dbInput" style="display:none">
+			<button onclick="document.getElementById('dbInput').click()">📂 Загрузить базу данных</button>
+			<button onclick="saveToCache()">💾 Сохранить в кеш браузера</button>
+			<button onclick="deleteCache()">🗑️ Удалить из кеша</button>
+		</div>
+	</div>
+
+	<div class="box">
+		<h3>Статистика</h3>
+		<div class="stats" id="stats"></div>
+
+		<div class="box">
+			<h3>График выпадений по месяцам</h3>
+			<canvas id="chart"></canvas>
+		</div>
+	</div>
+
+	<div class="box">
+		<h3>Последние 6★ крутки</h3>
+		<div class="recent-six-stars" id="recentSixStars"></div>
+	</div>
+
+	<div class="box">
+		<h3>История круток</h3>
+		<div class="filter-bar">
+			<span>Фильтр по редкости:</span>
+			<button class="active" onclick="filterByRarity(0,this)">Все</button>
+			<button class="r6" onclick="filterByRarity(6,this)">6★</button>
+			<button class="r5" onclick="filterByRarity(5,this)">5★</button>
+			<button class="r4" onclick="filterByRarity(4,this)">4★</button>
+			<button class="r3" onclick="filterByRarity(3,this)">3★</button>
+			<button class="r2" onclick="filterByRarity(2,this)">2★</button>
+		</div>
+
+		<table>
+			<thead>
+				<tr>
+					<th>Дата</th>
+					<th>Баннер</th>
+					<th>Крутка</th>
+					<th>Персонаж</th>
+				</tr>
+			</thead>
+			<tbody id="table"></tbody>
+		</table>
+	</div>
+
+	<script src="scripts.js"></script>
+	<h3>Version R1.9 - 07.02.2026</h3>
+</body>
+</html>
