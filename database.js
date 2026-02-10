@@ -4,7 +4,9 @@ const BANNERS = {
   "湖的馈赠": "Boon of the Water",
   "天真与渴盼": "Longing for Innocence",
   "湖的涟漪": "Ripples on the Water",
-  "第一滴雨": "Beginner's Choice Banner",
+  "第一滴雨": "The First Drop of Rain",
+  "火花雀儿": "The Chirps of Flame",
+  "于湖中央": "Amongst the Lake"
 };
 
 const CHARACTERS = {
