@@ -1,4 +1,5 @@
 const BANNERS = {
+  "永恒折射角": "The Brilliance Within",
   "仙子振翅入夜": "The Fairies Shining at Night",
   "命运亦需捧场": "On Fate's Cue",
   "湖的馈赠": "Boon of the Water",
