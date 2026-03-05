@@ -1,4 +1,5 @@
 const BANNERS = {
+  "誓言无有烬时": "The Oath Unyielding",
   "思维动力学": "Cognitive Dynamics",
   "永恒折射角": "The Brilliance Within",
   "仙子振翅入夜": "The Fairies Shining at Night",
