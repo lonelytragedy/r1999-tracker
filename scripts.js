@@ -1,6 +1,7 @@
 let localDB = [];
 let processedList = [];
 let processedPity = [];
+let processedTotal = [];
 let chart = null;
 let currentFilter = 0;
 let profiles = [];
@@ -14,6 +15,11 @@ window.addEventListener('DOMContentLoaded', () => {
   loadProfiles();
 });
 
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTopBtn');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+});
+
 function showToast(message, type = 'info', duration = 3000) {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
@@ -22,10 +28,18 @@ function showToast(message, type = 'info', duration = 3000) {
   document.body.appendChild(toast);
   setTimeout(() => toast.classList.add('show'), 10);
   
-  setTimeout(() => {
+  const timer = setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 300);
   }, duration);
+
+  toast._dismiss = () => {
+    clearTimeout(timer);
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  };
+
+  return toast;
 }
 
 function validateImportData(data) {
@@ -215,6 +229,60 @@ function loadFromFile(e) {
   reader.readAsText(file);
 }
 
+const PROXY = 'https://r1999tracker.posofrefraction.workers.dev/';
+
+async function loadFromURL() {
+  const url = document.getElementById('urlInput').value.trim();
+
+  if (!url) {
+    showToast('Введите ссылку', 'warning');
+    return;
+  }
+
+  if (!url.startsWith('http')) {
+    showToast('Неверный формат ссылки', 'error');
+    return;
+  }
+
+  const loadingToast = showToast('Загрузка данных...', 'info', 60000);
+
+  try {
+    const proxyUrl = PROXY + '?url=' + encodeURIComponent(url);
+    const res = await fetch(proxyUrl);
+
+    if (!res.ok) {
+      loadingToast._dismiss();
+      throw new Error(`Сервер вернул ошибку: ${res.status}`);
+    }
+
+    const json = await res.json();
+    loadingToast._dismiss();
+    validateImportData(json);
+
+    const before = localDB.length;
+    localDB = mergeDatabases(localDB, json.data.pageData);
+    const added = localDB.length - before;
+
+    parseData(localDB);
+    showToast(`Загружено ${added} новых записей (всего ${localDB.length})`, 'success', 4000);
+
+    try {
+      localStorage.setItem(`r1999_cache_${currentProfile}`, JSON.stringify(localDB));
+      localStorage.setItem(`r1999_meta_${currentProfile}`, JSON.stringify({
+        lastSave: new Date().toISOString(),
+        pullsCount: localDB.length
+      }));
+    } catch (err) {
+      if (err.name === 'QuotaExceededError') showToast('Недостаточно места в хранилище браузера', 'error');
+    }
+
+  } catch (err) {
+    loadingToast._dismiss();
+    console.error('URL import error:', err);
+    showToast(`Ошибка импорта: ${err.message}`, 'error', 5000);
+  }
+}
+
 function loadDBFile(e) {
   const input = e.target;
   const file = input.files[0];
@@ -318,13 +386,16 @@ function parseData(list) {
   const monthly = {};
   const pityCounters = {};
   processedPity = [];
+  processedTotal = [];
 
   processedList.forEach((e, i) => {
-    pityCounters[e.poolId] ??= 1;
-    processedPity[i] = pityCounters[e.poolId];
+    const key = getPityKey(e);
+    pityCounters[key] ??= 1;
+    processedPity[i] = pityCounters[key];
+    processedTotal[i] = i + 1;
 
     const isSix = e.gainIds.some(id => getChar(id).rarity === 6);
-    pityCounters[e.poolId] = isSix ? 1 : pityCounters[e.poolId] + 1;
+    pityCounters[key] = isSix ? 1 : pityCounters[key] + 1;
 
     const m = e.createTime.slice(0, 7);
     monthly[m] ??= { 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
@@ -427,16 +498,23 @@ function renderTableFast() {
   const rows = [];
 
   filtered.slice().reverse().forEach(e => {
-    const pity = processedPity[processedList.indexOf(e)];
+    const idx = processedList.indexOf(e);
+    const pity = processedPity[idx];
+    const total = processedTotal[idx];
     const c = getChar(e.gainIds[0]);
+    const type = getBannerType(e.poolName);
+
+    const typeLabel = { Character: 'Character', Limited: 'Limited', Water: 'Water', Regular: 'Regular' }[type] || 'Other';
+    const typeClass = { Character: 'type-character', Limited: 'type-limited', Water: 'type-water', Regular: 'type-regular' }[type] || 'type-other';
 
     const tr = document.createElement('tr');
     tr.className = pityColor(pity);
     tr.innerHTML = `
-      <td>${e.createTime}</td>
-      <td>${getBannerName(e.poolName)}</td>
+      <td style="text-align:center; color:#9aa0a6; font-size:13px;">${total}</td>
+      <td><span class="banner-type ${typeClass}">${typeLabel}</span> ${getBannerName(e.poolName)}</td>
       <td>${pity}</td>
       <td><span class="r${c.rarity}">${c.name} ★${c.rarity}</span></td>
+      <td style="text-align:right; color:#9aa0a6; font-size:13px; white-space:nowrap;">${e.createTime}</td>
     `;
 
     fragment.appendChild(tr);

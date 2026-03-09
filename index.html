@@ -28,6 +28,13 @@
 
 		<hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
 
+		<div class="url-import">
+			<input type="text" id="urlInput" placeholder="https://game-re-en-service.sl916.com/query/summon?userId=xxx&token=xxx">
+			<button onclick="loadFromURL()">🌐 Импорт по ссылке</button>
+		</div>
+
+		<hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
+
 		<div class="file-upload profile-bar">
 			<div>
 				<input type="file" id="fileInput" style="display:none" onchange="loadFromFile(event)">
@@ -85,17 +92,20 @@
 		<table>
 			<thead>
 				<tr>
-					<th>Дата</th>
+					<th style="width:52px; text-align:center;" title="Всего круток">№</th>
 					<th>Баннер</th>
-					<th>Крутка</th>
+					<th>Гарант</th>
 					<th>Персонаж</th>
+					<th style="text-align:right;">Дата</th>
 				</tr>
 			</thead>
 			<tbody id="table"></tbody>
 		</table>
 	</div>
 
+	<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+
 	<script src="scripts.js"></script>
-	<h3>Version R1.9 - 07.02.2026</h3>
+	<h3>Version 0.9RC - 09.03.2026</h3>
 </body>
 </html>

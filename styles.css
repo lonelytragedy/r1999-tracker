@@ -533,3 +533,95 @@ canvas {
   color: #ffffff;
   cursor: pointer;
 }
+
+.banner-type {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 5px;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}
+.type-character { background: rgba(180,100,255,.15); color: #c47fff; border: 1px solid rgba(180,100,255,.35); }
+.type-limited   { background: rgba(255,77,90,.15);  color: #ff4d5a; border: 1px solid rgba(255,77,90,.35);  }
+.type-water     { background: rgba(80,160,255,.15); color: #60aaff; border: 1px solid rgba(80,160,255,.35); }
+.type-regular   { background: rgba(255,185,60,.15); color: #ffb93c; border: 1px solid rgba(255,185,60,.35); }
+.type-other     { background: rgba(154,160,166,.15);color: #9aa0a6; border: 1px solid rgba(154,160,166,.35);}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #1c2040;
+}
+
+.url-import {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.url-import input[type="text"] {
+  flex: 1;
+  background: #1c2040;
+  border: 1px solid #2f3470;
+  color: white;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin: 0;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.url-import input[type="text"]::placeholder {
+  color: #555a80;
+}
+
+.url-import button {
+  white-space: nowrap;
+  padding: 0 14px;
+  font-size: 14px;
+  margin: 0;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+#scrollTopBtn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1c2040;
+  border: 1px solid #2f3470;
+  color: #eaeaf0;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s;
+  pointer-events: none;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+}
+
+#scrollTopBtn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+#scrollTopBtn:hover {
+  background: #2a2f60;
+  box-shadow: 0 0 12px rgba(90, 100, 255, 0.4);
+}

@@ -1,15 +1,15 @@
 const BANNERS = {
-  "誓言无有烬时": "The Oath Unyielding",
-  "思维动力学": "Cognitive Dynamics",
-  "永恒折射角": "The Brilliance Within",
-  "仙子振翅入夜": "The Fairies Shining at Night",
-  "命运亦需捧场": "On Fate's Cue",
-  "湖的馈赠": "Boon of the Water",
-  "天真与渴盼": "Longing for Innocence",
-  "湖的涟漪": "Ripples on the Water",
-  "第一滴雨": "The First Drop of Rain",
-  "火花雀儿": "The Chirps of Flame",
-  "于湖中央": "Amongst the Lake"
+  "誓言无有烬时": { name: "The Oath Unyielding", type: "Character"},
+  "思维动力学":   { name: "Cognitive Dynamics", type: "Character"},
+  "永恒折射角":   { name: "The Brilliance Within", type: "Character"},
+  "仙子振翅入夜": { name: "The Fairies Shining at Night", type: "Character"},
+  "命运亦需捧场": { name: "On Fate's Cue", type: "Limited"},
+  "湖的馈赠":     { name: "Boon of the Water", type: "Water"},
+  "天真与渴盼":   { name: "Longing for Innocence", type: "Limited"},
+  "湖的涟漪":     { name: "Ripples on the Water", type: "Water"},
+  "第一滴雨":     { name: "The First Drop of Rain", type: "Regular"},
+  "火花雀儿":     { name: "The Chirps of Flame", type: "Character"},
+  "于湖中央":     { name: "Amongst the Lake", type: "Regular"}
 };
 
 const CHARACTERS = {
@@ -134,7 +134,21 @@ const CHARACTERS = {
 };
 
 function getBannerName(cn) {
-  return BANNERS[cn] || cn;
+  const b = BANNERS[cn];
+  if (!b) return cn;
+  return b.name;
+}
+
+function getBannerType(cn) {
+  const b = BANNERS[cn];
+  if (!b) return "Character";
+  return b.type;
+}
+
+function getPityKey(e) {
+  const type = getBannerType(e.poolName);
+  if (type === "Character") return "Character";
+  return e.poolId;
 }
 
 function getChar(id) {
