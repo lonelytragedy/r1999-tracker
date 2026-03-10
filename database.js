@@ -1,4 +1,5 @@
 const BANNERS = {
+  "修缮往日": { name: "From the Ruin of the Past", type: "Character"},
   "誓言无有烬时": { name: "The Oath Unyielding", type: "Character"},
   "思维动力学":   { name: "Cognitive Dynamics", type: "Character"},
   "永恒折射角":   { name: "The Brilliance Within", type: "Character"},
