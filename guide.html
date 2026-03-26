@@ -1,68 +1,248 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Инструкция по работе с The 1999: Summon Tracker</title>
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guide - The 1999: Summon Tracker</title>
+
+  <meta name="description" content="Guide for The 1999: Summon Tracker - how to import your Reverse 1999 pull history using the auto link grabber, Fiddler, or a JSON file.">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Guide - The 1999: Summon Tracker">
+  <meta property="og:description" content="How to import your Reverse 1999 pull history and use the tracker.">
+  <meta property="og:image" content="static/ui/logo.png">
+  <meta property="og:locale" content="en_US">
+
+  <link rel="icon" href="static/ui/favicon.ico" type="image/x-icon">
+  <link rel="canonical" href="https://lonelytragedy.github.io/r1999-tracker/guide.html">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .guide-screenshot {
+      background: #1b1f40;
+      border: 1px solid #2f3470;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 12px 0;
+      font-size: 13px;
+      color: #9aa0a6;
+    }
+    .guide-screenshot img {
+      max-width: 100%;
+      border-radius: 6px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .guide-screenshot p {
+      margin: 0;
+      font-family: monospace;
+      color: #60aaff;
+      word-break: break-all;
+    }
+    .guide-code {
+      background: #1b1f40;
+      border: 1px solid #2f3470;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 8px 0;
+      font-family: monospace;
+      font-size: 13px;
+      color: #00ff9c;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .guide-step-tag {
+      display: inline-block;
+      background: rgba(127,119,221,.2);
+      border: 1px solid rgba(127,119,221,.4);
+      color: #7F77DD;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .guide-warn {
+      background: rgba(255,80,80,.1);
+      border-left: 3px solid #ff4d5a;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #ff8a8a;
+    }
+    .guide-tip {
+      background: rgba(0,200,255,.08);
+      border-left: 3px solid #00c8ff;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #80dfff;
+    }
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .method-card {
+      background: #1b1f40;
+      border: 1px solid #2f3470;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .method-card h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: #eaeaf0;
+    }
+    .method-card p {
+      margin: 0;
+      font-size: 13px;
+      color: #9aa0a6;
+      line-height: 1.5;
+    }
+    .method-card .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .badge-easy   { background: rgba(0,255,160,.15); color: #00ffa0; border: 1px solid rgba(0,255,160,.3); }
+    .badge-manual { background: rgba(255,185,60,.15); color: #ffb93c; border: 1px solid rgba(255,185,60,.3); }
+    p, li { line-height: 1.65; }
+    ul { padding-left: 20px; margin: 8px 0; }
+    li { margin-bottom: 4px; }
+  </style>
 </head>
-
 <body>
-	<h1 class="site-header">
-		<img src="logo.png" alt="Logo" class="site-logo">
-		The 1999: Summon Tracker
-		<a href="index.html" class="home-button">🏠 На главную</a>
-	</h1>
 
-	<div class="box">
-		<h3>1. Получение файла круток из игры Reverse 1999</h3>
-		<p>Чтобы импортировать крутки в базу, нужен JSON-файл. Его можно получить с помощью <b>Fiddler Classic</b>
-			<a href="https://www.telerik.com/download/fiddler" target="_blank" class="home-button" style="padding:2px 6px;">Оф. сайт</a>
-		</p>
-		<ul>
-			<li>Запустите <b>Fiddler</b> и игру <b>Reverse 1999</b></li>
-			<li>Откройте историю круток <b>(Summon->Record)</b></li>
-			<li>В Fiddler найдите запрос на историю круток, который выглядит примерно так:</li>
-		</ul>
-		<div class="guide-screenshot">
-			<img src="guide/1.png">
-			<p>https://game-re-en-service.sl916.com/query/summon?userId=xxx&token=xxx</p>
-		</div>
-		<ul>
-			<li>Выберите эту строку и нажмите <b>ПКМ->Copy->Just URL</b></li>
-			<li>Вставьте ссылку в браузер и сохраните как файл - <b>ПКМ по странице->Сохранить как</b></li>
-		</ul>
-	</div>
+  <h1 class="site-header">
+    <img src="static/ui/logo.png" alt="Logo" class="site-logo">
+    The 1999: Summon Tracker
+    <a href="index.html" class="home-button">🏠 На главную</a>
+  </h1>
 
-	<div class="box">
-		<h3>2. Загрузка файла в базу данных</h3>
-		<ul>
-			<li>Нажмите кнопку <b>📂 Выбрать файл*</b> в разделе <i>Управление базой данных</i>.</li>
-			<li>Выберите JSON-файл с крутками</li>
-			<li>Если у вас уже есть синхронизированные крутки на сайте, то он автоматически добавит <b>только новые крутки</b> к тем, которые уже есть в базе</li>
-		</ul>
-		<b>*Внимание, эта кнопка обрабатывает только крутки напрямую из игры (обработанную базу нужно загружать через кнопку 📂 Загрузить базу)</b>
-	</div>
+  <div class="box">
+    <h3>Способы импорта круток</h3>
+    <p>Есть три способа получить историю круток. Выбери наиболее удобный.</p>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="badge badge-easy">⚡ Проще всего</div>
+        <h4>🤖 Авто-граббер ссылки</h4>
+        <p>Программа автоматически перехватывает ссылку пока ты открываешь историю круток в игре. Ссылка копируется в буфер обмена и вставляется в трекер одним кликом.</p>
+      </div>
+      <div class="method-card">
+        <div class="badge badge-easy">⚡ Просто</div>
+        <h4>🌐 Импорт по ссылке</h4>
+        <p>Получи ссылку через Fiddler или авто-граббер и вставь прямо в трекер - файл скачивать не нужно, данные загрузятся автоматически.</p>
+      </div>
+      <div class="method-card">
+        <div class="badge badge-manual">🔧 Вручную</div>
+        <h4>📂 Загрузка файла</h4>
+        <p>Сохрани JSON-файл с историей круток через Fiddler или браузер и загрузи его напрямую в трекер.</p>
+      </div>
+    </div>
+  </div>
 
-	<div class="box">
-		<h3>3. Работа с профилями</h3>
-		<ul>
-			<li>Создание нового профиля: кнопка <b>➕</b>.</li>
-			<li>Переключение профиля: выпадающий список</li>
-			<li>Удаление профиля: кнопка <b>➖</b> (нельзя удалить стандартный профиль).</li>
-		</ul>
-	</div>
+  <div class="box">
+    <h3>Способ 1 - Авто-граббер ссылки <span class="guide-step-tag">Рекомендуется</span></h3>
+    <p>
+      Специальная утилита автоматически перехватывает ссылку на историю круток пока ты открываешь её в игре. Не требует настройки Fiddler.
+      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Скачать .exe</a>
+    </p>
 
-	<div class="box">
-		<h3>4. Экспорт и импорт базы данных</h3>
-		<ul>
-			<li><b>💾 Скачать базу</b> — сохранение текущей базы данных профиля в JSON-файл. Этот файл имеет свою структуру и подойдёт только для этого сайта</li>
-			<li><b>📂 Загрузить базу</b> — загрузка ранее сохранённого JSON-файла данных. <b style="color: red">Внимание</b> загрузка новой базы в профиль очищает все данные этого профиля</li>
-			<li><b>💾 Сохранить в кеш</b> — сохранение данных профиля в локальное хранилище (неактуально)</li>
-			<li><b>🗑️ Удалить из кеша</b> — очищает данные текущего профиля</li>
-		</ul>
-	</div>
+    <div class="guide-tip">Программа временно включает локальный прокси, перехватывает запрос к истории круток и автоматически копирует ссылку в буфер обмена. Игровые данные не изменяются.</div>
 
-	<script src="guide.js"></script>
+    <ul>
+      <li><span class="guide-step-tag">1</span> Скачай последний релиз со страницы Releases и запусти <b>R1999LinkGrabber.exe</b></li>
+      <li><span class="guide-step-tag">2</span> В консоли появится:</li>
+    </ul>
+    <div class="guide-code">Proxy enabled: 127.0.0.1:8080
+Starting capture...
+Launch the game and open summon history</div>
+    <ul>
+      <li><span class="guide-step-tag">3</span> Запусти <b>Reverse: 1999</b> и открой страницу истории круток <b>(Summon → Record)</b></li>
+      <li><span class="guide-step-tag">4</span> Программа автоматически найдёт ссылку и скопирует её:</li>
+    </ul>
+    <div class="guide-code">=== SUMMON LINK FOUND ===
+https://game-re-en-service.sl916.com/query/summon?...
+Link copied to clipboard</div>
+    <ul>
+      <li><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера</li>
+    </ul>
+
+    <div class="guide-warn">
+      <b>Важно:</b> не закрывай окно консоли крестиком - это может оставить системный прокси включённым. Выходи только через <b>Ctrl + C</b> или позволь программе завершиться самостоятельно после захвата ссылки.
+    </div>
+
+    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;">
+      Если прокси всё же остался включён: <b>Настройки → Сеть и интернет → Прокси → Настройка прокси вручную</b> → выключи <b>«Использовать прокси-сервер»</b>.
+    </p>
+
+    <p style="font-size:13px; color:#9aa0a6;">
+      Если хочешь запустить Python-скрипт напрямую - нужны Python 3.10–3.12 и зависимости:
+    </p>
+    <div class="guide-code">pip install mitmproxy pyperclip
+python R1999LinkGrabber.py</div>
+  </div>
+
+  <div class="box">
+    <h3>Способ 2 - Импорт по ссылке через Fiddler</h3>
+    <p>
+      Если не хочешь использовать авто-граббер, ссылку можно получить вручную через <b>Fiddler Classic</b>.
+      <a href="https://www.telerik.com/download/fiddler" target="_blank" class="home-button" style="padding:2px 6px; margin-left:6px;">Скачать Fiddler</a>
+    </p>
+    <ul>
+      <li><span class="guide-step-tag">1</span> Запусти <b>Fiddler</b> и игру <b>Reverse: 1999</b></li>
+      <li><span class="guide-step-tag">2</span> Открой историю круток в игре <b>(Summon → Record)</b></li>
+      <li><span class="guide-step-tag">3</span> В Fiddler найди запрос вида:</li>
+    </ul>
+    <div class="guide-screenshot">
+      <img src="static/guide/1.png" alt="Fiddler screenshot">
+      <p>https://game-re-en-service.sl916.com/query/summon?userId=xxx&amp;token=xxx</p>
+    </div>
+    <ul>
+      <li><span class="guide-step-tag">4</span> Выдели эту строку → <b>ПКМ → Copy → Just URL</b></li>
+      <li><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера и нажми кнопку</li>
+    </ul>
+    <div class="guide-tip">Данные загрузятся автоматически через прокси - скачивать файл не нужно.</div>
+  </div>
+
+  <div class="box">
+    <h3>Способ 3 - Загрузка JSON-файла вручную</h3>
+    <ul>
+      <li><span class="guide-step-tag">1</span> Получи ссылку любым из способов выше</li>
+      <li><span class="guide-step-tag">2</span> Открой ссылку в браузере</li>
+      <li><span class="guide-step-tag">3</span> Сохрани страницу как файл: <b>ПКМ по странице → Сохранить как</b></li>
+      <li><span class="guide-step-tag">4</span> На главной странице нажми <b>📂 Выбрать файл</b> и выбери сохранённый JSON</li>
+    </ul>
+    <div class="guide-warn"><b>Внимание:</b> кнопка «📂 Выбрать файл» принимает только оригинальный файл из игры. Для загрузки ранее сохранённой базы трекера используй кнопку <b>«📂 Загрузить базу данных»</b>.</div>
+  </div>
+
+  <div class="box">
+    <h3>Работа с профилями</h3>
+    <ul>
+      <li>Создать новый профиль - кнопка <b>➕</b></li>
+      <li>Переключить профиль - выпадающий список</li>
+      <li>Удалить профиль - кнопка <b>➖</b> (стандартный профиль удалить нельзя, только очистить)</li>
+    </ul>
+    <div class="guide-tip">Профили хранятся локально в браузере. Если сменишь браузер или устройство - используй экспорт базы данных.</div>
+  </div>
+
+  <div class="box">
+    <h3>Экспорт и импорт базы данных</h3>
+    <ul>
+      <li><b>💾 Скачать базу данных</b> - сохраняет текущий профиль в JSON-файл для резервной копии или переноса</li>
+      <li><b>📂 Загрузить базу данных</b> - загружает ранее сохранённый файл базы</li>
+    </ul>
+    <div class="guide-warn"><b>Внимание:</b> загрузка базы полностью заменяет данные текущего профиля.</div>
+  </div>
+
+  <script src="guide.js" defer></script>
 </body>
 </html>

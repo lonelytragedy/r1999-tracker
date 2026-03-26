@@ -1,111 +1,126 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>The 1999: Summon Tracker</title>
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="styles.css">
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script src="database.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The 1999: Summon Tracker - Ultimate Reverse: 1999 Summon Tracker</title>
+
+  <meta name="description" content="Summon tracker for Reverse 1999. Import your pull history, track pity, banner statistics and 6★ character drops.">
+  <meta name="author" content="The 1999: Summon Tracker">
+  <meta name="robots" content="index, follow">
+
+  <link rel="icon" href="static/ui/favicon.ico" type="image/x-icon">
+  <link rel="canonical" href="https://lonelytragedy.github.io/r1999-tracker/">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="database.js" defer></script>
 </head>
-
 <body>
-	<h1 class="site-header">
-		<img src="logo.png" alt="Logo" class="site-logo">
-		The 1999: Summon Tracker
-	</h1>
+  <div id="top-bar"></div>
 
-	<div class="box">
-		<div class="box-header">
-			<h3>Управление базой данных</h3>
-			<div class="side-buttons">
-				<a href="guide.html" class="side-btn">📘 Инструкция</a>
-				<a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vSZ_xS_5dfuvV7-yfitOqCw7e8VVkqtfWCAkcFpXLYTvx7XXR7lg2e1wjTLBZJJAleeEKm-f1Y7gNI_/pubhtml"
-					target="_blank"
-					class="side-btn">📜 История баннеров</a>
-			</div>
-		</div>
+  <h1 class="site-header">
+    <img src="static/ui/logo.png" alt="Logo" class="site-logo">
+    The 1999: Summon Tracker
+  </h1>
 
-		<hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
+  <div class="box">
+    <div class="box-header">
+      <h3>Управление базой данных</h3>
+      <div class="side-buttons">
+        <a href="guide.html" class="side-btn">📘 Инструкция</a>
+        <a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vSZ_xS_5dfuvV7-yfitOqCw7e8VVkqtfWCAkcFpXLYTvx7XXR7lg2e1wjTLBZJJAleeEKm-f1Y7gNI_/pubhtml"
+           target="_blank" class="side-btn">📜 История баннеров</a>
+      </div>
+    </div>
 
-		<div class="url-import">
-			<input type="text" id="urlInput" placeholder="https://game-re-en-service.sl916.com/query/summon?userId=xxx&token=xxx">
-			<button onclick="loadFromURL()">🌐 Импорт по ссылке</button>
-		</div>
+    <hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
 
-		<hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
+    <div class="url-import">
+      <input type="text" id="urlInput" placeholder="https://game-re-en-service.sl916.com/query/summon?userId=xxx&token=xxx">
+      <button onclick="loadFromURL()">🌐 Импорт по ссылке</button>
+    </div>
 
-		<div class="file-upload profile-bar">
-			<div>
-				<input type="file" id="fileInput" style="display:none" onchange="loadFromFile(event)">
-				<button onclick="document.getElementById('fileInput').click()">📂 Выбрать файл</button>
-				<span style="font-size:14px; color:#9aa0a6; margin-left:8px;">
-					Загрузить отдельный JSON-файл круток
-				</span>
-			</div>
+    <hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
 
-			<div class="profiles">
-				<select id="profileSelect" onchange="switchProfile(this.value)"></select>
-				<button onclick="addProfile()">➕</button>
-				<button onclick="removeProfile()">➖</button>
-			</div>
-		</div>
+    <div class="file-upload profile-bar">
+      <div>
+        <input type="file" id="fileInput" style="display:none">
+        <button onclick="document.getElementById('fileInput').click()">📂 Выбрать файл</button>
+        <span style="font-size:14px; color:#9aa0a6; margin-left:8px;">Загрузить отдельный JSON-файл круток</span>
+      </div>
+      <div class="profiles">
+        <select id="profileSelect" onchange="switchProfile(this.value)"></select>
+        <button onclick="addProfile()">➕</button>
+        <button onclick="removeProfile()">➖</button>
+      </div>
+    </div>
 
-		<hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
+    <hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
 
-		<div class="db-buttons">
-			<button onclick="exportDB()">💾 Скачать базу данных</button>
-			<input type="file" id="dbInput" style="display:none">
-			<button onclick="document.getElementById('dbInput').click()">📂 Загрузить базу данных</button>
-			<button onclick="saveToCache()">💾 Сохранить в кеш браузера</button>
-			<button onclick="deleteCache()">🗑️ Удалить из кеша</button>
-		</div>
-	</div>
+    <div class="db-buttons">
+      <button onclick="exportDB()">💾 Скачать базу данных</button>
+      <input type="file" id="dbInput" style="display:none">
+      <button onclick="document.getElementById('dbInput').click()">📂 Загрузить базу данных</button>
+    </div>
+  </div>
 
-	<div class="box">
-		<h3>Статистика</h3>
-		<div class="stats" id="stats"></div>
+  <div class="box" id="activeBannersBox">
+    <h3>Активные баннеры</h3>
+    <div class="active-banners-grid" id="activeBanners"></div>
+  </div>
 
-		<div class="box">
-			<h3>График выпадений по месяцам</h3>
-			<canvas id="chart"></canvas>
-		</div>
-	</div>
+  <div class="box" id="statsBox">
+    <h3>Статистика</h3>
+    <div class="stats" id="stats"></div>
+    <div class="banner-stats-row" id="bannerStats"></div>
+  </div>
 
-	<div class="box">
-		<h3>Последние 6★ крутки</h3>
-		<div class="recent-six-stars" id="recentSixStars"></div>
-	</div>
+  <div class="box" id="recentSixStarsBox">
+    <h3>Последние 6★ крутки</h3>
+    <div class="recent-six-stars" id="recentSixStars"></div>
+  </div>
 
-	<div class="box">
-		<h3>История круток</h3>
-		<div class="filter-bar">
-			<span>Фильтр по редкости:</span>
-			<button class="active" onclick="filterByRarity(0,this)">Все</button>
-			<button class="r6" onclick="filterByRarity(6,this)">6★</button>
-			<button class="r5" onclick="filterByRarity(5,this)">5★</button>
-			<button class="r4" onclick="filterByRarity(4,this)">4★</button>
-			<button class="r3" onclick="filterByRarity(3,this)">3★</button>
-			<button class="r2" onclick="filterByRarity(2,this)">2★</button>
-		</div>
+  <div class="box" id="chartBox">
+    <h3>График выпадений по месяцам</h3>
+    <canvas id="chart"></canvas>
+  </div>
 
-		<table>
-			<thead>
-				<tr>
-					<th style="width:52px; text-align:center;" title="Всего круток">№</th>
-					<th>Баннер</th>
-					<th>Гарант</th>
-					<th>Персонаж</th>
-					<th style="text-align:right;">Дата</th>
-				</tr>
-			</thead>
-			<tbody id="table"></tbody>
-		</table>
-	</div>
+  <div class="box">
+    <h3>История круток</h3>
+    <div class="filter-bar">
+      <span>Редкость:</span>
+      <button class="active" onclick="filterByRarity(0,this)">Все</button>
+      <button class="r6" onclick="filterByRarity(6,this)">6★</button>
+      <button class="r5" onclick="filterByRarity(5,this)">5★</button>
+      <button class="r4" onclick="filterByRarity(4,this)">4★</button>
+      <button class="r3" onclick="filterByRarity(3,this)">3★</button>
+      <button class="r2" onclick="filterByRarity(2,this)">2★</button>
+      <span style="margin-left:8px;">Тип баннера:</span>
+      <button class="filter-type-all active" onclick="filterByType(null,this)">Все</button>
+      <button class="filter-type type-limited"   onclick="filterByType('Limited',this)">Limited</button>
+      <button class="filter-type type-character" onclick="filterByType('Character',this)">Character</button>
+      <button class="filter-type type-water"     onclick="filterByType('Water',this)">Water</button>
+      <button class="filter-type type-regular"   onclick="filterByType('Regular',this)">Regular</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28px;"></th>
+          <th style="width:52px; text-align:center;" title="Всего круток">№</th>
+          <th>Баннер</th>
+          <th>Гарант</th>
+          <th>Персонаж</th>
+          <th style="text-align:right;">Дата</th>
+        </tr>
+      </thead>
+      <tbody id="table"></tbody>
+    </table>
+  </div>
 
-	<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+  <p class="version-footer">Version 1.0RC - 26.03.2026</p>
 
-	<script src="scripts.js"></script>
-	<h3>Version 0.9RC - 09.03.2026</h3>
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+
+  <script src="scripts.js" defer></script>
 </body>
 </html>

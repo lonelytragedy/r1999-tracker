@@ -1,4 +1,5 @@
 const BANNERS = {
+  "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character"},
   "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character"},
   "修缮往日": { name: "From the Ruin of the Past", type: "Character"},
   "誓言无有烬时": { name: "The Oath Unyielding", type: "Character"},
@@ -9,13 +10,36 @@ const BANNERS = {
   "湖的馈赠":     { name: "Boon of the Water", type: "Water"},
   "天真与渴盼":   { name: "Longing for Innocence", type: "Limited"},
   "湖的涟漪":     { name: "Ripples on the Water", type: "Water"},
-  "第一滴雨":     { name: "The First Drop of Rain", type: "Regular"},
   "火花雀儿":     { name: "The Chirps of Flame", type: "Character"},
+  "第一滴雨":     { name: "The First Drop of Rain", type: "Regular"},
   "于湖中央":     { name: "Amongst the Lake", type: "Regular"}
 };
 
+const ACTIVE_BANNERS = [
+  {
+    key:    "铁与血的亲证",
+    endUTC: "2026-04-16T09:59:00Z",
+    image:  "static/banners/Witness_of_Iron_and_Blood.webp",
+    rateUp: ["Igor", "Horropedia", "Baby Blue"]
+  },
+  {
+    key:    "午夜摇篮曲",
+    endUTC: "2026-04-07T09:59:00Z",
+    image:  "static/banners/Blue_Lullaby.webp",
+    rateUp: ["Tuesday", "Bkornblume", "Charlie"]
+  },
+  {
+    key:     "湖的涟漪",
+    endUTC:  "2026-04-16T09:59:00Z",
+    image:   "static/banners/Ripples_on_the_Water_3.3.webp",
+    rateUp:  ["Mercuria", "Kaalaa Baunaa", "Getian",  "Isolde", "Melania", "An-an Lee"]
+  },
+];
+
 const CHARACTERS = {
   3141: { name: "Paper Heron", rarity: 6 },
+  3139: { name: "Lorentz Butterfly", rarity: 6},
+  3137: { name: "Cheng Heguang", rarity: 6},
   3135: { name: "Brume", rarity: 6 },
   3134: { name: "Beryl", rarity: 6 },
   3132: { name: "Corvus", rarity: 6 },
@@ -75,6 +99,7 @@ const CHARACTERS = {
   3007: { name: "A Knight", rarity: 6 },
   3004: { name: "Lilya", rarity: 6 },
   3003: { name: "Druvis III", rarity: 6 },
+  
   3122: { name: "Alexios", rarity: 5 },
   3118: { name: "Name Day", rarity: 5 },
   3115: { name: "Buddy Fairchild", rarity: 5 },
@@ -104,6 +129,8 @@ const CHARACTERS = {
   3016: { name: "Baby Blue", rarity: 5 },
   3011: { name: "Sweetheart", rarity: 5 },
   3010: { name: "X", rarity: 5 },
+  
+  3138: { name: "Reed", rarity: 4},
   3101: { name: "White Rum", rarity: 4 },
   3058: { name: "Erick", rarity: 4 },
   3057: { name: "Mesmer Jr.", rarity: 4 },
@@ -120,6 +147,7 @@ const CHARACTERS = {
   3013: { name: "Зима", rarity: 4 },
   3006: { name: "Eagle", rarity: 4 },
   3005: { name: "Nick Bottom", rarity: 4 },
+  
   3096: { name: "Pioneer", rarity: 3 },
   3055: { name: "Sputnik", rarity: 3 },
   3054: { name: "ONiON", rarity: 3 },
@@ -131,21 +159,13 @@ const CHARACTERS = {
   3034: { name: "aliEn T", rarity: 3 },
   3030: { name: "La Source", rarity: 3 },
   3012: { name: "The Fool", rarity: 3 },
+  
   3059: { name: "Door", rarity: 2 },
   3027: { name: "Ms. Radio", rarity: 2 }
 };
 
-function getBannerName(cn) {
-  const b = BANNERS[cn];
-  if (!b) return cn;
-  return b.name;
-}
-
-function getBannerType(cn) {
-  const b = BANNERS[cn];
-  if (!b) return "Character";
-  return b.type;
-}
+function getBannerName(cn) { return BANNERS[cn]?.name ?? cn; }
+function getBannerType(cn) { return BANNERS[cn]?.type ?? "Character"; }
 
 function getPityKey(e) {
   const type = getBannerType(e.poolName);
@@ -154,5 +174,8 @@ function getPityKey(e) {
 }
 
 function getChar(id) {
-  return CHARACTERS[id] || { name: `ID:${id}`, rarity: "?" };
+  return CHARACTERS[id] || { name: `ID:${id}`, rarity: 6 };
 }
+
+const _charByName = Object.values(CHARACTERS).reduce((m, c) => (m[c.name] = c, m), {});
+function getCharByName(name) { return _charByName[name] || null; }
