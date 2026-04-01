@@ -1,4 +1,5 @@
 const BANNERS = {
+  "湖的企盼" : { name: "Yearning of the Water", type: "Water" },
   "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character"},
   "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character"},
   "修缮往日": { name: "From the Ruin of the Past", type: "Character"},
@@ -33,6 +34,12 @@ const ACTIVE_BANNERS = [
     endUTC:  "2026-04-16T09:59:00Z",
     image:   "static/banners/Ripples_on_the_Water_3.3.webp",
     rateUp:  ["Mercuria", "Kaalaa Baunaa", "Getian",  "Isolde", "Melania", "An-an Lee"]
+  },
+  {
+    key:    "湖的企盼",
+    endUTC: "2026-04-15T04:59:00Z",
+    image:  "static/banners/Yearning_of_the_Water_3.3.webp",
+    rateUp: ["Sentinel", "Charon"]
   },
 ];
 
