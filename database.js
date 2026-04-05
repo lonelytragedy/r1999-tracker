@@ -1,4 +1,5 @@
 const BANNERS = {
+  "度朔飞琼" : { name: "The Snow of Dushuo", type: "Special" },
   "湖的企盼" : { name: "Yearning of the Water", type: "Water" },
   "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character"},
   "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character"},
@@ -17,6 +18,12 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:    "度朔飞琼",
+    endUTC: "2026-05-28T09:59:00Z",
+    image:  "static/banners/The_Snow_of_Dushuo.webp",
+    rateUp: ["An-an Lee", "Voyager", "Regulus", "Tooth Fairy", "Barcarola", "Isolde", "Eternity", "Semmelweis", "Medicine Pocket", "Marcus", "Getian", "Vila", "Sotheby", "Argus", "Jessica", "Willow", "Noire", "A Knight", "Corvus"]
+  },
   {
     key:    "铁与血的亲证",
     endUTC: "2026-04-16T09:59:00Z",

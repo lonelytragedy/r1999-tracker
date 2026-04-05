@@ -2,8 +2,8 @@ const PROXY             = 'https://r1999tracker.posofrefraction.workers.dev/';
 const PITY_MAX          = 70;
 const PITY_COLOR_YELLOW = 50;
 const PITY_COLOR_RED    = 60;
-const BANNER_TYPE_LABELS  = { Limited: 'Limited Event', Character: 'Character Event', Water: 'Water', Regular: 'Regular' };
-const BANNER_TYPE_CLASSES = { Limited: 'type-limited',  Character: 'type-character',  Water: 'type-water',  Regular: 'type-regular' };
+const BANNER_TYPE_LABELS  = { Limited: 'Limited Event', Character: 'Character Event', Water: 'Water', Regular: 'Regular', Special: 'Special' };
+const BANNER_TYPE_CLASSES = { Limited: 'type-limited',  Character: 'type-character',  Water: 'type-water',  Regular: 'type-regular', Special: 'type-special' };
 
 let localDB               = [];
 let processedList         = [];
@@ -504,7 +504,10 @@ function renderBannerStats() {
 
   container.innerHTML = '';
 
-  Object.entries(BANNER_TYPE_LABELS).forEach(([type, label]) => {
+  const activeTypes = Object.entries(BANNER_TYPE_LABELS).filter(([type]) => typeData[type]?.pulls > 0);
+  container.style.setProperty('--banner-col-count', activeTypes.length || 1);
+
+  activeTypes.forEach(([type, label]) => {
     const data = typeData[type];
 
     let latestKey = null, latestIdx = -1;
@@ -517,29 +520,23 @@ function renderBannerStats() {
     const card        = document.createElement('div');
     card.className    = 'banner-stat-card';
 
-    if (data.pulls === 0) {
-      card.innerHTML = `
-        <div class="banner-stat-card-title">${typeTag} ${label}</div>
-        <div class="banner-stat-empty">Нет данных</div>`;
-    } else {
-      const pityColorCls = currentPity < PITY_COLOR_YELLOW ? 'pity-val-green' : currentPity < PITY_COLOR_RED ? 'pity-val-yellow' : 'pity-val-red';
-      card.innerHTML = `
-        <div class="banner-stat-card-title">${typeTag} ${label}</div>
-        <div class="banner-stat-item">
-          <div class="banner-stat-label">
-            Круток за всё время
-            <span class="sub"><img src="static/ui/ClearDrop.webp" alt="💎" onerror="this.outerHTML='💎'"> ${(data.pulls * 180).toLocaleString('ru-RU')}</span>
-          </div>
-          <div class="banner-stat-value">${data.pulls}</div>
+    const pityColorCls = currentPity < PITY_COLOR_YELLOW ? 'pity-val-green' : currentPity < PITY_COLOR_RED ? 'pity-val-yellow' : 'pity-val-red';
+    card.innerHTML = `
+      <div class="banner-stat-card-title">${typeTag} ${label}</div>
+      <div class="banner-stat-item">
+        <div class="banner-stat-label">
+          Круток за всё время
+          <span class="sub"><img src="static/ui/ClearDrop.webp" alt="💎" onerror="this.outerHTML='💎'"> ${(data.pulls * 180).toLocaleString('ru-RU')}</span>
         </div>
-        <div class="banner-stat-item">
-          <div class="banner-stat-pity-label">
-            6★ Гарант
-            <span class="pity-hint">Гарант на ${PITY_MAX} крутке</span>
-          </div>
-          <div class="banner-stat-pity-value ${pityColorCls}">${currentPity} / ${PITY_MAX}</div>
-        </div>`;
-    }
+        <div class="banner-stat-value">${data.pulls}</div>
+      </div>
+      <div class="banner-stat-item">
+        <div class="banner-stat-pity-label">
+          6★ Гарант
+          <span class="pity-hint">Гарант на ${PITY_MAX} крутке</span>
+        </div>
+        <div class="banner-stat-pity-value ${pityColorCls}">${currentPity} / ${PITY_MAX}</div>
+      </div>`;
 
     container.appendChild(card);
     requestAnimationFrame(() => card.classList.add('visible'));

@@ -212,6 +212,7 @@ canvas {
 .filter-bar button.type-character { color: #c47fff; }
 .filter-bar button.type-water     { color: #60aaff; }
 .filter-bar button.type-regular   { color: #ffb93c; }
+.filter-bar button.type-special   { color: #ff7eb3; }
 
 .filter-bar button.filter-type:hover,
 .filter-bar button.filter-type.active {
@@ -447,11 +448,12 @@ canvas {
 .type-limited   { background: rgba(255, 77, 90,.15); color: #ff4d5a; border: 1px solid rgba(255, 77, 90,.35); }
 .type-water     { background: rgba( 80,160,255,.15); color: #60aaff; border: 1px solid rgba( 80,160,255,.35); }
 .type-regular   { background: rgba(255,185, 60,.15); color: #ffb93c; border: 1px solid rgba(255,185, 60,.35); }
+.type-special   { background: rgba(255,126,179,.15); color: #ff7eb3; border: 1px solid rgba(255,126,179,.35); }
 .type-other     { background: rgba(154,160,166,.15); color: #9aa0a6; border: 1px solid rgba(154,160,166,.35); }
 
 .banner-stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(var(--banner-col-count, 4), minmax(0, 1fr));
   gap: 16px;
   margin-bottom: 20px;
 }
@@ -749,6 +751,12 @@ tr.group-hover {
   font-size: 13px;
   color: #6b6f8a;
   font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .banner-stats-row {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
 }
 
 .version-footer {
