@@ -185,6 +185,54 @@ function renderActiveBanners() {
   }
 
   tick();
+
+  requestAnimationFrame(() => {
+    container.querySelectorAll('.active-banner-rate-up').forEach(collapseRateUpChips);
+  });
+}
+
+function collapseRateUpChips(rateUpEl) {
+  const chips = Array.from(rateUpEl.querySelectorAll('.active-banner-rate-up-chip'));
+  if (chips.length <= 2) return;
+
+  const firstTop = chips[0].getBoundingClientRect().top;
+
+  let secondRowTop = null;
+  let overflowIdx = chips.length;
+
+  for (let i = 1; i < chips.length; i++) {
+    const top = chips[i].getBoundingClientRect().top;
+
+    if (secondRowTop === null && top > firstTop + 2) {
+      secondRowTop = top;
+      continue;
+    }
+
+    if (secondRowTop !== null && top > secondRowTop + 2) {
+      overflowIdx = i;
+      break;
+    }
+  }
+
+  if (overflowIdx === chips.length) return;
+
+  const showCount = overflowIdx;
+  const hiddenCount = chips.length - showCount;
+
+  for (let i = showCount; i < chips.length; i++) {
+    chips[i].style.display = 'none';
+  }
+
+  const moreBtn = document.createElement('span');
+  moreBtn.className = 'active-banner-rate-up-chip rate-up-more-btn';
+  moreBtn.textContent = `+${hiddenCount}`;
+
+  chips[showCount - 1].insertAdjacentElement('afterend', moreBtn);
+
+  moreBtn.addEventListener('click', () => {
+    chips.forEach(c => (c.style.display = ''));
+    moreBtn.remove();
+  });
 }
 
 function showToast(message, type = 'info', duration = 3000) {
