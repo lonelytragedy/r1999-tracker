@@ -1,4 +1,5 @@
 const BANNERS = {
+  "鳞与石的世纪" : { name: "Serpentine Century", type: "Character" },
   "度朔飞琼" : { name: "The Snow of Dushuo", type: "Special" },
   "湖的企盼" : { name: "Yearning of the Water", type: "Water" },
   "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character"},
@@ -25,16 +26,16 @@ const ACTIVE_BANNERS = [
     rateUp: ["An-an Lee", "Voyager", "Regulus", "Tooth Fairy", "Barcarola", "Isolde", "Eternity", "Semmelweis", "Medicine Pocket", "Marcus", "Getian", "Vila", "Sotheby", "Argus", "Jessica", "Willow", "Noire", "A Knight", "Corvus"]
   },
   {
+    key:    "鳞与石的世纪",
+    endUTC: "2026-04-21T09:59:00Z",
+    image:  "static/banners/Serpentine_Century.webp",
+    rateUp: ["Hissabeth", "Satsuki", "Brimley"]
+  },
+  {
     key:    "铁与血的亲证",
     endUTC: "2026-04-16T09:59:00Z",
     image:  "static/banners/Witness_of_Iron_and_Blood.webp",
     rateUp: ["Igor", "Horropedia", "Baby Blue"]
-  },
-  {
-    key:    "午夜摇篮曲",
-    endUTC: "2026-04-07T09:59:00Z",
-    image:  "static/banners/Blue_Lullaby.webp",
-    rateUp: ["Tuesday", "Bkornblume", "Charlie"]
   },
   {
     key:     "湖的涟漪",
