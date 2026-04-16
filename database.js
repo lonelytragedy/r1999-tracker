@@ -1,4 +1,6 @@
 const BANNERS = {
+  "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited"},
+  "湖的启示" : { name: "Revelation of the Water", type: "Water" },
   "鳞与石的世纪" : { name: "Serpentine Century", type: "Character" },
   "度朔飞琼" : { name: "The Snow of Dushuo", type: "Special" },
   "湖的企盼" : { name: "Yearning of the Water", type: "Water" },
@@ -20,10 +22,10 @@ const BANNERS = {
 
 const ACTIVE_BANNERS = [
   {
-    key:    "度朔飞琼",
+    key:    "剪春注我",
     endUTC: "2026-05-28T09:59:00Z",
-    image:  "static/banners/The_Snow_of_Dushuo.webp",
-    rateUp: ["An-an Lee", "Voyager", "Regulus", "Tooth Fairy", "Barcarola", "Isolde", "Eternity", "Semmelweis", "Medicine Pocket", "Marcus", "Getian", "Vila", "Sotheby", "Argus", "Jessica", "Willow", "Noire", "A Knight", "Corvus"]
+    image:  "static/banners/Her_Heart-Cut_Spring.webp",
+    rateUp: ["Paper Heron", "Ulu", "Tennant"]
   },
   {
     key:    "鳞与石的世纪",
@@ -32,22 +34,22 @@ const ACTIVE_BANNERS = [
     rateUp: ["Hissabeth", "Satsuki", "Brimley"]
   },
   {
-    key:    "铁与血的亲证",
-    endUTC: "2026-04-16T09:59:00Z",
-    image:  "static/banners/Witness_of_Iron_and_Blood.webp",
-    rateUp: ["Igor", "Horropedia", "Baby Blue"]
+    key:    "湖的启示",
+    endUTC: "2026-05-18T09:59:00Z",
+    image:  "static/banners/Revelation_of_the_Water_3.4.webp",
+    rateUp: ["Druvis III", "Lilya", "A Knight", "Sotheby", "Regulus", "Centurion", "An-an Lee", "Medicine Pocket", "Eternity", "Ms. NewBabel", "Voyager", "Melania", "Pickles", "Tooth Fairy", "Jessica", "Kaalaa Baunaa", "Shamane", "37", "6", "Spathodea", "Ezra", "Getian", "Semmelweis", "Isolde", "Marcus", "Vila", "Windsong", "Kakania", "J", "Mercuria", "Tuesday", "Argus", "Lopera", "Willow", "Flutterpage", "Barcarola", "Fatutu", "Noire", "Recoleta", "Aleph", "Ulrich", "Hissabeth", "Kiperina", "Moldir", "Sentinel", "Charon", "Rubuska", "Corvus"]
   },
   {
-    key:     "湖的涟漪",
-    endUTC:  "2026-04-16T09:59:00Z",
-    image:   "static/banners/Ripples_on_the_Water_3.3.webp",
-    rateUp:  ["Mercuria", "Kaalaa Baunaa", "Getian",  "Isolde", "Melania", "An-an Lee"]
+    key:    "湖的涟漪",
+    endUTC: "2026-05-28T09:59:00Z",
+    image:  "static/banners/Ripples_on_the_Water_3.4.webp",
+    rateUp: ["Tooth Fairy", "6", "Willow", "Voyager", "Regulus", "A Knight", "Sotheby", "An-an Lee"]
   },
   {
-    key:    "湖的企盼",
-    endUTC: "2026-04-15T04:59:00Z",
-    image:  "static/banners/Yearning_of_the_Water_3.3.webp",
-    rateUp: ["Sentinel", "Charon"]
+    key:    "度朔飞琼",
+    endUTC: "2026-05-28T09:59:00Z",
+    image:  "static/banners/The_Snow_of_Dushuo.webp",
+    rateUp: ["An-an Lee", "Voyager", "Regulus", "Tooth Fairy", "Barcarola", "Isolde", "Eternity", "Semmelweis", "Medicine Pocket", "Marcus", "Getian", "Vila", "Sotheby", "Argus", "Jessica", "Willow", "Noire", "A Knight", "Corvus"]
   },
 ];
 
