@@ -1,4 +1,7 @@
 const BANNERS = {
+  "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited"},
+  "湖心追述" : { name: "From the Lake's Heart", type: "Limited"},
+  "子夜独角戏" : { name: "The Midnight Flutist", type: "Character"},
   "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited"},
   "湖的启示" : { name: "Revelation of the Water", type: "Water" },
   "鳞与石的世纪" : { name: "Serpentine Century", type: "Character" },
@@ -28,10 +31,22 @@ const ACTIVE_BANNERS = [
     rateUp: ["Paper Heron", "Ulu", "Tennant"]
   },
   {
-    key:    "鳞与石的世纪",
-    endUTC: "2026-04-21T09:59:00Z",
-    image:  "static/banners/Serpentine_Century.webp",
-    rateUp: ["Hissabeth", "Satsuki", "Brimley"]
+    key:    "赤心如昼明",
+    endUTC: "2026-05-22T09:59:00Z",
+    image:  "static/banners/Moonbeam_Guardian.webp",
+    rateUp: ["Liang Yue", "Bkornblume", "Horropedia"]
+  },
+  {
+    key:    "湖心追述",
+    endUTC: "2026-05-22T09:59:00Z",
+    image:  "static/banners/From_the_Lakes_Heart.webp",
+    rateUp: ["Anjo Nala", "Lucy", "Jiu Niangzi"]
+  },
+  {
+    key:    "子夜独角戏",
+    endUTC: "2026-05-05T09:59:00Z",
+    image:  "static/banners/The_Midnight_Flutist.webp",
+    rateUp: ["Rubuska", "Necrologist", "Name Day"]
   },
   {
     key:    "湖的启示",
