@@ -1,4 +1,5 @@
 const BANNERS = {
+  "幕间蒙太奇" : { name: "A Life in Montage", type: "Character" },
   "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited"},
   "湖心追述" : { name: "From the Lake's Heart", type: "Limited"},
   "子夜独角戏" : { name: "The Midnight Flutist", type: "Character"},
@@ -43,10 +44,10 @@ const ACTIVE_BANNERS = [
     rateUp: ["Anjo Nala", "Lucy", "Jiu Niangzi"]
   },
   {
-    key:    "子夜独角戏",
-    endUTC: "2026-05-05T09:59:00Z",
-    image:  "static/banners/The_Midnight_Flutist.webp",
-    rateUp: ["Rubuska", "Necrologist", "Name Day"]
+    key:    "幕间蒙太奇",
+    endUTC: "2026-05-19T09:59:00Z",
+    image:  "static/banners/A_Life_in_Montage.webp",
+    rateUp: ["Noire", "Balloon Party", "Diggers"]
   },
   {
     key:    "湖的启示",
