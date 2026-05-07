@@ -1,4 +1,5 @@
 const BANNERS = {
+  "鸿羽若有凌云志" : { name: "Soaring Aspirations", type: "Character" },
   "幕间蒙太奇" : { name: "A Life in Montage", type: "Character" },
   "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited"},
   "湖心追述" : { name: "From the Lake's Heart", type: "Limited"},
@@ -31,6 +32,12 @@ const ACTIVE_BANNERS = [
     image:  "static/banners/Her_Heart-Cut_Spring.webp",
     rateUp: ["Paper Heron", "Ulu", "Tennant"]
   },
+  {
+    key:    "鸿羽若有凌云志",
+    endUTC: "2026-05-28T09:59:00Z",
+    image:  "static/banners/Soaring_Aspirations.webp",
+    rateUp: ["Cheng Heguang", "Baby Blue", "Blonney"]
+  },  
   {
     key:    "赤心如昼明",
     endUTC: "2026-05-22T09:59:00Z",
