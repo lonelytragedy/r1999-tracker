@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The 1999: Summon Tracker - Ultimate Reverse: 1999 Summon Tracker</title>
+  <title>The 1999: Summon Tracker</title>
 
   <meta name="description" content="Summon tracker for Reverse 1999. Import your pull history, track pity, banner statistics and 6★ character drops.">
   <meta name="author" content="The 1999: Summon Tracker">
@@ -13,31 +13,40 @@
   <link rel="canonical" href="https://lonelytragedy.github.io/r1999-tracker/">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="lang-init.js"></script>
   <script src="database.js" defer></script>
+  <script src="gdrive.js" defer></script>
 </head>
 <body>
   <div id="top-bar"></div>
 
-  <h1 class="site-header">
-    <img src="static/ui/logo.png" alt="Logo" class="site-logo">
-    The 1999: Summon Tracker
-  </h1>
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+    <h1 class="site-header" style="margin:0;">
+      <img src="static/ui/logo.png" alt="Logo" class="site-logo">
+      The 1999: Summon Tracker
+    </h1>
+    <div class="lang-switcher">
+      <button class="banner-toggle-btn" id="langRU" onclick="setLang('ru')"><img class="lang-btn-flag" src="static/ui/flag_ru.png" alt=""> RU</button>
+      <button class="banner-toggle-btn" id="langEN" onclick="setLang('en')"><img class="lang-btn-flag" src="static/ui/flag_en.png" alt=""> EN</button>
+    </div>
+  </div>
 
   <div class="box">
     <div class="box-header">
-      <h3>Управление базой данных</h3>
+      <h3 data-i18n="dbManagement"></h3>
       <div class="side-buttons">
-        <a href="guide.html" class="side-btn">📘 Инструкция</a>
+        <a href="guide.html" class="side-btn" data-i18n="guideBtn"></a>
         <a href="https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vSZ_xS_5dfuvV7-yfitOqCw7e8VVkqtfWCAkcFpXLYTvx7XXR7lg2e1wjTLBZJJAleeEKm-f1Y7gNI_/pubhtml"
-           target="_blank" class="side-btn">📜 История баннеров</a>
+           target="_blank" class="side-btn" data-i18n="bannerHistoryBtn"></a>
       </div>
     </div>
 
     <hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
 
     <div class="url-import">
-      <input type="text" id="urlInput" placeholder="https://game-re-en-service.sl916.com/query/summon?userId=xxx&token=xxx">
-      <button onclick="loadFromURL()">🌐 Импорт по ссылке</button>
+      <input type="text" id="urlInput" data-i18n-placeholder="urlPlaceholder">
+      <button onclick="loadFromURL()" data-i18n="importUrlBtn"></button>
     </div>
 
     <hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
@@ -45,8 +54,8 @@
     <div class="file-upload profile-bar">
       <div>
         <input type="file" id="fileInput" style="display:none">
-        <button onclick="document.getElementById('fileInput').click()">📂 Выбрать файл</button>
-        <span style="font-size:14px; color:#9aa0a6; margin-left:8px;">Загрузить отдельный JSON-файл круток</span>
+        <button onclick="document.getElementById('fileInput').click()" data-i18n="selectFileBtn"></button>
+        <span style="font-size:14px; color:#9aa0a6; margin-left:8px;" data-i18n="selectFileHint"></span>
       </div>
       <div class="profiles">
         <select id="profileSelect" onchange="switchProfile(this.value)"></select>
@@ -57,46 +66,71 @@
 
     <hr style="border:0; border-top:1px solid #2f3470; margin:12px 0;">
 
-    <div class="db-buttons">
-      <button onclick="exportDB()">💾 Скачать базу данных</button>
+    <div class="db-buttons-row">
       <input type="file" id="dbInput" style="display:none">
-      <button onclick="document.getElementById('dbInput').click()">📂 Загрузить базу данных</button>
+      <button class="db-btn" onclick="exportDB()" data-i18n="exportDbBtn"></button>
+      <button class="db-btn" onclick="document.getElementById('dbInput').click()" data-i18n="importDbBtn"></button>
+      <div class="db-btn-divider"></div>
+      <div class="gdrive-block">
+        <img src="static/ui/gdrive.png" alt="Google Drive" class="gdrive-icon" onerror="this.style.display='none'">
+        <span id="gdriveStatus" class="gdrive-status" data-i18n="gdriveNotConnected"></span>
+        <button id="gdriveSignInBtn"  class="db-btn gdrive-btn-signin"  onclick="gdriveSignIn()"  data-i18n="gdriveConnect"></button>
+        <button id="gdriveSignOutBtn" class="db-btn gdrive-btn-signout" onclick="gdriveSignOut()" style="display:none" data-i18n="gdriveDisconnect"></button>
+      </div>
     </div>
   </div>
 
-  <div class="box" id="activeBannersBox">
-    <h3>Активные баннеры</h3>
-    <div class="active-banners-grid" id="activeBanners"></div>
+  <div class="box" id="bannerTimelineBox">
+    <div class="banner-box-header">
+      <h3 id="bannerBoxTitle" data-i18n="bannerTimeline"></h3>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <label class="tl-tz-toggle" id="tlTzToggle">
+          <input type="checkbox" id="tlLocalTimeCheck" onchange="toggleTlLocalTime(this.checked)">
+          <span data-i18n="tlLocalTime"></span>
+          <span class="tl-tz-label" id="tlTzLabel"></span>
+        </label>
+        <div class="banner-view-toggle">
+          <button class="banner-toggle-btn active" id="toggleTimeline" onclick="setBannerView('timeline')" data-i18n="viewTimeline"></button>
+          <button class="banner-toggle-btn" id="toggleGrid" onclick="setBannerView('grid')" data-i18n="viewGrid"></button>
+        </div>
+      </div>
+    </div>
+    <div class="banner-view-panel">
+      <div id="bannerTimelineWrap" class="banner-timeline-wrap"></div>
+      <div id="activeBannersWrap" style="display:none;">
+        <div class="active-banners-grid" id="activeBanners"></div>
+      </div>
+    </div>
   </div>
 
   <div class="box" id="statsBox">
-    <h3>Статистика</h3>
+    <h3 data-i18n="statistics"></h3>
     <div class="stats" id="stats"></div>
     <div class="banner-stats-row" id="bannerStats"></div>
   </div>
 
   <div class="box" id="recentSixStarsBox">
-    <h3>Последние 6★ крутки</h3>
+    <h3 data-i18n="recentSixStars"></h3>
     <div class="recent-six-stars" id="recentSixStars"></div>
   </div>
 
   <div class="box" id="chartBox">
-    <h3>График выпадений по месяцам</h3>
+    <h3 data-i18n="monthlyChart"></h3>
     <canvas id="chart"></canvas>
   </div>
 
   <div class="box">
-    <h3>История круток</h3>
+    <h3 data-i18n="pullHistory"></h3>
     <div class="filter-bar">
-      <span>Редкость:</span>
-      <button class="active" onclick="filterByRarity(0,this)">Все</button>
+      <span data-i18n="filterRarity"></span>
+      <button class="active" onclick="filterByRarity(0,this)" data-i18n="filterAll"></button>
       <button class="r6" onclick="filterByRarity(6,this)">6★</button>
       <button class="r5" onclick="filterByRarity(5,this)">5★</button>
       <button class="r4" onclick="filterByRarity(4,this)">4★</button>
       <button class="r3" onclick="filterByRarity(3,this)">3★</button>
       <button class="r2" onclick="filterByRarity(2,this)">2★</button>
-      <span style="margin-left:8px;">Тип баннера:</span>
-      <button class="filter-type-all active" onclick="filterByType(null,this)">Все</button>
+      <span style="margin-left:8px;" data-i18n="filterBannerType"></span>
+      <button class="filter-type-all active" onclick="filterByType(null,this)" data-i18n="filterAll"></button>
       <button class="filter-type type-limited"   onclick="filterByType('Limited',this)">Limited</button>
       <button class="filter-type type-character" onclick="filterByType('Character',this)">Character</button>
       <button class="filter-type type-water"     onclick="filterByType('Water',this)">Water</button>
@@ -107,20 +141,20 @@
       <thead>
         <tr>
           <th style="width:28px;"></th>
-          <th style="width:52px; text-align:center;" title="Всего круток">№</th>
-          <th>Баннер</th>
-          <th>Гарант</th>
-          <th>Персонаж</th>
-          <th style="text-align:right;">Дата</th>
+          <th style="width:52px; text-align:center;" data-i18n-title="thTotalPulls">№</th>
+          <th data-i18n="thBanner"></th>
+          <th data-i18n="thPity"></th>
+          <th data-i18n="thCharacter"></th>
+          <th style="text-align:right;" data-i18n="thDate"></th>
         </tr>
       </thead>
       <tbody id="table"></tbody>
     </table>
   </div>
 
-  <p class="version-footer">Version 1.1RC - 05.04.2026</p>
+  <p class="version-footer">Version 2.0 WIP — 28.05.2026</p>
 
-  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+  <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-i18n-title="scrollTop">↑</button>
 
   <script src="scripts.js" defer></script>
 </body>

@@ -1,4 +1,7 @@
 const BANNERS = {
+  "ramona": { name: "Conduit of the Unseen", type: "Character" },
+  "奇异吸引子": { name: "The Strange Attractor", type: "Character" },
+  "虚影的实鉴": { name: "Observation into the Mirrors", type: "Character" },
   "鸿羽若有凌云志" : { name: "Soaring Aspirations", type: "Character" },
   "幕间蒙太奇" : { name: "A Life in Montage", type: "Character" },
   "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited"},
@@ -27,56 +30,44 @@ const BANNERS = {
 
 const ACTIVE_BANNERS = [
   {
-    key:    "剪春注我",
-    endUTC: "2026-05-28T09:59:00Z",
-    image:  "static/banners/Her_Heart-Cut_Spring.webp",
-    rateUp: ["Paper Heron", "Ulu", "Tennant"]
+    key:      "湖的涟漪",
+    startUTC: "2026-05-28T10:00:00Z",
+    endUTC:   "2026-07-02T09:59:00Z",
+    image:    "static/banners/Ripples_on_the_Water_3.5.webp",
+    rateUp:  ["Spathodea", "Tuesday", "Isolde", "Willow", "Sotheby", "Tooth Fairy"]
   },
   {
-    key:    "鸿羽若有凌云志",
-    endUTC: "2026-05-28T09:59:00Z",
-    image:  "static/banners/Soaring_Aspirations.webp",
-    rateUp: ["Cheng Heguang", "Baby Blue", "Blonney"]
-  },  
-  {
-    key:    "赤心如昼明",
-    endUTC: "2026-05-22T09:59:00Z",
-    image:  "static/banners/Moonbeam_Guardian.webp",
-    rateUp: ["Liang Yue", "Bkornblume", "Horropedia"]
+    key:      "湖的企盼",
+    startUTC: "2026-06-01T05:00:00Z",
+    endUTC:   "2026-06-15T04:59:00Z",
+    image:    "static/banners/Yearning_of_the_Water.webp",
+    rateUp:  ["Corvus", "Brume"]
   },
   {
-    key:    "湖心追述",
-    endUTC: "2026-05-22T09:59:00Z",
-    image:  "static/banners/From_the_Lakes_Heart.webp",
-    rateUp: ["Anjo Nala", "Lucy", "Jiu Niangzi"]
+    key:      "ramona",
+    startUTC: "2026-06-18T10:00:00Z",
+    endUTC:   "2026-07-02T09:59:00Z",
+    image:    "static/banners/Conduit_of_the_Unseen.webp",
+    rateUp: ["Ramona", "Loggerhead", "Kanjira"]
   },
   {
-    key:    "幕间蒙太奇",
-    endUTC: "2026-05-19T09:59:00Z",
-    image:  "static/banners/A_Life_in_Montage.webp",
-    rateUp: ["Noire", "Balloon Party", "Diggers"]
+    key:      "奇异吸引子",
+    startUTC: "2026-05-28T10:00:00Z",
+    endUTC:   "2026-06-18T09:59:00Z",
+    image:    "static/banners/The_Strange_Attractor.webp",
+    rateUp: ["Lorentz Butterfly", "X", "Barbara"]
   },
   {
-    key:    "湖的启示",
-    endUTC: "2026-05-18T09:59:00Z",
-    image:  "static/banners/Revelation_of_the_Water_3.4.webp",
-    rateUp: ["Druvis III", "Lilya", "A Knight", "Sotheby", "Regulus", "Centurion", "An-an Lee", "Medicine Pocket", "Eternity", "Ms. NewBabel", "Voyager", "Melania", "Pickles", "Tooth Fairy", "Jessica", "Kaalaa Baunaa", "Shamane", "37", "6", "Spathodea", "Ezra", "Getian", "Semmelweis", "Isolde", "Marcus", "Vila", "Windsong", "Kakania", "J", "Mercuria", "Tuesday", "Argus", "Lopera", "Willow", "Flutterpage", "Barcarola", "Fatutu", "Noire", "Recoleta", "Aleph", "Ulrich", "Hissabeth", "Kiperina", "Moldir", "Sentinel", "Charon", "Rubuska", "Corvus"]
-  },
-  {
-    key:    "湖的涟漪",
-    endUTC: "2026-05-28T09:59:00Z",
-    image:  "static/banners/Ripples_on_the_Water_3.4.webp",
-    rateUp: ["Tooth Fairy", "6", "Willow", "Voyager", "Regulus", "A Knight", "Sotheby", "An-an Lee"]
-  },
-  {
-    key:    "度朔飞琼",
-    endUTC: "2026-05-28T09:59:00Z",
-    image:  "static/banners/The_Snow_of_Dushuo.webp",
-    rateUp: ["An-an Lee", "Voyager", "Regulus", "Tooth Fairy", "Barcarola", "Isolde", "Eternity", "Semmelweis", "Medicine Pocket", "Marcus", "Getian", "Vila", "Sotheby", "Argus", "Jessica", "Willow", "Noire", "A Knight", "Corvus"]
+    key:     "虚影的实鉴",
+    startUTC: "2026-05-19T10:00:00Z",
+    endUTC:   "2026-06-03T09:59:00Z",
+    image:    "static/banners/Observation_into_the_Mirrors.webp",
+    rateUp: ["Kakania", "Mr. Duncan", "Yenisei"]
   },
 ];
 
 const CHARACTERS = {
+  3142: { name: "Ramona", rarity: 6},
   3141: { name: "Paper Heron", rarity: 6 },
   3139: { name: "Lorentz Butterfly", rarity: 6},
   3137: { name: "Cheng Heguang", rarity: 6},

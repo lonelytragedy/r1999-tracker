@@ -1,19 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Guide - The 1999: Summon Tracker</title>
-
-  <meta name="description" content="Guide for The 1999: Summon Tracker - how to import your Reverse 1999 pull history using the auto link grabber, Fiddler, or a JSON file.">
+  <title>Guide — The 1999: Summon Tracker</title>
+  <meta name="description" content="Guide for The 1999: Summon Tracker — how to import your Reverse 1999 pull history.">
   <meta name="robots" content="index, follow">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Guide - The 1999: Summon Tracker">
-  <meta property="og:description" content="How to import your Reverse 1999 pull history and use the tracker.">
-  <meta property="og:image" content="static/ui/logo.png">
-  <meta property="og:locale" content="en_US">
-
   <link rel="icon" href="static/ui/favicon.ico" type="image/x-icon">
   <link rel="canonical" href="https://lonelytragedy.github.io/r1999-tracker/guide.html">
   <link rel="stylesheet" href="styles.css">
@@ -117,132 +109,279 @@
     p, li { line-height: 1.65; }
     ul { padding-left: 20px; margin: 8px 0; }
     li { margin-bottom: 4px; }
+
+    .lang-switcher {
+      display: inline-flex;
+      gap: 4px;
+      background: var(--scrollbar-track);
+      border: 1px solid var(--border-tl);
+      border-radius: 8px;
+      padding: 3px;
+      vertical-align: middle;
+    }
+    .lang-btn-flag {
+      width: 16px; height: 12px;
+      border-radius: 2px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+
+    [data-ru], [data-en] { display: none !important; }
+    html[lang="ru"] [data-ru] { display: block !important; }
+    html[lang="en"] [data-en] { display: block !important; }
+    html[lang="ru"] .badge[data-ru] { display: inline-block !important; }
+    html[lang="en"] .badge[data-en] { display: inline-block !important; }
+    html[lang="ru"] span[data-ru] { display: inline !important; }
+    html[lang="en"] span[data-en] { display: inline !important; }
+    html[lang="ru"] a[data-ru] { display: inline !important; }
+    html[lang="en"] a[data-en] { display: inline !important; }
+    html[lang="ru"] li[data-ru] { display: list-item !important; }
+    html[lang="en"] li[data-en] { display: list-item !important; }
   </style>
 </head>
 <body>
 
-  <h1 class="site-header">
-    <img src="static/ui/logo.png" alt="Logo" class="site-logo">
-    The 1999: Summon Tracker
-    <a href="index.html" class="home-button">🏠 На главную</a>
-  </h1>
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+    <h1 class="site-header" style="margin:0;">
+      <img src="static/ui/logo.png" alt="Logo" class="site-logo">
+      The 1999: Summon Tracker
+    </h1>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <div class="lang-switcher">
+        <button class="banner-toggle-btn" id="langRU" onclick="setLang('ru')"><svg class="lang-btn-flag" viewBox="0 0 16 12" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="4" fill="#fff"/><rect y="4" width="16" height="4" fill="#0039A6"/><rect y="8" width="16" height="4" fill="#D52B1E"/></svg> RU</button>
+        <button class="banner-toggle-btn" id="langEN" onclick="setLang('en')"><svg class="lang-btn-flag" viewBox="0 0 16 12" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="12" fill="#012169"/><path d="M0,0 L16,12 M16,0 L0,12" stroke="#fff" stroke-width="2.4"/><path d="M0,0 L16,12 M16,0 L0,12" stroke="#C8102E" stroke-width="1.4"/><path d="M8,0 V12 M0,6 H16" stroke="#fff" stroke-width="4"/><path d="M8,0 V12 M0,6 H16" stroke="#C8102E" stroke-width="2.4"/></svg> EN</button>
+      </div>
+      <a href="index.html" class="home-button">
+        <span data-ru>🏠 На главную</span>
+        <span data-en>🏠 Home</span>
+      </a>
+    </div>
+  </div>
 
   <div class="box">
-    <h3>Способы импорта круток</h3>
-    <p>Есть три способа получить историю круток. Выбери наиболее удобный.</p>
+    <h3 data-ru>Способы импорта круток</h3>
+    <h3 data-en>Import Methods</h3>
+    <p data-ru>Есть три способа получить историю круток. Выбери наиболее удобный.</p>
+    <p data-en>There are three ways to get your pull history. Choose whichever works best for you.</p>
     <div class="method-grid">
       <div class="method-card">
-        <div class="badge badge-easy">⚡ Проще всего</div>
-        <h4>🤖 Авто-граббер ссылки</h4>
-        <p>Программа автоматически перехватывает ссылку пока ты открываешь историю круток в игре. Ссылка копируется в буфер обмена и вставляется в трекер одним кликом.</p>
+        <div class="badge badge-easy" data-ru>⚡ Проще всего</div>
+        <div class="badge badge-easy" data-en>⚡ Easiest</div>
+        <h4 data-ru>🤖 Авто-граббер ссылки</h4>
+        <h4 data-en>🤖 Auto Link Grabber</h4>
+        <p data-ru>Программа автоматически перехватывает ссылку пока ты открываешь историю круток в игре. Ссылка копируется в буфер обмена и вставляется в трекер одним кликом.</p>
+        <p data-en>The app automatically intercepts the link while you open your pull history in-game. The link is copied to your clipboard and can be pasted into the tracker with one click.</p>
       </div>
       <div class="method-card">
-        <div class="badge badge-easy">⚡ Просто</div>
-        <h4>🌐 Импорт по ссылке</h4>
-        <p>Получи ссылку через Fiddler или авто-граббер и вставь прямо в трекер - файл скачивать не нужно, данные загрузятся автоматически.</p>
+        <div class="badge badge-easy" data-ru>⚡ Просто</div>
+        <div class="badge badge-easy" data-en>⚡ Easy</div>
+        <h4 data-ru>🌐 Импорт по ссылке</h4>
+        <h4 data-en>🌐 Import by URL</h4>
+        <p data-ru>Получи ссылку через Fiddler или авто-граббер и вставь прямо в трекер — файл скачивать не нужно, данные загрузятся автоматически.</p>
+        <p data-en>Get the URL via Fiddler or the auto-grabber and paste it directly into the tracker — no file download needed, data loads automatically.</p>
       </div>
       <div class="method-card">
-        <div class="badge badge-manual">🔧 Вручную</div>
-        <h4>📂 Загрузка файла</h4>
-        <p>Сохрани JSON-файл с историей круток через Fiddler или браузер и загрузи его напрямую в трекер.</p>
+        <div class="badge badge-manual" data-ru>🔧 Вручную</div>
+        <div class="badge badge-manual" data-en>🔧 Manual</div>
+        <h4 data-ru>📂 Загрузка файла</h4>
+        <h4 data-en>📂 File Upload</h4>
+        <p data-ru>Сохрани JSON-файл с историей круток через Fiddler или браузер и загрузи его напрямую в трекер.</p>
+        <p data-en>Save the pull history JSON file via Fiddler or browser and upload it directly to the tracker.</p>
       </div>
     </div>
   </div>
 
   <div class="box">
-    <h3>Способ 1 - Авто-граббер ссылки <span class="guide-step-tag">Рекомендуется</span></h3>
-    <p>
+    <h3 data-ru>Способ 1 — Авто-граббер ссылки <span class="guide-step-tag">Рекомендуется</span></h3>
+    <h3 data-en>Method 1 — Auto Link Grabber <span class="guide-step-tag">Recommended</span></h3>
+
+    <p data-ru>
       Специальная утилита автоматически перехватывает ссылку на историю круток пока ты открываешь её в игре. Не требует настройки Fiddler.
       <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Скачать .exe</a>
     </p>
+    <p data-en>
+      A small utility that automatically intercepts your pull history link while you open it in-game. No Fiddler setup required.
+      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Download .exe</a>
+    </p>
 
-    <div class="guide-tip">Программа временно включает локальный прокси, перехватывает запрос к истории круток и автоматически копирует ссылку в буфер обмена. Игровые данные не изменяются.</div>
+    <div class="guide-tip" data-ru>Программа временно включает локальный прокси, перехватывает запрос к истории круток и автоматически копирует ссылку в буфер обмена. Игровые данные не изменяются.</div>
+    <div class="guide-tip" data-en>The utility temporarily enables a local proxy, intercepts the pull history request, and automatically copies the link to your clipboard. No game data is modified.</div>
 
     <ul>
-      <li><span class="guide-step-tag">1</span> Скачай последний релиз со страницы Releases и запусти <b>R1999LinkGrabber.exe</b></li>
-      <li><span class="guide-step-tag">2</span> В консоли появится:</li>
+      <li data-ru><span class="guide-step-tag">1</span> Скачай последний релиз со страницы Releases и запусти <b>R1999LinkGrabber.exe</b></li>
+      <li data-en><span class="guide-step-tag">1</span> Download the latest release from the Releases page and run <b>R1999LinkGrabber.exe</b></li>
+      <li data-ru><span class="guide-step-tag">2</span> В консоли появится:</li>
+      <li data-en><span class="guide-step-tag">2</span> The console will show:</li>
     </ul>
     <div class="guide-code">Proxy enabled: 127.0.0.1:8080
 Starting capture...
 Launch the game and open summon history</div>
     <ul>
-      <li><span class="guide-step-tag">3</span> Запусти <b>Reverse: 1999</b> и открой страницу истории круток <b>(Summon → Record)</b></li>
-      <li><span class="guide-step-tag">4</span> Программа автоматически найдёт ссылку и скопирует её:</li>
+      <li data-ru><span class="guide-step-tag">3</span> Запусти <b>Reverse: 1999</b> и открой страницу истории круток <b>(Summon → Record)</b></li>
+      <li data-en><span class="guide-step-tag">3</span> Launch <b>Reverse: 1999</b> and open the pull history page <b>(Summon → Record)</b></li>
+      <li data-ru><span class="guide-step-tag">4</span> Программа автоматически найдёт ссылку и скопирует её:</li>
+      <li data-en><span class="guide-step-tag">4</span> The app will automatically find and copy the link:</li>
     </ul>
     <div class="guide-code">=== SUMMON LINK FOUND ===
 https://game-re-en-service.sl916.com/query/summon?...
 Link copied to clipboard</div>
     <ul>
-      <li><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера</li>
+      <li data-ru><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера</li>
+      <li data-en><span class="guide-step-tag">5</span> Paste the link into the <b>🌐 Import by URL</b> field on the tracker's main page</li>
     </ul>
 
-    <div class="guide-warn">
-      <b>Важно:</b> не закрывай окно консоли крестиком - это может оставить системный прокси включённым. Выходи только через <b>Ctrl + C</b> или позволь программе завершиться самостоятельно после захвата ссылки.
+    <div class="guide-warn" data-ru>
+      <b>Важно:</b> не закрывай окно консоли крестиком — это может оставить системный прокси включённым. Выходи только через <b>Ctrl + C</b> или позволь программе завершиться самостоятельно после захвата ссылки.
+    </div>
+    <div class="guide-warn" data-en>
+      <b>Important:</b> do not close the console window with the X button — this may leave the system proxy enabled. Exit only via <b>Ctrl + C</b> or let the program finish automatically after capturing the link.
     </div>
 
-    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;">
+    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;" data-ru>
       Если прокси всё же остался включён: <b>Настройки → Сеть и интернет → Прокси → Настройка прокси вручную</b> → выключи <b>«Использовать прокси-сервер»</b>.
     </p>
+    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;" data-en>
+      If the proxy remains enabled: <b>Settings → Network & Internet → Proxy → Manual proxy setup</b> → disable <b>"Use a proxy server"</b>.
+    </p>
 
-    <p style="font-size:13px; color:#9aa0a6;">
-      Если хочешь запустить Python-скрипт напрямую - нужны Python 3.10–3.12 и зависимости:
+    <p style="font-size:13px; color:#9aa0a6;" data-ru>
+      Если хочешь запустить Python-скрипт напрямую — нужны Python 3.10–3.12 и зависимости:
+    </p>
+    <p style="font-size:13px; color:#9aa0a6;" data-en>
+      To run the Python script directly — requires Python 3.10–3.12 and dependencies:
     </p>
     <div class="guide-code">pip install mitmproxy pyperclip
 python R1999LinkGrabber.py</div>
   </div>
 
   <div class="box">
-    <h3>Способ 2 - Импорт по ссылке через Fiddler</h3>
-    <p>
+    <h3 data-ru>Способ 2 — Импорт по ссылке через Fiddler</h3>
+    <h3 data-en>Method 2 — Import by URL via Fiddler</h3>
+
+    <p data-ru>
       Если не хочешь использовать авто-граббер, ссылку можно получить вручную через <b>Fiddler Classic</b>.
       <a href="https://www.telerik.com/download/fiddler" target="_blank" class="home-button" style="padding:2px 6px; margin-left:6px;">Скачать Fiddler</a>
     </p>
+    <p data-en>
+      If you prefer not to use the auto-grabber, you can get the URL manually via <b>Fiddler Classic</b>.
+      <a href="https://www.telerik.com/download/fiddler" target="_blank" class="home-button" style="padding:2px 6px; margin-left:6px;">Download Fiddler</a>
+    </p>
+
     <ul>
-      <li><span class="guide-step-tag">1</span> Запусти <b>Fiddler</b> и игру <b>Reverse: 1999</b></li>
-      <li><span class="guide-step-tag">2</span> Открой историю круток в игре <b>(Summon → Record)</b></li>
-      <li><span class="guide-step-tag">3</span> В Fiddler найди запрос вида:</li>
+      <li data-ru><span class="guide-step-tag">1</span> Запусти <b>Fiddler</b> и игру <b>Reverse: 1999</b></li>
+      <li data-en><span class="guide-step-tag">1</span> Launch <b>Fiddler</b> and <b>Reverse: 1999</b></li>
+      <li data-ru><span class="guide-step-tag">2</span> Открой историю круток в игре <b>(Summon → Record)</b></li>
+      <li data-en><span class="guide-step-tag">2</span> Open pull history in-game <b>(Summon → Record)</b></li>
+      <li data-ru><span class="guide-step-tag">3</span> В Fiddler найди запрос вида:</li>
+      <li data-en><span class="guide-step-tag">3</span> In Fiddler find a request like:</li>
     </ul>
     <div class="guide-screenshot">
       <img src="static/guide/1.png" alt="Fiddler screenshot">
       <p>https://game-re-en-service.sl916.com/query/summon?userId=xxx&amp;token=xxx</p>
     </div>
     <ul>
-      <li><span class="guide-step-tag">4</span> Выдели эту строку → <b>ПКМ → Copy → Just URL</b></li>
-      <li><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера и нажми кнопку</li>
+      <li data-ru><span class="guide-step-tag">4</span> Выдели эту строку → <b>ПКМ → Copy → Just URL</b></li>
+      <li data-en><span class="guide-step-tag">4</span> Select the row → <b>Right-click → Copy → Just URL</b></li>
+      <li data-ru><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера и нажми кнопку</li>
+      <li data-en><span class="guide-step-tag">5</span> Paste the link into the <b>🌐 Import by URL</b> field on the tracker's main page and click the button</li>
     </ul>
-    <div class="guide-tip">Данные загрузятся автоматически через прокси - скачивать файл не нужно.</div>
+    <div class="guide-tip" data-ru>Данные загрузятся автоматически через прокси — скачивать файл не нужно.</div>
+    <div class="guide-tip" data-en>Data loads automatically via proxy — no file download needed.</div>
   </div>
 
   <div class="box">
-    <h3>Способ 3 - Загрузка JSON-файла вручную</h3>
+    <h3 data-ru>Способ 3 — Загрузка JSON-файла вручную</h3>
+    <h3 data-en>Method 3 — Manual JSON File Upload</h3>
+
     <ul>
-      <li><span class="guide-step-tag">1</span> Получи ссылку любым из способов выше</li>
-      <li><span class="guide-step-tag">2</span> Открой ссылку в браузере</li>
-      <li><span class="guide-step-tag">3</span> Сохрани страницу как файл: <b>ПКМ по странице → Сохранить как</b></li>
-      <li><span class="guide-step-tag">4</span> На главной странице нажми <b>📂 Выбрать файл</b> и выбери сохранённый JSON</li>
+      <li data-ru><span class="guide-step-tag">1</span> Получи ссылку любым из способов выше</li>
+      <li data-en><span class="guide-step-tag">1</span> Get the URL using any method above</li>
+      <li data-ru><span class="guide-step-tag">2</span> Открой ссылку в браузере</li>
+      <li data-en><span class="guide-step-tag">2</span> Open the URL in your browser</li>
+      <li data-ru><span class="guide-step-tag">3</span> Сохрани страницу как файл: <b>ПКМ по странице → Сохранить как</b></li>
+      <li data-en><span class="guide-step-tag">3</span> Save the page as a file: <b>Right-click → Save As</b></li>
+      <li data-ru><span class="guide-step-tag">4</span> На главной странице нажми <b>📂 Выбрать файл</b> и выбери сохранённый JSON</li>
+      <li data-en><span class="guide-step-tag">4</span> On the main page click <b>📂 Select File</b> and choose the saved JSON</li>
     </ul>
-    <div class="guide-warn"><b>Внимание:</b> кнопка «📂 Выбрать файл» принимает только оригинальный файл из игры. Для загрузки ранее сохранённой базы трекера используй кнопку <b>«📂 Загрузить базу данных»</b>.</div>
+    <div class="guide-warn" data-ru><b>Внимание:</b> кнопка «📂 Выбрать файл» принимает только оригинальный файл из игры. Для загрузки ранее сохранённой базы трекера используй кнопку <b>«📂 Загрузить базу данных»</b>.</div>
+    <div class="guide-warn" data-en><b>Note:</b> the «📂 Select File» button only accepts the original in-game file. To load a previously saved tracker database, use the <b>«📂 Load Database»</b> button instead.</div>
   </div>
 
   <div class="box">
-    <h3>Работа с профилями</h3>
+    <h3 data-ru>Работа с профилями</h3>
+    <h3 data-en>Managing Profiles</h3>
+
     <ul>
-      <li>Создать новый профиль - кнопка <b>➕</b></li>
-      <li>Переключить профиль - выпадающий список</li>
-      <li>Удалить профиль - кнопка <b>➖</b> (стандартный профиль удалить нельзя, только очистить)</li>
+      <li data-ru>Создать новый профиль — кнопка <b>➕</b></li>
+      <li data-en>Create a new profile — click <b>➕</b></li>
+      <li data-ru>Переключить профиль — выпадающий список</li>
+      <li data-en>Switch profiles — use the dropdown</li>
+      <li data-ru>Удалить профиль — кнопка <b>➖</b> (стандартный профиль удалить нельзя, только очистить)</li>
+      <li data-en>Delete a profile — click <b>➖</b> (the default profile cannot be deleted, only cleared)</li>
     </ul>
-    <div class="guide-tip">Профили хранятся локально в браузере. Если сменишь браузер или устройство - используй экспорт базы данных.</div>
+    <div class="guide-tip" data-ru>Профили хранятся локально в браузере. Для переноса на другое устройство используй <b>💾 Скачать базу данных</b> или подключи <b>Google Диск</b> — тогда все профили синхронизируются автоматически.</div>
+    <div class="guide-tip" data-en>Profiles are stored locally in the browser. To transfer to another device, use <b>💾 Download Database</b> or connect <b>Google Drive</b> — all profiles will sync automatically.</div>
   </div>
 
   <div class="box">
-    <h3>Экспорт и импорт базы данных</h3>
+    <h3 data-ru>Экспорт и импорт базы данных</h3>
+    <h3 data-en>Export &amp; Import Database</h3>
+
     <ul>
-      <li><b>💾 Скачать базу данных</b> - сохраняет текущий профиль в JSON-файл для резервной копии или переноса</li>
-      <li><b>📂 Загрузить базу данных</b> - загружает ранее сохранённый файл базы</li>
+      <li data-ru><b>💾 Скачать базу данных</b> — сохраняет <b>все профили</b> в один JSON-файл для резервной копии или переноса на другое устройство</li>
+      <li data-en><b>💾 Download Database</b> — saves <b>all profiles</b> into a single JSON file for backup or transfer to another device</li>
+      <li data-ru><b>📂 Загрузить базу данных</b> — загружает ранее сохранённый файл базы</li>
+      <li data-en><b>📂 Load Database</b> — loads a previously saved database file</li>
     </ul>
-    <div class="guide-warn"><b>Внимание:</b> загрузка базы полностью заменяет данные текущего профиля.</div>
+    <div class="guide-tip" data-ru>При загрузке файла трекер сравнивает каждый профиль с локальными данными. Если профиль из файла совпадает — он игнорируется. Если в файле круток <b>больше</b> — профиль обновляется автоматически. Если в файле круток <b>меньше</b> — появится окно с выбором: оставить локальный или заменить данными из файла.</div>
+    <div class="guide-tip" data-en>When loading a file, the tracker compares each profile with local data. If a profile from the file matches — it is ignored. If the file has <b>more</b> pulls — the profile is updated automatically. If the file has <b>fewer</b> pulls — a dialog appears to choose whether to keep local data or replace it.</div>
+    <div class="guide-warn" data-ru><b>Внимание:</b> кнопка «📂 Загрузить базу данных» предназначена только для файлов, ранее сохранённых через «💾 Скачать базу данных». Для загрузки оригинального файла из игры используй кнопку <b>«📂 Выбрать файл»</b>.</div>
+    <div class="guide-warn" data-en><b>Note:</b> the «📂 Load Database» button is only for files previously saved via «💾 Download Database». To load the original in-game file, use the <b>«📂 Select File»</b> button.</div>
   </div>
 
-  <script src="guide.js" defer></script>
+  <div class="box">
+    <h3 data-ru>Синхронизация с Google Диском</h3>
+    <h3 data-en>Google Drive Sync</h3>
+
+    <p data-ru>Трекер поддерживает автоматическую синхронизацию всех профилей через Google Drive. Данные хранятся в скрытой папке приложения — они не отображаются в твоём Диске.</p>
+    <p data-en>The tracker supports automatic sync of all profiles via Google Drive. Data is stored in a hidden app folder — it does not appear in your Drive.</p>
+    <ul>
+      <li data-ru><span class="guide-step-tag">1</span> Нажми <b>Подключить Google Диск</b> в блоке управления базой данных</li>
+      <li data-en><span class="guide-step-tag">1</span> Click <b>Connect Google Drive</b> in the database management section</li>
+      <li data-ru><span class="guide-step-tag">2</span> Войди в аккаунт Google и разреши доступ</li>
+      <li data-en><span class="guide-step-tag">2</span> Sign in to your Google account and grant access</li>
+      <li data-ru><span class="guide-step-tag">3</span> Трекер автоматически загрузит данные из облака и в дальнейшем будет сохранять изменения сам</li>
+      <li data-en><span class="guide-step-tag">3</span> The tracker will automatically load data from the cloud and save changes going forward</li>
+    </ul>
+    <div class="guide-tip" data-ru>После подключения статус изменится на <b>Подключено</b>. При каждом импорте круток данные автоматически сохраняются в облако через 2 секунды после последнего изменения.</div>
+    <div class="guide-tip" data-en>After connecting, the status changes to <b>Connected</b>. After each pull import, data is automatically saved to the cloud 2 seconds after the last change.</div>
+    <div class="guide-tip" data-ru>Подключение сохраняется между сессиями. При следующем открытии трекер автоматически восстановит соединение и синхронизируется без необходимости входить заново.</div>
+    <div class="guide-tip" data-en>The connection persists between sessions. On the next visit, the tracker will automatically reconnect and sync without requiring a new sign-in.</div>
+    <div class="guide-warn" data-ru><b>Конфликты:</b> если в облаке данных больше — они применяются автоматически. Если меньше — появится окно с выбором.</div>
+    <div class="guide-warn" data-en><b>Conflicts:</b> if the cloud has more data — it is applied automatically. If less — a dialog appears for you to choose.</div>
+  </div>
+
+  <script>
+    (function() {
+      const RU = ['ru','be','uk','kk','ky','tg','uz','tk','az','hy','ka','mn'];
+      const saved = localStorage.getItem('r1999_lang');
+      const lang = (saved === 'ru' || saved === 'en') ? saved
+        : RU.includes((navigator.language || '').split('-')[0].toLowerCase()) ? 'ru' : 'en';
+      document.documentElement.lang = lang;
+      document.getElementById('langRU').classList.toggle('active', lang === 'ru');
+      document.getElementById('langEN').classList.toggle('active', lang === 'en');
+      requestAnimationFrame(() => document.querySelector('.lang-switcher')?.classList.add('ready'));
+      document.querySelectorAll('.box').forEach(b => b.classList.add('visible'));
+    })();
+
+    function setLang(lang) {
+      localStorage.setItem('r1999_lang', lang);
+      document.documentElement.lang = lang;
+      document.getElementById('langRU').classList.toggle('active', lang === 'ru');
+      document.getElementById('langEN').classList.toggle('active', lang === 'en');
+    }
+  </script>
 </body>
 </html>
