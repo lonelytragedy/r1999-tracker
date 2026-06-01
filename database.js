@@ -40,7 +40,7 @@ const ACTIVE_BANNERS = [
     key:      "湖的企盼",
     startUTC: "2026-06-01T05:00:00Z",
     endUTC:   "2026-06-15T04:59:00Z",
-    image:    "static/banners/Yearning_of_the_Water.webp",
+    image:    "static/banners/Yearning_of_the_Water_3.5.webp",
     rateUp:  ["Corvus", "Brume"]
   },
   {
