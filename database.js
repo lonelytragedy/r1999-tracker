@@ -68,7 +68,7 @@ const ACTIVE_BANNERS = [
   {
     key:     "虚影的实鉴",
     startUTC: "2026-05-19T10:00:00Z",
-    endUTC:   "2026-06-03T09:59:00Z",
+    endUTC:   "2026-06-02T09:59:00Z",
     image:    "static/banners/Observation_into_the_Mirrors.webp",
     rateUp: ["Kakania", "Mr. Duncan", "Yenisei"]
   },
