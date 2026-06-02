@@ -1,4 +1,5 @@
 const BANNERS = {
+  "零重力漫游": { name: "Wirewalking in Zero Gravity", type: "Character"},
   "ramona": { name: "Conduit of the Unseen", type: "Character" },
   "奇异吸引子": { name: "The Strange Attractor", type: "Character" },
   "虚影的实鉴": { name: "Observation into the Mirrors", type: "Character" },
@@ -29,6 +30,13 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+      {
+    key:      "零重力漫游",
+    startUTC: "2026-06-02T10:00:00Z",
+    endUTC:   "2026-06-16T09:59:00Z",
+    image:    "static/banners/Wirewalking_in_Zero_Gravity.webp",
+    rateUp:  ["Kiperina", "Dikke", "Desert Flannel"]
+  },
   {
     key:      "湖的涟漪",
     startUTC: "2026-05-28T10:00:00Z",
