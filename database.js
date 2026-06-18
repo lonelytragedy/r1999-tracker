@@ -1,7 +1,7 @@
 const BANNERS = {
   "晴日决胜局": { name: "Clash 'n' Slash", type: "Character" },
   "零重力漫游": { name: "Wirewalking in Zero Gravity", type: "Character"},
-  "ramona": { name: "Conduit of the Unseen", type: "Character" },
+  "渡影归真": { name: "Conduit of the Unseen", type: "Character" },
   "奇异吸引子": { name: "The Strange Attractor", type: "Character" },
   "虚影的实鉴": { name: "Observation into the Mirrors", type: "Character" },
   "鸿羽若有凌云志" : { name: "Soaring Aspirations", type: "Character" },
@@ -60,7 +60,7 @@ const ACTIVE_BANNERS = [
     rateUp:  ["Corvus", "Brume"]
   },
   {
-    key:      "ramona",
+    key:      "渡影归真",
     startUTC: "2026-06-18T10:00:00Z",
     endUTC:   "2026-07-02T09:59:00Z",
     image:    "static/banners/Conduit_of_the_Unseen.webp",
