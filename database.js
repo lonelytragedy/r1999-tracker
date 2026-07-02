@@ -1,36 +1,59 @@
 const BANNERS = {
-  "晴日决胜局": { name: "Clash 'n' Slash", type: "Character" },
-  "零重力漫游": { name: "Wirewalking in Zero Gravity", type: "Character"},
-  "渡影归真": { name: "Conduit of the Unseen", type: "Character" },
-  "奇异吸引子": { name: "The Strange Attractor", type: "Character" },
-  "虚影的实鉴": { name: "Observation into the Mirrors", type: "Character" },
-  "鸿羽若有凌云志" : { name: "Soaring Aspirations", type: "Character" },
-  "幕间蒙太奇" : { name: "A Life in Montage", type: "Character" },
-  "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited"},
-  "湖心追述" : { name: "From the Lake's Heart", type: "Limited"},
-  "子夜独角戏" : { name: "The Midnight Flutist", type: "Character"},
-  "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited"},
+  "现实破译法": { name: "Deciphering Reality", type: "Character", rateUp6: ["Enigma"] },
+  "虹色五线谱": { name: "Playing in Rainbow Clef", type: "Character", rateUp6: ["Barcarola"] },
+  "晴日决胜局": { name: "Clash 'n' Slash", type: "Character", rateUp6: ["J"] },
+  "零重力漫游": { name: "Wirewalking in Zero Gravity", type: "Character", rateUp6: ["Kiperina"]},
+  "渡影归真": { name: "Conduit of the Unseen", type: "Character", rateUp6: ["Ramona"] },
+  "奇异吸引子": { name: "The Strange Attractor", type: "Character", rateUp6: ["Lorentz Butterfly"] },
+  "虚影的实鉴": { name: "Observation into the Mirrors", type: "Character", rateUp6: ["Kakania"] },
+  "鸿羽若有凌云志" : { name: "Soaring Aspirations", type: "Character", rateUp6: ["Cheng Heguang"] },
+  "幕间蒙太奇" : { name: "A Life in Montage", type: "Character", rateUp6: ["Noire"] },
+  "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited", rateUp6: ["Liang Yue"]},
+  "湖心追述" : { name: "From the Lake's Heart", type: "Water"},
+  "子夜独角戏" : { name: "The Midnight Flutist", type: "Character", rateUp6: ["Rubuska"]},
+  "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited", rateUp6: ["Paper Heron"]},
   "湖的启示" : { name: "Revelation of the Water", type: "Water" },
-  "鳞与石的世纪" : { name: "Serpentine Century", type: "Character" },
+  "鳞与石的世纪" : { name: "Serpentine Century", type: "Character", rateUp6: ["Hissabeth"] },
   "度朔飞琼" : { name: "The Snow of Dushuo", type: "Special" },
   "湖的企盼" : { name: "Yearning of the Water", type: "Water" },
-  "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character"},
-  "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character"},
-  "修缮往日": { name: "From the Ruin of the Past", type: "Character"},
-  "誓言无有烬时": { name: "The Oath Unyielding", type: "Character"},
-  "思维动力学":   { name: "Cognitive Dynamics", type: "Character"},
-  "永恒折射角":   { name: "The Brilliance Within", type: "Character"},
-  "仙子振翅入夜": { name: "The Fairies Shining at Night", type: "Character"},
-  "命运亦需捧场": { name: "On Fate's Cue", type: "Limited"},
+  "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character", rateUp6: ["Igor"]},
+  "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character", rateUp6: ["Tuesday"]},
+  "修缮往日": { name: "From the Ruin of the Past", type: "Character", rateUp6: ["Moldir"]},
+  "誓言无有烬时": { name: "The Oath Unyielding", type: "Character", rateUp6: ["Marsha"]},
+  "思维动力学":   { name: "Cognitive Dynamics", type: "Character", rateUp6: ["Ulrich"]},
+  "永恒折射角":   { name: "The Brilliance Within", type: "Character", rateUp6: ["Brume"]},
+  "仙子振翅入夜": { name: "The Fairies Shining at Night", type: "Character", rateUp6: ["Tooth Fairy"]},
+  "命运亦需捧场": { name: "On Fate's Cue", type: "Limited", rateUp6: ["Beryl"]},
   "湖的馈赠":     { name: "Boon of the Water", type: "Water"},
-  "天真与渴盼":   { name: "Longing for Innocence", type: "Limited"},
+  "天真与渴盼":   { name: "Longing for Innocence", type: "Limited", rateUp6: ["Anjo Nala"]},
   "湖的涟漪":     { name: "Ripples on the Water", type: "Water"},
-  "火花雀儿":     { name: "The Chirps of Flame", type: "Character"},
+  "火花雀儿":     { name: "The Chirps of Flame", type: "Character", rateUp6: ["Spathodea"]},
   "第一滴雨":     { name: "The First Drop of Rain", type: "Regular"},
   "于湖中央":     { name: "Amongst the Lake", type: "Regular"}
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:      "现实破译法",
+    startUTC: "2026-07-02T10:00:00Z",
+    endUTC:   "2026-07-23T09:59:00Z",
+    image:    "static/banners/Deciphering_Reality.webp",
+    rateUp:  ["Enigma", "Sweetheart", "Charlie"]
+  },
+  {
+    key:      "湖的涟漪",
+    startUTC: "2026-07-02T10:00:00Z",
+    endUTC:   "2026-07-23T09:59:00Z",
+    image:    "static/banners/Ripples_on_the_Water_3.6.webp",
+    rateUp:  ["Recoleta", "Melania", "Tooth Fairy", "Willow", "Tuesday", "Isolde"]
+  },
+  {
+    key:      "虹色五线谱",
+    startUTC: "2026-06-30T10:00:00Z",
+    endUTC:   "2026-07-14T09:59:00Z",
+    image:    "static/banners/Playing_in_Rainbow_Clef.webp",
+    rateUp:  ["Barcarola", "Bkornblume", "Charlie"]
+  },
   {
     key:      "晴日决胜局",
     startUTC: "2026-06-16T10:00:00Z",
@@ -83,6 +106,11 @@ const ACTIVE_BANNERS = [
 ];
 
 const CHARACTERS = {
+  3147: { name: "Ms. Stranger", rarity: 6},
+  3146: { name: "Rhiannon", rarity: 6},
+  3145: { name: "Everecho", rarity: 6},
+  3144: { name: "Coppélia", rarity: 6},
+  3143: { name: "Enigma", rarity: 6},
   3142: { name: "Ramona", rarity: 6},
   3141: { name: "Paper Heron", rarity: 6 },
   3139: { name: "Lorentz Butterfly", rarity: 6},
@@ -147,6 +175,7 @@ const CHARACTERS = {
   3004: { name: "Lilya", rarity: 6 },
   3003: { name: "Druvis III", rarity: 6 },
   
+  3154: { name: "Silverwing Eagle", rarity: 5 },
   3122: { name: "Alexios", rarity: 5 },
   3118: { name: "Name Day", rarity: 5 },
   3115: { name: "Buddy Fairchild", rarity: 5 },
@@ -178,6 +207,7 @@ const CHARACTERS = {
   3010: { name: "X", rarity: 5 },
   
   3138: { name: "Reed", rarity: 4},
+  3136: { name: "Lady by the Lake", rarity: 4 },
   3101: { name: "White Rum", rarity: 4 },
   3058: { name: "Erick", rarity: 4 },
   3057: { name: "Mesmer Jr.", rarity: 4 },
@@ -214,14 +244,14 @@ const CHARACTERS = {
 function getBannerName(cn) { return BANNERS[cn]?.name ?? cn; }
 function getBannerType(cn) { return BANNERS[cn]?.type ?? "Character"; }
 
+const PITY_SHARED_GROUP = { 3: "STANDARD", 12: "RIPPLES" };
+
 function getPityKey(e) {
-  const type = getBannerType(e.poolName);
-  if (type === "Character") return "Character";
-  return e.poolId;
+  return PITY_SHARED_GROUP[Number(e.poolType)] ?? e.poolId;
 }
 
 function getChar(id) {
-  return CHARACTERS[id] || { name: `ID:${id}`, rarity: 6 };
+  return CHARACTERS[id] || { name: `ID:${id}`, rarity: 5 };
 }
 
 const _charByName = Object.values(CHARACTERS).reduce((m, c) => (m[c.name] = c, m), {});

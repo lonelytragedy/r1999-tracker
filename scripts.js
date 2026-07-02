@@ -20,7 +20,13 @@ let localDB               = [];
 let processedList         = [];
 let processedPity         = [];
 let processedPityCounters = {};
+let processedFifty        = [];
+let processedGuarantee    = {};
 let chart                 = null;
+let pityChart             = null;
+let chartsMonthly         = null;
+let chartsDirty           = false;
+let chartsOpen            = false;
 let currentFilter         = 0;
 let currentTypeFilter     = null;
 let profiles              = [];
@@ -41,7 +47,9 @@ function t(key, ...args) {
   return typeof val === 'function' ? val(...args) : val;
 }
 
-function setLang(lang) {
+async function setLang(lang) {
+  await loadLocale(lang);
+  if (!LOCALES[lang]) return;
   document.body.classList.add('ui-fade');
   setTimeout(() => {
     currentLang = lang;
@@ -58,9 +66,10 @@ function setLang(lang) {
 function loadLocale(lang) {
   return new Promise(resolve => {
     if (LOCALES[lang]) { resolve(); return; }
-    const script  = document.createElement('script');
-    script.src    = 'localization/' + lang + '.js';
-    script.onload = () => { LOCALES[lang] = window.LOCALE; resolve(); };
+    const script   = document.createElement('script');
+    script.src     = 'localization/' + lang + '.js';
+    script.onload  = () => { LOCALES[lang] = window.LOCALE; resolve(); };
+    script.onerror = () => { script.remove(); resolve(); };
     document.head.appendChild(script);
   });
 }
@@ -86,7 +95,7 @@ function refreshDynamicContent() {
   applyBannerView(mode);
   renderBannerStats();
   if (processedList.length > 0) {
-    ['statsBox', 'recentSixStarsBox', 'chartBox'].forEach(id => {
+    ['statsBox', 'recentSixStarsBox', 'chartsBox'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = '';
     });
@@ -550,6 +559,17 @@ function showToast(message, type = 'info', duration = 3000) {
   return toast;
 }
 
+function readJSONStorage(key, fallback) {
+  const raw = localStorage.getItem(key);
+  if (raw === null) return fallback;
+  try { return JSON.parse(raw); } catch { return fallback; }
+}
+
+function readCachedPulls(profileId) {
+  const arr = readJSONStorage(`r1999_cache_${profileId}`, []);
+  return Array.isArray(arr) ? arr : [];
+}
+
 function saveToStorage() {
   try {
     localStorage.setItem(`r1999_cache_${currentProfile}`, JSON.stringify(localDB));
@@ -569,7 +589,8 @@ function saveProfiles() {
 }
 
 function loadProfiles() {
-  profiles = JSON.parse(localStorage.getItem('r1999_profiles') || '[]');
+  profiles = readJSONStorage('r1999_profiles', []);
+  if (!Array.isArray(profiles)) profiles = [];
   if (!profiles.length) {
     profiles = [{ id: 1, name: t('defaultProfile') }];
     localStorage.setItem('r1999_profiles', JSON.stringify(profiles));
@@ -581,7 +602,7 @@ function loadProfiles() {
 
 function renderProfileSelect() {
   document.getElementById('profileSelect').innerHTML = profiles.map(p =>
-    `<option value="${p.id}"${p.id === currentProfile ? ' selected' : ''}>${p.name}</option>`
+    `<option value="${escapeHTML(p.id)}"${p.id === currentProfile ? ' selected' : ''}>${escapeHTML(p.name)}</option>`
   ).join('');
 }
 
@@ -593,8 +614,7 @@ function switchProfile(id) {
 }
 
 function loadProfileDB(withBar = false) {
-  const cache = localStorage.getItem(`r1999_cache_${currentProfile}`);
-  localDB = cache ? JSON.parse(cache) : [];
+  localDB = readCachedPulls(currentProfile);
   if (withBar) {
     topBar.start(() => { parseData(localDB); topBar.finish(); });
   } else {
@@ -783,15 +803,12 @@ function loadDBFile(e) {
 }
 
 function exportDB() {
-  const hasAny = profiles.some(p => {
-    const d = localStorage.getItem(`r1999_cache_${p.id}`);
-    return d && JSON.parse(d).length > 0;
-  });
+  const hasAny = profiles.some(p => readCachedPulls(p.id).length > 0);
   if (!hasAny) { showToast(t('dbEmpty'), 'warning'); return; }
 
   const pulls = {};
   profiles.forEach(p => {
-    pulls[p.id] = JSON.parse(localStorage.getItem(`r1999_cache_${p.id}`) || '[]');
+    pulls[p.id] = readCachedPulls(p.id);
   });
 
   const payload  = { version: 2, savedAt: new Date().toISOString(), profiles, pulls };
@@ -850,7 +867,7 @@ function _resolveConflictsSmart(importedProfiles, importedPulls, savedAt) {
   const needsModal = [];
 
   conflicts.forEach(({ local, imported }) => {
-    const localCount    = countPulls(JSON.parse(localStorage.getItem(`r1999_cache_${local.id}`) || '[]'));
+    const localCount    = countPulls(readCachedPulls(local.id));
     const importedCount = countPulls(importedPulls[imported.id] || []);
     if (localCount === importedCount) return;
     if (importedCount > localCount) { _applyImported(local, imported, importedPulls); return; }
@@ -862,7 +879,7 @@ function _resolveConflictsSmart(importedProfiles, importedPulls, savedAt) {
   if (!needsModal.length) { _finishImport(true); return; }
 
   const localPulls = Object.fromEntries(
-    profiles.map(p => [p.id, JSON.parse(localStorage.getItem(`r1999_cache_${p.id}`) || '[]')])
+    profiles.map(p => [p.id, readCachedPulls(p.id)])
   );
 
   let idx = 0;
@@ -923,7 +940,7 @@ function _resolveConflictsAlways(importedProfiles, importedPulls, savedAt) {
   if (!conflicts.length) { _finishImport(false); return; }
 
   const localPulls = Object.fromEntries(
-    profiles.map(p => [p.id, JSON.parse(localStorage.getItem(`r1999_cache_${p.id}`) || '[]')])
+    profiles.map(p => [p.id, readCachedPulls(p.id)])
   );
 
   let idx = 0;
@@ -966,6 +983,9 @@ function _finishImport(silent = false) {
 function _showConflictModal({ local, imported, localMeta, importedMeta, driveDeleted, onKeepLocal, onUseImported }) {
   document.getElementById('conflictModal')?.remove();
 
+  const localName    = escapeHTML(local.name);
+  const importedName = imported ? escapeHTML(imported.name) : '';
+
   const modal     = document.createElement('div');
   modal.id        = 'conflictModal';
   modal.className = 'conflict-modal-overlay';
@@ -974,11 +994,11 @@ function _showConflictModal({ local, imported, localMeta, importedMeta, driveDel
     modal.innerHTML = `
       <div class="conflict-modal">
         <div class="conflict-modal-title">${t('conflictCloudTitle')}</div>
-        <div class="conflict-modal-subtitle">${t('conflictCloudSub', local.name)}</div>
+        <div class="conflict-modal-subtitle">${t('conflictCloudSub', localName)}</div>
         <div class="conflict-columns">
           <div class="conflict-col conflict-col-local">
             <div class="conflict-col-header">${t('conflictCloudLocal')}</div>
-            <div class="conflict-col-name">${local.name}</div>
+            <div class="conflict-col-name">${localName}</div>
             <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${localMeta.count}</b></div>
             <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${localMeta.lastPull}</b></div>
           </div>
@@ -996,18 +1016,18 @@ function _showConflictModal({ local, imported, localMeta, importedMeta, driveDel
     modal.innerHTML = `
       <div class="conflict-modal">
         <div class="conflict-modal-title">${t('conflictTitle')}</div>
-        <div class="conflict-modal-subtitle">${t('conflictSubtitle', imported.name)}</div>
+        <div class="conflict-modal-subtitle">${t('conflictSubtitle', importedName)}</div>
         <div class="conflict-columns">
           <div class="conflict-col conflict-col-local">
             <div class="conflict-col-header">${t('conflictLocal')}</div>
-            <div class="conflict-col-name">${local.name}</div>
+            <div class="conflict-col-name">${localName}</div>
             <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${localMeta.count}</b></div>
             <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${localMeta.lastPull}</b></div>
           </div>
           <div class="conflict-col-vs">VS</div>
           <div class="conflict-col conflict-col-imported">
             <div class="conflict-col-header">${t('conflictImported')}</div>
-            <div class="conflict-col-name">${imported.name}</div>
+            <div class="conflict-col-name">${importedName}</div>
             <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${importedMeta.count}</b></div>
             <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${importedMeta.lastPull}</b></div>
             <div class="conflict-stat"><span>${t('conflictStatSaved')}</span><b>${importedMeta.savedAt}</b></div>
@@ -1033,10 +1053,12 @@ function _showConflictModal({ local, imported, localMeta, importedMeta, driveDel
 }
 
 function parseData(list) {
-  processedList = normalizePulls(list);
-  processedPity = [];
+  processedList  = normalizePulls(list);
+  processedPity  = [];
+  processedFifty = [];
 
   const pityCounters = {};
+  const guarantee    = {};
   const monthly      = {};
 
   processedList.forEach((e, i) => {
@@ -1046,29 +1068,58 @@ function parseData(list) {
     processedPity[i]   = pityCounters[key];
     pityCounters[key]  = char.rarity === 6 ? 1 : pityCounters[key] + 1;
 
+    if (char.rarity === 6) {
+      const type = getBannerType(e.poolName);
+      if (type === 'Character' || type === 'Limited') {
+        const rateUp = BANNERS[e.poolName]?.rateUp6;
+        const g      = guarantee[key];
+        if (!rateUp) {
+          processedFifty[i] = null;
+          guarantee[key]    = null;
+        } else if (g === true) {
+          processedFifty[i] = 'guaranteed';
+          guarantee[key]    = false;
+        } else if (rateUp.includes(char.name)) {
+          processedFifty[i] = g === null ? null : 'win';
+          guarantee[key]    = false;
+        } else {
+          processedFifty[i] = 'lose';
+          guarantee[key]    = true;
+        }
+      }
+    }
+
     const month = e.createTime.slice(0, 7);
     monthly[month] ??= { 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     monthly[month][char.rarity]++;
   });
 
   processedPityCounters = pityCounters;
+  processedGuarantee    = guarantee;
 
   const hasData = processedList.length > 0;
 
   renderBannerStats();
-  ['statsBox', 'recentSixStarsBox', 'chartBox'].forEach(id => {
+  ['statsBox', 'recentSixStarsBox', 'chartsBox'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = hasData ? '' : 'none';
   });
 
   if (hasData) {
     renderStats();
-    renderChart(monthly);
+    chartsMonthly = monthly;
+    chartsDirty   = true;
+    if (chartsOpen) renderCharts();
     renderRecentSixStars();
   }
 
   renderTable();
   setTimeout(() => document.querySelectorAll('.stat').forEach(s => s.classList.add('show')), 50);
+}
+
+function gameVersionFromPoolId(poolId) {
+  const s = String(poolId ?? '');
+  return s.length === 5 ? `${s[0]}.${s[1]}` : '';
 }
 
 function renderBannerStats() {
@@ -1080,11 +1131,22 @@ function renderBannerStats() {
     typeData[type] = { pulls: 0, lastKeyIdx: {} };
   });
 
+  const waterSegs = {};
+
   processedList.forEach((e, i) => {
     const type = getBannerType(e.poolName);
     if (!typeData[type]) return;
+    const key = getPityKey(e);
     typeData[type].pulls++;
-    typeData[type].lastKeyIdx[getPityKey(e)] = i;
+    typeData[type].lastKeyIdx[key] = i;
+
+    if (type === 'Water') {
+      const seg = waterSegs[key] ??= { key, pulls: 0, lastIdx: -1, name: '', lastMonth: '', poolId: e.poolId };
+      seg.pulls++;
+      seg.lastIdx   = i;
+      seg.name      = getBannerName(e.poolName);
+      seg.lastMonth = e.createTime.slice(0, 7);
+    }
   });
 
   container.innerHTML = '';
@@ -1092,37 +1154,82 @@ function renderBannerStats() {
   const activeTypes = Object.entries(BANNER_TYPE_LABELS).filter(([type]) => typeData[type]?.pulls > 0);
   container.style.setProperty('--banner-col-count', activeTypes.length || 1);
 
-  activeTypes.forEach(([type, label]) => {
-    const data = typeData[type];
+  const locale = t('dateLocale');
 
-    let latestKey = null, latestIdx = -1;
-    for (const [key, idx] of Object.entries(data.lastKeyIdx)) {
-      if (idx > latestIdx) { latestIdx = idx; latestKey = key; }
-    }
+  const pityOf = key => {
+    const pity = (processedPityCounters[key] ?? 1) - 1;
+    return {
+      pity,
+      colorCls: pity < PITY_COLOR_YELLOW ? 'pity-val-green' : pity < PITY_COLOR_RED ? 'pity-val-yellow' : 'pity-val-red',
+    };
+  };
 
-    const currentPity  = latestKey !== null ? (processedPityCounters[latestKey] ?? 1) - 1 : 0;
-    const typeTag      = `<span class="banner-type ${BANNER_TYPE_CLASSES[type]}">${type}</span>`;
-    const pityColorCls = currentPity < PITY_COLOR_YELLOW ? 'pity-val-green' : currentPity < PITY_COLOR_RED ? 'pity-val-yellow' : 'pity-val-red';
-    const locale       = t('dateLocale');
-
-    const card     = document.createElement('div');
-    card.className = 'banner-stat-card';
-    card.innerHTML = `
-      <div class="banner-stat-card-title">${typeTag} ${label}</div>
+  const itemsHTML = (pulls, { pity, colorCls }, guaranteed = false) => `
       <div class="banner-stat-item">
         <div class="banner-stat-label">
           ${t('bannerStatPulls')}
-          <span class="sub"><img src="static/ui/ClearDrop.webp" alt="💎" onerror="this.outerHTML='💎'"> ${(data.pulls * 180).toLocaleString(locale)}</span>
+          <span class="sub"><img src="static/ui/ClearDrop.webp" alt="💎" onerror="this.outerHTML='💎'"> <span class="banner-stat-gems">${(pulls * 180).toLocaleString(locale)}</span></span>
         </div>
-        <div class="banner-stat-value">${data.pulls}</div>
+        <div class="banner-stat-value banner-stat-pulls">${pulls}</div>
       </div>
       <div class="banner-stat-item">
         <div class="banner-stat-pity-label">
           ${t('bannerStatPity')}
           <span class="pity-hint">${t('bannerPityHint')}</span>
         </div>
-        <div class="banner-stat-pity-value ${pityColorCls}">${currentPity} / ${PITY_MAX}</div>
+        <div class="banner-stat-pity-value banner-stat-pity ${colorCls}">${guaranteed ? `<span class="pity-guarantee-arrow" title="${t('fifty_guaranteed')}">↑</span>` : ''}${pity} / ${PITY_MAX}</div>
       </div>`;
+
+  activeTypes.forEach(([type, label]) => {
+    const data    = typeData[type];
+    const typeTag = `<span class="banner-type ${BANNER_TYPE_CLASSES[type]}">${type}</span>`;
+    const segs    = type === 'Water' ? Object.values(waterSegs).sort((a, b) => b.lastIdx - a.lastIdx) : null;
+
+    const card     = document.createElement('div');
+    card.className = 'banner-stat-card';
+
+    if (segs && segs.length > 1) {
+      const nameCount = {};
+      segs.forEach(s => { nameCount[s.name] = (nameCount[s.name] || 0) + 1; });
+      segs.forEach(s => {
+        const tag = gameVersionFromPoolId(s.poolId) || s.lastMonth;
+        s.optLabel = nameCount[s.name] > 1 ? `${tag} · ${s.name}` : s.name;
+      });
+
+      const options = segs.map((s, idx) => `<option value="${idx}">${escapeHTML(s.optLabel)}</option>`).join('');
+
+      card.innerHTML = `
+        <div class="banner-stat-card-title">
+          ${typeTag}
+          <select class="banner-stat-select">${options}</select>
+        </div>
+        ${itemsHTML(segs[0].pulls, pityOf(segs[0].key))}`;
+
+      const select  = card.querySelector('.banner-stat-select');
+      const pullsEl = card.querySelector('.banner-stat-pulls');
+      const gemsEl  = card.querySelector('.banner-stat-gems');
+      const pityEl  = card.querySelector('.banner-stat-pity');
+      select.addEventListener('change', () => {
+        const s = segs[Number(select.value)];
+        const d = pityOf(s.key);
+        pullsEl.textContent = s.pulls;
+        gemsEl.textContent  = (s.pulls * 180).toLocaleString(locale);
+        pityEl.textContent  = `${d.pity} / ${PITY_MAX}`;
+        pityEl.className    = `banner-stat-pity-value banner-stat-pity ${d.colorCls}`;
+      });
+    } else {
+      let latestKey = null, latestIdx = -1;
+      for (const [key, idx] of Object.entries(data.lastKeyIdx)) {
+        if (idx > latestIdx) { latestIdx = idx; latestKey = key; }
+      }
+      const info = latestKey !== null ? pityOf(latestKey) : { pity: 0, colorCls: 'pity-val-green' };
+      const guaranteed = (type === 'Character' || type === 'Limited') &&
+        latestKey !== null && processedGuarantee[latestKey] === true;
+
+      card.innerHTML = `
+        <div class="banner-stat-card-title">${typeTag} ${label}</div>
+        ${itemsHTML(data.pulls, info, guaranteed)}`;
+    }
 
     container.appendChild(card);
     requestAnimationFrame(() => card.classList.add('visible'));
@@ -1138,12 +1245,21 @@ function renderStats() {
     }
   });
 
+  let fiftyWins = 0, fiftyTotal = 0;
+  processedFifty.forEach(s => {
+    if (s === 'win' || s === 'lose') {
+      fiftyTotal++;
+      if (s === 'win') fiftyWins++;
+    }
+  });
+
   const pulls = processedList.length;
   document.getElementById('stats').innerHTML = `
     <div class="stat">${t('statTotalPulls')}<br><b>${pulls}</b></div>
     <div class="stat">${t('statSixStars')}<br><b>${sixCount}</b></div>
     <div class="stat">${t('statSixPct')}<br><b>${(sixCount / pulls * 100 || 0).toFixed(2)}%</b></div>
     <div class="stat">${t('statAvgPity')}<br><b>${sixCount ? Math.round(pitySum / sixCount) : 0}</b></div>
+    <div class="stat">${t('statFifty')}<br><b>${fiftyTotal ? `${fiftyWins}/${fiftyTotal} (${Math.round(fiftyWins / fiftyTotal * 100)}%)` : '—'}</b></div>
   `;
   setTimeout(() => document.querySelectorAll('#stats .stat').forEach(s => s.classList.add('show')), 50);
 }
@@ -1152,7 +1268,7 @@ function renderRecentSixStars() {
   const container = document.getElementById('recentSixStars');
 
   const sixStars = processedList
-    .map((e, i) => ({ char: getChar(e.gainIds[0]), pity: processedPity[i] }))
+    .map((e, i) => ({ char: getChar(e.gainIds[0]), pity: processedPity[i], fifty: processedFifty[i] }))
     .filter(item => item.char.rarity === 6)
     .reverse();
 
@@ -1192,9 +1308,27 @@ function renderRecentSixStars() {
     portrait.appendChild(img);
     card.appendChild(portrait);
     card.appendChild(pityBadge);
+    if (item.fifty) {
+      const fiftyBadge     = document.createElement('div');
+      fiftyBadge.className = `six-star-fifty ${item.fifty}`;
+      fiftyBadge.innerHTML = fiftyIconSVG(item.fifty);
+      fiftyBadge.title     = t('fifty_' + item.fifty);
+      card.appendChild(fiftyBadge);
+    }
     card.appendChild(nameLabel);
     container.appendChild(card);
   });
+}
+
+function fiftyIconSVG(status) {
+  const heart = 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
+  if (status === 'win') {
+    return `<svg viewBox="0 0 24 24" class="fifty-icon"><path d="${heart}" fill="currentColor"/></svg>`;
+  }
+  if (status === 'lose') {
+    return `<svg viewBox="0 0 24 24" class="fifty-icon"><path d="${heart}" fill="none" stroke="currentColor" stroke-width="2"/><line x1="3.5" y1="3.5" x2="20.5" y2="20.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  }
+  return `<svg viewBox="0 0 24 24" class="fifty-icon"><path d="${heart}" fill="none" stroke="currentColor" stroke-width="2"/></svg>`;
 }
 
 function pityRowColor(v) {
@@ -1259,7 +1393,7 @@ function renderTable() {
       ${bracketCell}
       <td style="text-align:center;color:#9aa0a6;font-size:13px;">${origIdx + 1}</td>
       <td><span class="banner-type ${BANNER_TYPE_CLASSES[type] || 'type-other'}">${type}</span> ${getBannerName(e.poolName)}</td>
-      <td>${processedPity[origIdx]}</td>
+      <td>${processedPity[origIdx]}${processedFifty[origIdx] ? `<span class="fifty-mark" title="${t('fifty_' + processedFifty[origIdx])}">${fiftyIconSVG(processedFifty[origIdx])}</span>` : ''}</td>
       <td><span class="r${c.rarity}">${c.name} ★${c.rarity}</span></td>
       <td style="text-align:right;color:#9aa0a6;font-size:13px;white-space:nowrap;">${e.createTime}</td>
     `;
@@ -1345,6 +1479,65 @@ function renderChart(monthly) {
       scales: {
         x: { ticks: { color: '#eaeaf0' }, grid: { display: false } },
         y: { ticks: { color: '#eaeaf0' }, grid: { display: false } },
+      },
+    },
+  });
+}
+
+function renderCharts() {
+  if (!chartsMonthly) return;
+  renderChart(chartsMonthly);
+  renderPityChart();
+  chartsDirty = false;
+}
+
+function toggleChartsBox() {
+  chartsOpen = !chartsOpen;
+  const content = document.getElementById('chartsContent');
+  const arrow   = document.getElementById('chartsArrow');
+  if (content) content.style.display = chartsOpen ? '' : 'none';
+  if (arrow) arrow.classList.toggle('open', chartsOpen);
+  if (chartsOpen && chartsDirty) renderCharts();
+}
+
+function renderPityChart() {
+  const canvas = document.getElementById('pityChart');
+  if (!canvas) return;
+
+  const counts = new Array(PITY_MAX).fill(0);
+  processedList.forEach((e, i) => {
+    if (getChar(e.gainIds[0]).rarity === 6) {
+      counts[Math.min(processedPity[i], PITY_MAX) - 1]++;
+    }
+  });
+
+  if (pityChart) pityChart.destroy();
+
+  const colors = counts.map((_, i) => {
+    const p = i + 1;
+    return p < PITY_COLOR_YELLOW ? 'rgba(0,255,156,0.75)'
+         : p < PITY_COLOR_RED    ? 'rgba(255,213,74,0.8)'
+         :                         'rgba(255,77,90,0.85)';
+  });
+
+  pityChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: counts.map((_, i) => i + 1),
+      datasets: [{
+        data:               counts,
+        backgroundColor:    colors,
+        borderWidth:        0,
+        barPercentage:      1,
+        categoryPercentage: 0.85,
+      }],
+    },
+    options: {
+      animation: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#eaeaf0', maxTicksLimit: 24 }, grid: { display: false } },
+        y: { ticks: { color: '#eaeaf0', precision: 0 }, grid: { display: false } },
       },
     },
   });
@@ -1753,6 +1946,8 @@ function _updateGdriveUILang() {
     status.innerHTML = status.classList.contains('syncing')
       ? `<span class="gdrive-spinner"></span>${t('gdriveSyncing')}`
       : t('gdriveConnected');
+  } else if (status.classList.contains('expired')) {
+    status.innerHTML = t('gdriveExpired');
   } else {
     status.innerHTML = t('gdriveNotConnected');
   }

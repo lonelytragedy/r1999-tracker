@@ -114,9 +114,17 @@
     <div class="recent-six-stars" id="recentSixStars"></div>
   </div>
 
-  <div class="box" id="chartBox">
-    <h3 data-i18n="monthlyChart"></h3>
-    <canvas id="chart"></canvas>
+  <div class="box" id="chartsBox">
+    <div class="charts-header" onclick="toggleChartsBox()">
+      <h3 data-i18n="chartsTitle"></h3>
+      <span class="charts-toggle-arrow" id="chartsArrow">▾</span>
+    </div>
+    <div id="chartsContent" style="display:none">
+      <h4 data-i18n="pityChart"></h4>
+      <canvas id="pityChart"></canvas>
+      <h4 data-i18n="monthlyChart"></h4>
+      <canvas id="chart"></canvas>
+    </div>
   </div>
 
   <div class="box">

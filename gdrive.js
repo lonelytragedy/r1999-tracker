@@ -2,11 +2,14 @@ const GDRIVE_CLIENT_ID   = '579096807032-2u5js0g94p8n4h2a8ugjckari71stsut.apps.g
 const GDRIVE_SCOPE       = 'https://www.googleapis.com/auth/drive.appdata';
 const GDRIVE_FILE_NAME   = 'r1999_tracker_db.json';
 const GDRIVE_AUTOSAVE_MS = 2000;
+const GDRIVE_WORKER      = 'https://r1999tracker.posofrefraction.workers.dev';
 
-let gdriveToken       = null;
-let gdriveFileId      = null;
-let gdriveTokenClient = null;
-let _autoSaveTimer    = null;
+let gdriveToken      = null;
+let gdriveRefresh    = null;
+let gdriveFileId     = null;
+let gdriveCodeClient = null;
+let _autoSaveTimer   = null;
+let _pendingSave     = false;
 
 function gdriveInit() {
   if (!window.google?.accounts?.oauth2) {
@@ -14,73 +17,89 @@ function gdriveInit() {
     return;
   }
 
-  gdriveTokenClient = google.accounts.oauth2.initTokenClient({
+  gdriveCodeClient = google.accounts.oauth2.initCodeClient({
     client_id: GDRIVE_CLIENT_ID,
     scope:     GDRIVE_SCOPE,
-    callback:  _onTokenResponse,
+    ux_mode:   'popup',
+    callback:  _onCodeResponse,
+    error_callback: err => {
+      console.warn('GIS popup error:', err);
+      showToast(t('gdriveAuthError', err.type || 'popup blocked'), 'error', 5000);
+    },
   });
 
-  const saved = localStorage.getItem('gdrive_token');
-  if (!saved) return;
-
-  gdriveToken = JSON.parse(saved);
-  _updateGdriveUI(true);
-
-  if (_isTokenValid()) {
-    gdriveLoad();
-  } else {
-    gdriveTokenClient.requestAccessToken({
-      prompt:   '',
-      callback: resp => {
-        if (resp.error) {
-          gdriveToken = null;
-          localStorage.removeItem('gdrive_token');
-          _updateGdriveUI(false);
-          return;
-        }
-        gdriveToken = {
-          access_token: resp.access_token,
-          expires_at:   Date.now() + (resp.expires_in - 60) * 1000
-        };
-        localStorage.setItem('gdrive_token', JSON.stringify(gdriveToken));
-        gdriveLoad();
-      }
-    });
+  gdriveRefresh = localStorage.getItem('gdrive_refresh') || null;
+  const savedTok = localStorage.getItem('gdrive_token');
+  if (savedTok) {
+    try { gdriveToken = JSON.parse(savedTok); } catch { gdriveToken = null; }
   }
-}
 
-function _onTokenResponse(resp) {
-  if (resp.error) {
-    console.error('GIS token error:', resp);
-    showToast(t('gdriveAuthError', resp.error), 'error', 5000);
+  if (!gdriveRefresh) {
+    if (_isTokenValid()) {
+      _updateGdriveUI(true);
+      gdriveLoad();
+    } else if (gdriveToken) {
+      _setExpiredUI();
+    }
     return;
   }
-  gdriveToken = {
-    access_token: resp.access_token,
-    expires_at:   Date.now() + (resp.expires_in - 60) * 1000
-  };
-  localStorage.setItem('gdrive_token', JSON.stringify(gdriveToken));
-  gdriveFileId = null;
+
   _updateGdriveUI(true);
-  showToast(t('gdriveConnectedMsg'), 'success');
-  gdriveLoad();
+  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
 }
 
 function gdriveSignIn() {
-  if (!gdriveTokenClient) { showToast(t('gdriveSDKError'), 'error'); return; }
-  gdriveTokenClient.requestAccessToken({ prompt: '' });
+  if (!gdriveCodeClient) { showToast(t('gdriveSDKError'), 'error'); return; }
+  gdriveCodeClient.requestCode();
 }
 
 function gdriveSignOut() {
   if (gdriveToken?.access_token) {
     google.accounts.oauth2.revoke(gdriveToken.access_token, () => {});
   }
-  gdriveToken  = null;
-  gdriveFileId = null;
+  gdriveToken   = null;
+  gdriveRefresh = null;
+  gdriveFileId  = null;
+  _pendingSave  = false;
   clearTimeout(_autoSaveTimer);
   localStorage.removeItem('gdrive_token');
+  localStorage.removeItem('gdrive_refresh');
   _updateGdriveUI(false);
   showToast(t('gdriveDisconnectedMsg'), 'info');
+}
+
+async function _onCodeResponse(resp) {
+  if (resp.error) {
+    console.error('GIS code error:', resp);
+    showToast(t('gdriveAuthError', resp.error), 'error', 5000);
+    return;
+  }
+  try {
+    const data = await _workerPost('/oauth/exchange', { code: resp.code });
+    if (!data.access_token) throw new Error('no access_token');
+    _storeAccess(data);
+    if (data.refresh_token) {
+      gdriveRefresh = data.refresh_token;
+      localStorage.setItem('gdrive_refresh', gdriveRefresh);
+    }
+    gdriveFileId = null;
+    _updateGdriveUI(true);
+    showToast(t('gdriveConnectedMsg'), 'success');
+    await gdriveLoad();
+    if (_pendingSave) { _pendingSave = false; gdriveSave(); }
+  } catch (err) {
+    console.error('GDrive auth error:', err);
+    showToast(t('gdriveAuthError', err.message || err), 'error', 5000);
+    _setExpiredUI();
+  }
+}
+
+function _storeAccess(data) {
+  gdriveToken = {
+    access_token: data.access_token,
+    expires_at:   Date.now() + (data.expires_in - 60) * 1000,
+  };
+  localStorage.setItem('gdrive_token', JSON.stringify(gdriveToken));
 }
 
 function _isTokenValid() {
@@ -89,24 +108,39 @@ function _isTokenValid() {
 
 async function _ensureToken() {
   if (_isTokenValid()) return true;
-  return new Promise(resolve => {
-    gdriveTokenClient.requestAccessToken({
-      prompt:   '',
-      callback: resp => {
-        if (resp.error) { resolve(false); return; }
-        gdriveToken = {
-          access_token: resp.access_token,
-          expires_at:   Date.now() + (resp.expires_in - 60) * 1000
-        };
-        localStorage.setItem('gdrive_token', JSON.stringify(gdriveToken));
-        resolve(true);
-      }
-    });
+  if (!gdriveRefresh)  return false;
+  try {
+    const data = await _workerPost('/oauth/refresh', { refresh_token: gdriveRefresh });
+    if (!data.access_token) return false;
+    _storeAccess(data);
+    return true;
+  } catch (err) {
+    console.warn('GDrive refresh failed:', err);
+    if (err.status === 400 || err.status === 401) {
+      gdriveRefresh = null;
+      localStorage.removeItem('gdrive_refresh');
+    }
+    return false;
+  }
+}
+
+async function _workerPost(path, payload) {
+  const res  = await fetch(GDRIVE_WORKER + path, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(payload),
   });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err  = new Error(data.error || ('HTTP ' + res.status));
+    err.status = res.status;
+    throw err;
+  }
+  return data;
 }
 
 function gdriveScheduleSave() {
-  if (!gdriveToken) return;
+  if (!gdriveRefresh && !gdriveToken) return;
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(() => gdriveSave(), GDRIVE_AUTOSAVE_MS);
 }
@@ -160,18 +194,19 @@ async function _updateFile(fileId, content) {
 }
 
 async function gdriveSave() {
-  if (!_isTokenValid()) {
-    const ok = await _ensureToken();
-    if (!ok) return;
+  if (!await _ensureToken()) {
+    _pendingSave = true;
+    _setExpiredUI();
+    return;
   }
 
   _setSyncing(true);
 
   try {
-    const freshProfiles = JSON.parse(localStorage.getItem('r1999_profiles') || '[]');
+    const freshProfiles = readJSONStorage('r1999_profiles', []);
     const pulls = {};
     freshProfiles.forEach(p => {
-      pulls[p.id] = JSON.parse(localStorage.getItem(`r1999_cache_${p.id}`) || '[]');
+      pulls[p.id] = readCachedPulls(p.id);
     });
 
     const payload = JSON.stringify({
@@ -196,7 +231,7 @@ async function gdriveSave() {
 }
 
 async function gdriveLoad() {
-  if (!_isTokenValid()) return;
+  if (!await _ensureToken()) return;
 
   _setSyncing(true);
 
@@ -245,6 +280,17 @@ function _setSyncing(active) {
     status.innerHTML = t('gdriveConnected');
     status.className = 'gdrive-status connected';
   }
+}
+
+function _setExpiredUI() {
+  const status  = document.getElementById('gdriveStatus');
+  const signIn  = document.getElementById('gdriveSignInBtn');
+  const signOut = document.getElementById('gdriveSignOutBtn');
+  if (!status) return;
+  status.innerHTML = t('gdriveExpired');
+  status.className = 'gdrive-status expired';
+  if (signIn)  signIn.style.display  = '';
+  if (signOut) signOut.style.display = 'none';
 }
 
 window.addEventListener('load', () => {

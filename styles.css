@@ -202,6 +202,7 @@ canvas { width: 100%; max-height: 280px; height: 280px; display: block; }
   flex-shrink: 0;
 }
 .gdrive-status.connected { color: var(--c-r4); }
+.gdrive-status.expired { color: var(--c-r5, #ffd54a); white-space: normal; }
 .gdrive-btn-signout { font-size: 12px; }
 .gdrive-spinner {
   display: inline-block;
@@ -340,8 +341,49 @@ canvas { width: 100%; max-height: 280px; height: 280px; display: block; }
 .banner-stat-card-title {
   font-size: 20px; font-weight: 700; margin-bottom: 16px;
   display: flex; align-items: center; gap: 8px;
+  min-width: 0;
 }
-.banner-stat-card-title .banner-type { font-size: 13px; padding: 3px 8px; }
+.banner-stat-card-title .banner-type { font-size: 13px; padding: 3px 8px; flex-shrink: 0; }
+.banner-stat-select {
+  background: var(--bg-input); border: 1px solid var(--border); color: var(--text);
+  padding: 4px 8px; border-radius: 6px; font-size: 15px; font-weight: 600;
+  flex: 1 1 auto; min-width: 0; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; cursor: pointer;
+}
+.banner-stat-select:hover { border-color: var(--accent, #4a52a8); }
+.pity-guarantee-arrow {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%; margin-right: 7px;
+  background: rgba(185,133,255,0.18); color: #b985ff;
+  font-size: 14px; font-weight: 700; vertical-align: 3px;
+}
+.fifty-icon { width: 13px; height: 13px; display: block; }
+.charts-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
+}
+.charts-header h3 { margin: 0; }
+.charts-toggle-arrow {
+  font-size: 18px; color: #9aa0a6;
+  transition: transform 0.25s ease;
+}
+.charts-toggle-arrow.open { transform: rotate(180deg); }
+#chartsContent h4 { margin: 16px 0 8px; color: #9aa0a6; font-weight: 600; }
+.six-star-fifty {
+  position: absolute; top: 0; left: calc(50% - 52px);
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  background: rgba(10, 12, 40, 0.85);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5); z-index: 1;
+}
+.pity-color-green  .six-star-fifty { color: #00ff9c; }
+.pity-color-yellow .six-star-fifty { color: #ffd54a; }
+.pity-color-red    .six-star-fifty { color: #ff4d5a; }
+.fifty-mark { display: inline-flex; vertical-align: -1px; margin-left: 6px; }
+tr.pity-green  .fifty-mark { color: #00ff9c; }
+tr.pity-yellow .fifty-mark { color: #ffd54a; }
+tr.pity-red    .fifty-mark { color: #ff4d5a; }
 
 .banner-stat-item {
   background: var(--bg-card); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
