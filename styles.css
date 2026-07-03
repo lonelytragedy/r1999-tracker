@@ -959,6 +959,8 @@ body.ui-fade { opacity: 0; }
   thead th:nth-child(5), tbody td:nth-child(5) { width: 29%; }
   thead th:nth-child(6), tbody td:nth-child(6) { width: 22%; }
   tbody td { white-space: normal !important; word-break: break-word; }
+  thead th { font-size: 12px; padding: 8px 4px; white-space: normal; }
+  td { padding: 8px 4px; }
 
   .recent-toggle {
     display: block; width: 100%; margin-top: 10px;
