@@ -48,6 +48,8 @@ window.LOCALE = {
   bannerStatPity:     '6★ Pity',
   bannerPityHint:     'Pity at 70 pulls',
   recentSixStars:     'Recent 6★ Pulls',
+  recentShowAll:      'Show all',
+  recentCollapse:     'Collapse',
   sixStarsPlaceholder:'🌟 Your recent 6★ characters will appear here',
   monthlyChart:       'Monthly Pull Chart',
   chartPlaceholder1:  '📊 Pull statistics chart will appear here',

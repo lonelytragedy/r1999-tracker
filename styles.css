@@ -922,6 +922,7 @@ body.ui-fade { opacity: 0; }
 .banner-view-panel > .slide-in-left   { animation-name: slide-in-left; }
 
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.recent-toggle { display: none; }
 
 @media (max-width: 600px) {
   .box { padding: 14px; }
@@ -949,9 +950,25 @@ body.ui-fade { opacity: 0; }
   .tl-modal-img-wrap { height: 160px; }
   .tl-modal-header { flex-direction: column; align-items: flex-start; gap: 8px; }
 
-  .table-scroll { overflow-x: visible; }
-  table { table-layout: auto; font-size: 13px; }
+  .table-scroll { overflow-x: hidden; }
+  table { table-layout: fixed; width: 100%; font-size: 13px; }
   thead th:nth-child(1), tbody td:nth-child(1),
   thead th:nth-child(2), tbody td:nth-child(2) { display: none; }
-  tbody td { white-space: normal !important; }
+  thead th:nth-child(3), tbody td:nth-child(3) { width: 34%; }
+  thead th:nth-child(4), tbody td:nth-child(4) { width: 15%; }
+  thead th:nth-child(5), tbody td:nth-child(5) { width: 29%; }
+  thead th:nth-child(6), tbody td:nth-child(6) { width: 22%; }
+  tbody td { white-space: normal !important; word-break: break-word; }
+
+  .recent-toggle {
+    display: block; width: 100%; margin-top: 10px;
+    background: var(--bg-input); border: 1px solid var(--border); color: var(--text);
+    padding: 9px; border-radius: 8px; font-size: 14px; cursor: pointer;
+  }
+  #recentSixStarsBox.collapsed .recent-six-stars {
+    max-height: 300px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent);
+    mask-image: linear-gradient(to bottom, #000 68%, transparent);
+  }
+  #recentSixStarsBox.no-collapse .recent-toggle { display: none; }
 }

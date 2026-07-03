@@ -48,6 +48,8 @@ window.LOCALE = {
   bannerStatPity:     '6★ Гарант',
   bannerPityHint:     'Гарант на 70 крутке',
   recentSixStars:     'Последние 6★ крутки',
+  recentShowAll:      'Показать все',
+  recentCollapse:     'Свернуть',
   sixStarsPlaceholder:'🌟 Здесь появятся ваши последние 6★ персонажи',
   monthlyChart:       'График выпадений по месяцам',
   chartPlaceholder1:  '📊 Здесь появится график статистики',

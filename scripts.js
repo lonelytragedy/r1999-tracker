@@ -1069,10 +1069,10 @@ function parseData(list) {
     pityCounters[key]  = char.rarity === 6 ? 1 : pityCounters[key] + 1;
 
     if (char.rarity === 6) {
-      const type = getBannerType(e.poolName);
-      if (type === 'Character' || type === 'Limited') {
-        const rateUp = BANNERS[e.poolName]?.rateUp6;
-        const g      = guarantee[key];
+      const type   = getBannerType(e.poolName);
+      const rateUp = BANNERS[e.poolName]?.rateUp6;
+      if (type === 'Character' || type === 'Limited' || rateUp) {
+        const g = guarantee[key];
         if (!rateUp) {
           processedFifty[i] = null;
           guarantee[key]    = null;
@@ -1203,7 +1203,7 @@ function renderBannerStats() {
           ${typeTag}
           <select class="banner-stat-select">${options}</select>
         </div>
-        ${itemsHTML(segs[0].pulls, pityOf(segs[0].key))}`;
+        ${itemsHTML(segs[0].pulls, pityOf(segs[0].key), processedGuarantee[segs[0].key] === true)}`;
 
       const select  = card.querySelector('.banner-stat-select');
       const pullsEl = card.querySelector('.banner-stat-pulls');
@@ -1212,9 +1212,10 @@ function renderBannerStats() {
       select.addEventListener('change', () => {
         const s = segs[Number(select.value)];
         const d = pityOf(s.key);
+        const g = processedGuarantee[s.key] === true;
         pullsEl.textContent = s.pulls;
         gemsEl.textContent  = (s.pulls * 180).toLocaleString(locale);
-        pityEl.textContent  = `${d.pity} / ${PITY_MAX}`;
+        pityEl.innerHTML    = `${g ? `<span class="pity-guarantee-arrow" title="${t('fifty_guaranteed')}">↑</span>` : ''}${d.pity} / ${PITY_MAX}`;
         pityEl.className    = `banner-stat-pity-value banner-stat-pity ${d.colorCls}`;
       });
     } else {
@@ -1274,6 +1275,7 @@ function renderRecentSixStars() {
 
   if (!sixStars.length) {
     container.innerHTML = `<div class="recent-six-stars-placeholder">${t('sixStarsPlaceholder')}</div>`;
+    updateRecentToggle();
     return;
   }
 
@@ -1318,6 +1320,22 @@ function renderRecentSixStars() {
     card.appendChild(nameLabel);
     container.appendChild(card);
   });
+
+  updateRecentToggle();
+}
+
+function updateRecentToggle() {
+  const box = document.getElementById('recentSixStarsBox');
+  const btn = document.getElementById('recentToggle');
+  const grid = document.getElementById('recentSixStars');
+  if (!box || !btn || !grid) return;
+  box.classList.toggle('no-collapse', grid.scrollHeight <= 320);
+  btn.textContent = box.classList.contains('collapsed') ? t('recentShowAll') : t('recentCollapse');
+}
+
+function toggleRecent() {
+  document.getElementById('recentSixStarsBox').classList.toggle('collapsed');
+  updateRecentToggle();
 }
 
 function fiftyIconSVG(status) {
