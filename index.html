@@ -145,19 +145,21 @@
       <button class="filter-type type-regular"   onclick="filterByType('Regular',this)">Regular</button>
       <button class="filter-type type-special"   onclick="filterByType('Special',this)">Special</button>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th style="width:28px;"></th>
-          <th style="width:52px; text-align:center;" data-i18n-title="thTotalPulls">№</th>
-          <th data-i18n="thBanner"></th>
-          <th data-i18n="thPity"></th>
-          <th data-i18n="thCharacter"></th>
-          <th style="text-align:right;" data-i18n="thDate"></th>
-        </tr>
-      </thead>
-      <tbody id="table"></tbody>
-    </table>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28px;"></th>
+            <th style="width:52px; text-align:center;" data-i18n-title="thTotalPulls">№</th>
+            <th data-i18n="thBanner"></th>
+            <th data-i18n="thPity"></th>
+            <th data-i18n="thCharacter"></th>
+            <th style="text-align:right;" data-i18n="thDate"></th>
+          </tr>
+        </thead>
+        <tbody id="table"></tbody>
+      </table>
+    </div>
   </div>
 
   <p class="version-footer">Version 2.0 WIP — 28.05.2026</p>

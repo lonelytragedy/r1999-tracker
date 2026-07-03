@@ -920,3 +920,18 @@ body.ui-fade { opacity: 0; }
 @keyframes slide-out-left  { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-48px); } }
 .banner-view-panel > .slide-in-right  { animation-name: slide-in-right; }
 .banner-view-panel > .slide-in-left   { animation-name: slide-in-left; }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 600px) {
+  .box { padding: 14px; }
+  .box-header { flex-wrap: wrap; }
+  .side-buttons { flex-wrap: wrap; }
+  .gdrive-block { flex-wrap: wrap; }
+  .url-import { flex-wrap: wrap; }
+  .url-import input[type="text"] { min-width: 0; }
+  .url-import button { flex: 1; }
+  .banner-box-header { flex-wrap: wrap; }
+  .table-scroll table { min-width: 560px; }
+  table { font-size: 15px; }
+}
