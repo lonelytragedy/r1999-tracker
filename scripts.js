@@ -813,9 +813,16 @@ function exportDB() {
 
   const payload  = { version: 2, savedAt: new Date().toISOString(), profiles, pulls };
   const filename = `r1999_all_${new Date().toISOString().slice(0, 10)}.json`;
-  const blob     = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const url      = URL.createObjectURL(blob);
-  const a        = document.createElement('a');
+  const json     = JSON.stringify(payload, null, 2);
+
+  if (window.AndroidBridge && typeof window.AndroidBridge.saveDatabase === 'function') {
+    window.AndroidBridge.saveDatabase(json, filename);
+    return;
+  }
+
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
   a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
   showToast(t('exportedProfiles', profiles.length), 'success');
