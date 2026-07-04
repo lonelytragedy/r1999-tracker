@@ -63,6 +63,14 @@ window.__driveConnected = function (refreshToken) {
   _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
 };
 
+window.__driveRestore = function (refreshToken) {
+  if (!refreshToken) return;
+  gdriveRefresh = refreshToken;
+  localStorage.setItem('gdrive_refresh', refreshToken);
+  _updateGdriveUI(true);
+  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
+};
+
 window.__driveDisconnected = function () {
   gdriveSignOut();
 };
@@ -76,6 +84,9 @@ function gdriveSignIn() {
 function gdriveSignOut() {
   if (!GDRIVE_IN_APP && gdriveToken?.access_token) {
     google.accounts.oauth2.revoke(gdriveToken.access_token, () => {});
+  }
+  if (GDRIVE_IN_APP && window.AndroidBridge.disconnectDrive) {
+    window.AndroidBridge.disconnectDrive();
   }
   gdriveToken   = null;
   gdriveRefresh = null;
