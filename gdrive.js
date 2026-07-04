@@ -11,27 +11,30 @@ let gdriveCodeClient = null;
 let _autoSaveTimer   = null;
 let _pendingSave     = false;
 
+const GDRIVE_IN_APP = !!(window.AndroidBridge && window.AndroidBridge.connectDrive);
+
 function gdriveInit() {
-  if (!window.google?.accounts?.oauth2) {
-    console.warn('GIS SDK not loaded yet');
-    return;
-  }
-
-  gdriveCodeClient = google.accounts.oauth2.initCodeClient({
-    client_id: GDRIVE_CLIENT_ID,
-    scope:     GDRIVE_SCOPE,
-    ux_mode:   'popup',
-    callback:  _onCodeResponse,
-    error_callback: err => {
-      console.warn('GIS popup error:', err);
-      showToast(t('gdriveAuthError', err.type || 'popup blocked'), 'error', 5000);
-    },
-  });
-
   gdriveRefresh = localStorage.getItem('gdrive_refresh') || null;
   const savedTok = localStorage.getItem('gdrive_token');
   if (savedTok) {
     try { gdriveToken = JSON.parse(savedTok); } catch { gdriveToken = null; }
+  }
+
+  if (!GDRIVE_IN_APP) {
+    if (!window.google?.accounts?.oauth2) {
+      console.warn('GIS SDK not loaded yet');
+      return;
+    }
+    gdriveCodeClient = google.accounts.oauth2.initCodeClient({
+      client_id: GDRIVE_CLIENT_ID,
+      scope:     GDRIVE_SCOPE,
+      ux_mode:   'popup',
+      callback:  _onCodeResponse,
+      error_callback: err => {
+        console.warn('GIS popup error:', err);
+        showToast(t('gdriveAuthError', err.type || 'popup blocked'), 'error', 5000);
+      },
+    });
   }
 
   if (!gdriveRefresh) {
@@ -48,13 +51,30 @@ function gdriveInit() {
   _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
 }
 
+window.__driveConnected = function (refreshToken) {
+  if (refreshToken) {
+    gdriveRefresh = refreshToken;
+    localStorage.setItem('gdrive_refresh', refreshToken);
+  }
+  gdriveToken = null;
+  gdriveFileId = null;
+  _updateGdriveUI(true);
+  showToast(t('gdriveConnectedMsg'), 'success');
+  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
+};
+
+window.__driveDisconnected = function () {
+  gdriveSignOut();
+};
+
 function gdriveSignIn() {
+  if (GDRIVE_IN_APP) { window.AndroidBridge.connectDrive(); return; }
   if (!gdriveCodeClient) { showToast(t('gdriveSDKError'), 'error'); return; }
   gdriveCodeClient.requestCode();
 }
 
 function gdriveSignOut() {
-  if (gdriveToken?.access_token) {
+  if (!GDRIVE_IN_APP && gdriveToken?.access_token) {
     google.accounts.oauth2.revoke(gdriveToken.access_token, () => {});
   }
   gdriveToken   = null;
