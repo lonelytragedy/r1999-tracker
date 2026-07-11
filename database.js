@@ -9,7 +9,7 @@ const BANNERS = {
   "鸿羽若有凌云志" : { name: "Soaring Aspirations", type: "Character", rateUp6: ["Cheng Heguang"] },
   "幕间蒙太奇" : { name: "A Life in Montage", type: "Character", rateUp6: ["Noire"] },
   "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited", rateUp6: ["Liang Yue"]},
-  "湖心追述" : { name: "From the Lake's Heart", type: "Water"},
+  "湖心追述" : { name: "From the Lake's Heart", type: "Water", rateUp6: ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]},
   "子夜独角戏" : { name: "The Midnight Flutist", type: "Character", rateUp6: ["Rubuska"]},
   "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited", rateUp6: ["Paper Heron"]},
   "湖的启示" : { name: "Revelation of the Water", type: "Water" },
@@ -33,6 +33,13 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:      "誓言无有烬时",
+    startUTC: "2026-07-14T10:00:00Z",
+    endUTC:   "2026-07-28T09:59:00Z",
+    image:    "static/banners/The_Oath_Unyielding.webp",
+    rateUp:  ["Marsha", "Avgust", "Horropedia"]
+  },
   {
     key:      "现实破译法",
     startUTC: "2026-07-02T10:00:00Z",

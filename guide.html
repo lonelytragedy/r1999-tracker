@@ -139,6 +139,16 @@
     html[lang="en"] a[data-en] { display: inline !important; }
     html[lang="ru"] li[data-ru] { display: list-item !important; }
     html[lang="en"] li[data-en] { display: list-item !important; }
+
+    html[lang="ru"] .guide-mobile-only[data-ru],
+    html[lang="en"] .guide-mobile-only[data-en] { display: none !important; }
+
+    @media (max-width: 600px) {
+      html[lang="ru"] .guide-desktop-only[data-ru],
+      html[lang="en"] .guide-desktop-only[data-en] { display: none !important; }
+      html[lang="ru"] .guide-mobile-only[data-ru],
+      html[lang="en"] .guide-mobile-only[data-en] { display: block !important; }
+    }
   </style>
 </head>
 <body>
@@ -193,67 +203,156 @@
     </div>
   </div>
 
-  <div class="box">
-    <h3 data-ru>Способ 1 — Авто-граббер ссылки <span class="guide-step-tag">Рекомендуется</span></h3>
-    <h3 data-en>Method 1 — Auto Link Grabber <span class="guide-step-tag">Recommended</span></h3>
+  <div class="box guide-desktop-only" data-ru>
+    <h3>Способ 1 — Авто-граббер ссылки (Windows) <span class="guide-step-tag">Рекомендуется</span></h3>
 
-    <p data-ru>
+    <p>
       Специальная утилита автоматически перехватывает ссылку на историю круток пока ты открываешь её в игре. Не требует настройки Fiddler.
       <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Скачать .exe</a>
     </p>
-    <p data-en>
-      A small utility that automatically intercepts your pull history link while you open it in-game. No Fiddler setup required.
-      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Download .exe</a>
-    </p>
 
-    <div class="guide-tip" data-ru>Программа временно включает локальный прокси, перехватывает запрос к истории круток и автоматически копирует ссылку в буфер обмена. Игровые данные не изменяются.</div>
-    <div class="guide-tip" data-en>The utility temporarily enables a local proxy, intercepts the pull history request, and automatically copies the link to your clipboard. No game data is modified.</div>
+    <div class="guide-tip">Программа временно включает локальный прокси, перехватывает запрос к истории круток и автоматически копирует ссылку в буфер обмена. Игровые данные не изменяются.</div>
 
     <ul>
-      <li data-ru><span class="guide-step-tag">1</span> Скачай последний релиз со страницы Releases и запусти <b>R1999LinkGrabber.exe</b></li>
-      <li data-en><span class="guide-step-tag">1</span> Download the latest release from the Releases page and run <b>R1999LinkGrabber.exe</b></li>
-      <li data-ru><span class="guide-step-tag">2</span> В консоли появится:</li>
-      <li data-en><span class="guide-step-tag">2</span> The console will show:</li>
+      <li><span class="guide-step-tag">1</span> Скачай последний релиз со страницы Releases и запусти <b>R1999LinkGrabber.exe</b></li>
+      <li><span class="guide-step-tag">2</span> В консоли появится:</li>
     </ul>
     <div class="guide-code">Proxy enabled: 127.0.0.1:8080
 Starting capture...
 Launch the game and open summon history</div>
     <ul>
-      <li data-ru><span class="guide-step-tag">3</span> Запусти <b>Reverse: 1999</b> и открой страницу истории круток <b>(Summon → Record)</b></li>
-      <li data-en><span class="guide-step-tag">3</span> Launch <b>Reverse: 1999</b> and open the pull history page <b>(Summon → Record)</b></li>
-      <li data-ru><span class="guide-step-tag">4</span> Программа автоматически найдёт ссылку и скопирует её:</li>
-      <li data-en><span class="guide-step-tag">4</span> The app will automatically find and copy the link:</li>
+      <li><span class="guide-step-tag">3</span> Запусти <b>Reverse: 1999</b> и открой страницу истории круток <b>(Summon → Record)</b></li>
+      <li><span class="guide-step-tag">4</span> Программа автоматически найдёт ссылку и скопирует её:</li>
     </ul>
     <div class="guide-code">=== SUMMON LINK FOUND ===
 https://game-re-en-service.sl916.com/query/summon?...
 Link copied to clipboard</div>
     <ul>
-      <li data-ru><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера</li>
-      <li data-en><span class="guide-step-tag">5</span> Paste the link into the <b>🌐 Import by URL</b> field on the tracker's main page</li>
+      <li><span class="guide-step-tag">5</span> Вставь ссылку в поле <b>🌐 Импорт по ссылке</b> на главной странице трекера</li>
     </ul>
 
-    <div class="guide-warn" data-ru>
+    <div class="guide-warn">
       <b>Важно:</b> не закрывай окно консоли крестиком — это может оставить системный прокси включённым. Выходи только через <b>Ctrl + C</b> или позволь программе завершиться самостоятельно после захвата ссылки.
     </div>
-    <div class="guide-warn" data-en>
+
+    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;">
+      Если прокси всё же остался включён: <b>Настройки → Сеть и интернет → Прокси → Настройка прокси вручную</b> → выключи <b>«Использовать прокси-сервер»</b>.
+    </p>
+
+    <p style="font-size:13px; color:#9aa0a6;">
+      Если хочешь запустить Python-скрипт напрямую — нужны Python 3.10–3.12 и зависимости:
+    </p>
+    <div class="guide-code">pip install mitmproxy pyperclip
+python R1999LinkGrabber.py</div>
+  </div>
+
+  <div class="box guide-desktop-only" data-en>
+    <h3>Method 1 — Auto Link Grabber (Windows) <span class="guide-step-tag">Recommended</span></h3>
+
+    <p>
+      A small utility that automatically intercepts your pull history link while you open it in-game. No Fiddler setup required.
+      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Download .exe</a>
+    </p>
+
+    <div class="guide-tip">The utility temporarily enables a local proxy, intercepts the pull history request, and automatically copies the link to your clipboard. No game data is modified.</div>
+
+    <ul>
+      <li><span class="guide-step-tag">1</span> Download the latest release from the Releases page and run <b>R1999LinkGrabber.exe</b></li>
+      <li><span class="guide-step-tag">2</span> The console will show:</li>
+    </ul>
+    <div class="guide-code">Proxy enabled: 127.0.0.1:8080
+Starting capture...
+Launch the game and open summon history</div>
+    <ul>
+      <li><span class="guide-step-tag">3</span> Launch <b>Reverse: 1999</b> and open the pull history page <b>(Summon → Record)</b></li>
+      <li><span class="guide-step-tag">4</span> The app will automatically find and copy the link:</li>
+    </ul>
+    <div class="guide-code">=== SUMMON LINK FOUND ===
+https://game-re-en-service.sl916.com/query/summon?...
+Link copied to clipboard</div>
+    <ul>
+      <li><span class="guide-step-tag">5</span> Paste the link into the <b>🌐 Import by URL</b> field on the tracker's main page</li>
+    </ul>
+
+    <div class="guide-warn">
       <b>Important:</b> do not close the console window with the X button — this may leave the system proxy enabled. Exit only via <b>Ctrl + C</b> or let the program finish automatically after capturing the link.
     </div>
 
-    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;" data-ru>
-      Если прокси всё же остался включён: <b>Настройки → Сеть и интернет → Прокси → Настройка прокси вручную</b> → выключи <b>«Использовать прокси-сервер»</b>.
-    </p>
-    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;" data-en>
+    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;">
       If the proxy remains enabled: <b>Settings → Network & Internet → Proxy → Manual proxy setup</b> → disable <b>"Use a proxy server"</b>.
     </p>
 
-    <p style="font-size:13px; color:#9aa0a6;" data-ru>
-      Если хочешь запустить Python-скрипт напрямую — нужны Python 3.10–3.12 и зависимости:
-    </p>
-    <p style="font-size:13px; color:#9aa0a6;" data-en>
+    <p style="font-size:13px; color:#9aa0a6;">
       To run the Python script directly — requires Python 3.10–3.12 and dependencies:
     </p>
     <div class="guide-code">pip install mitmproxy pyperclip
 python R1999LinkGrabber.py</div>
+  </div>
+
+  <div class="box guide-mobile-only" data-ru>
+    <h3>Способ 1 — Приложение Reverse: Tracker (Android) <span class="guide-step-tag">Рекомендуется</span></h3>
+
+    <p>
+      Официальное Android-приложение содержит и сам трекер, и граббер ссылки — устанавливать что-то ещё не нужно.
+      <a href="https://github.com/lonelytragedy/r1999-TrackerApp/releases/latest" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Скачать APK</a>
+    </p>
+
+    <div class="guide-tip">Приложение поднимает локальный VPN-туннель прямо на телефоне, перехватывает запрос к истории круток и копирует ссылку в буфер обмена. Игровые данные не изменяются, весь остальной трафик игры идёт как обычно.</div>
+
+    <ul>
+      <li><span class="guide-step-tag">1</span> Открой приложение — вкладка <b>Tracker</b> откроется по умолчанию</li>
+      <li><span class="guide-step-tag">2</span> Перейди во вкладку <b>Link grabber</b></li>
+      <li><span class="guide-step-tag">3</span> Нажми <b>Start VPN capture</b></li>
+      <li><span class="guide-step-tag">4</span> Зайди в игру, авторизуйся и открой вкладку <b>Summon</b></li>
+      <li><span class="guide-step-tag">5</span> В шторке уведомлений нажми <b>Start VPN</b></li>
+      <li><span class="guide-step-tag">6</span> Дождись, пока игра переподключится к интернету — если сама не переподключится, нажми <b>Reconnect</b> в игре вручную</li>
+      <li><span class="guide-step-tag">7</span> Открой историю круток</li>
+      <li><span class="guide-step-tag">8</span> Возможно, историю придётся открыть 2–3 раза — ссылка ловится не всегда с первой попытки</li>
+      <li><span class="guide-step-tag">9</span> Когда ссылка поймана — придёт уведомление. Она уже скопирована в буфер, а VPN отключится автоматически</li>
+    </ul>
+
+    <div class="guide-tip">Нажми на уведомление о найденной ссылке — приложение откроет вкладку <b>Link grabber</b> с готовой ссылкой. Оттуда жми <b>Open in tracker</b>, чтобы сразу импортировать её на вкладке Tracker.</div>
+
+    <div class="guide-warn">
+      <b>Важно:</b> шаг 5 (кнопка <b>Start VPN</b> в шторке) поднимает сам туннель — до этого момента перехват ещё не идёт. Кнопка <b>Cancel</b> в той же шторке просто отменяет ожидание, ничего не включая.
+    </div>
+
+    <p style="font-size:13px; color:#9aa0a6;">
+      Способ через прокси (без VPN) тоже доступен на вкладке <b>Link grabber → Proxy</b> — там своя инструкция прямо в приложении.
+    </p>
+  </div>
+
+  <div class="box guide-mobile-only" data-en>
+    <h3>Method 1 — Reverse: Tracker App (Android) <span class="guide-step-tag">Recommended</span></h3>
+
+    <p>
+      The official Android app bundles both the tracker and the link grabber — nothing else to install.
+      <a href="https://github.com/lonelytragedy/r1999-TrackerApp/releases/latest" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Download APK</a>
+    </p>
+
+    <div class="guide-tip">The app runs a local VPN tunnel on your phone, intercepts the pull history request, and copies the link to your clipboard. No game data is modified, and the rest of the game's traffic passes through normally.</div>
+
+    <ul>
+      <li><span class="guide-step-tag">1</span> Open the app — the <b>Tracker</b> tab opens by default</li>
+      <li><span class="guide-step-tag">2</span> Switch to the <b>Link grabber</b> tab</li>
+      <li><span class="guide-step-tag">3</span> Tap <b>Start VPN capture</b></li>
+      <li><span class="guide-step-tag">4</span> Open the game, log in, and go to the <b>Summon</b> tab</li>
+      <li><span class="guide-step-tag">5</span> In the notification shade, tap <b>Start VPN</b></li>
+      <li><span class="guide-step-tag">6</span> Wait for the game to reconnect to the internet — tap <b>Reconnect</b> in-game manually if it doesn't happen on its own</li>
+      <li><span class="guide-step-tag">7</span> Open the pull history</li>
+      <li><span class="guide-step-tag">8</span> You may need to re-open the history 2–3 times — the link isn't always caught on the first try</li>
+      <li><span class="guide-step-tag">9</span> Once the link is caught, a notification appears. It's already copied to your clipboard and the VPN turns off automatically</li>
+    </ul>
+
+    <div class="guide-tip">Tap the "link found" notification and the app opens the <b>Link grabber</b> tab with the link ready. From there tap <b>Open in tracker</b> to import it straight into the Tracker tab.</div>
+
+    <div class="guide-warn">
+      <b>Important:</b> step 5 (the <b>Start VPN</b> button in the notification) is what actually brings up the tunnel — capture is not running before that. <b>Cancel</b> in the same notification just dismisses it without enabling anything.
+    </div>
+
+    <p style="font-size:13px; color:#9aa0a6;">
+      A proxy-based method (no VPN) is also available under <b>Link grabber → Proxy</b> in the app, with its own instructions there.
+    </p>
   </div>
 
   <div class="box">
