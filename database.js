@@ -20,6 +20,7 @@ const BANNERS = {
   "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character", rateUp6: ["Tuesday"]},
   "修缮往日": { name: "From the Ruin of the Past", type: "Character", rateUp6: ["Moldir"]},
   "誓言无有烬时": { name: "The Oath Unyielding", type: "Character", rateUp6: ["Marsha"]},
+  "Analysis of Metallic Dramaturgy": { name: "Analysis of Metallic Dramaturgy", type: "Limited", rateUp6: ["The Twins"]},
   "思维动力学":   { name: "Cognitive Dynamics", type: "Character", rateUp6: ["Ulrich"]},
   "永恒折射角":   { name: "The Brilliance Within", type: "Character", rateUp6: ["Brume"]},
   "仙子振翅入夜": { name: "The Fairies Shining at Night", type: "Character", rateUp6: ["Tooth Fairy"]},
@@ -33,6 +34,27 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:      "湖的涟漪",
+    startUTC: "2026-07-23T10:00:00Z",
+    endUTC:   "2026-08-13T09:59:00Z",
+    image:    "static/banners/Ripples_on_the_Water_Atomic.webp",
+    rateUp:  ["Windsong", "Lopera", "Regulus", "An-an Lee", "Tooth Fairy", "Isolde"]
+  },
+  {
+    key:      "Analysis of Metallic Dramaturgy",
+    startUTC: "2026-07-23T10:00:00Z",
+    endUTC:   "2026-08-13T09:59:00Z",
+    image:    "static/banners/Analysis_of_Metallic_Dramaturgy.webp",
+    rateUp:  ["The Twins", "Satsuki", "Brimley"]
+  },
+  {
+    key:      "湖的企盼",
+    startUTC: "2026-08-01T05:00:00Z",
+    endUTC:   "2026-08-14T09:59:00Z",
+    image:    "static/banners/Yearning_of_the_Water_Atomic.webp",
+    rateUp:  ["Igor", "Cheng Heguang"]
+  },
   {
     key:      "誓言无有烬时",
     startUTC: "2026-07-14T10:00:00Z",
