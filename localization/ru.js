@@ -1,6 +1,9 @@
 window.LOCALE = {
   guideBtn:           '📘 Инструкция',
   bannerHistoryBtn:   '📜 История баннеров',
+  offlineLocked:      'Недоступно офлайн — нужно подключение к интернету',
+  offlineMode:        'Режим офлайн',
+  gdriveOffline:      'Офлайн-режим',
   dbManagement:       'Управление базой данных',
   urlPlaceholder:     'https://game-re-en-service.sl916.com/query/summon?userId=xxx&token=xxx',
   importUrlBtn:       '🌐 Импорт по ссылке',

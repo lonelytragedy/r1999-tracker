@@ -20,6 +20,9 @@
 </head>
 <body>
   <div id="top-bar"></div>
+  <div id="offlineBadge" class="offline-badge">
+    <span class="offline-dot"></span><span data-i18n="offlineMode"></span>
+  </div>
 
   <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
     <h1 class="site-header" style="margin:0;">
@@ -163,10 +166,17 @@
     </div>
   </div>
 
-  <p class="version-footer">Version 2.5 Mobile</p>
+  <p class="version-footer">Version 2.6 Mobile</p>
 
   <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-i18n-title="scrollTop">↑</button>
 
   <script src="scripts.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>

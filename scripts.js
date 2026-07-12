@@ -276,6 +276,7 @@ window.addEventListener('DOMContentLoaded', () => {
   preloadLocales();
   loadProfiles();
   initBannerView();
+  applyOfflineLocks();
 
   document.getElementById('fileInput').addEventListener('change', loadFromFile);
   document.getElementById('dbInput').addEventListener('change', loadDBFile);
@@ -294,6 +295,42 @@ window.addEventListener('DOMContentLoaded', () => {
     tb.querySelectorAll(`tr[data-group="${CSS.escape(gid)}"]`).forEach(r => r.classList.remove('group-hover'));
   });
 });
+
+const OFFLINE_LOCK_SELECTORS = [
+  '.url-import button',
+  '.side-btn[href$="guide.html"]',
+  '.side-btn[target="_blank"]',
+  '#gdriveSignInBtn'
+];
+
+function applyOfflineLocks() {
+  const offline = !navigator.onLine;
+  document.body.classList.toggle('is-offline', offline);
+  OFFLINE_LOCK_SELECTORS.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      el.classList.toggle('offline-locked', offline);
+      if (offline) {
+        el.setAttribute('aria-disabled', 'true');
+        el.title = t('offlineLocked');
+      } else {
+        el.removeAttribute('aria-disabled');
+        el.title = '';
+      }
+    });
+  });
+}
+
+document.addEventListener('click', ev => {
+  if (navigator.onLine) return;
+  const locked = ev.target.closest('.offline-locked');
+  if (!locked) return;
+  ev.preventDefault();
+  ev.stopImmediatePropagation();
+  showToast(t('offlineLocked'), 'warning');
+}, true);
+
+window.addEventListener('online', applyOfflineLocks);
+window.addEventListener('offline', applyOfflineLocks);
 
 window.addEventListener('scroll', () => {
   document.getElementById('scrollTopBtn')?.classList.toggle('visible', window.scrollY > 400);

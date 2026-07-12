@@ -1,6 +1,9 @@
 window.LOCALE = {
   guideBtn:           '📘 Guide',
   bannerHistoryBtn:   '📜 Banner History',
+  offlineLocked:      'Unavailable offline — an internet connection is required',
+  offlineMode:        'Offline mode',
+  gdriveOffline:      'Offline mode',
   dbManagement:       'Database Management',
   urlPlaceholder:     'https://game-re-en-service.sl916.com/query/summon?userId=xxx&token=xxx',
   importUrlBtn:       '🌐 Import by URL',

@@ -172,6 +172,7 @@ async function _workerPost(path, payload) {
 
 function gdriveScheduleSave() {
   if (!gdriveRefresh && !gdriveToken) return;
+  if (!navigator.onLine) { _pendingSave = true; _setOfflineUI(); return; }
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(() => gdriveSave(), GDRIVE_AUTOSAVE_MS);
 }
@@ -225,6 +226,11 @@ async function _updateFile(fileId, content) {
 }
 
 async function gdriveSave() {
+  if (!navigator.onLine) {
+    _pendingSave = true;
+    _setOfflineUI();
+    return;
+  }
   if (!await _ensureToken()) {
     _pendingSave = true;
     _setExpiredUI();
@@ -262,6 +268,7 @@ async function gdriveSave() {
 }
 
 async function gdriveLoad() {
+  if (!navigator.onLine) return;
   if (!await _ensureToken()) return;
 
   _setSyncing(true);
@@ -318,11 +325,40 @@ function _setExpiredUI() {
   const signIn  = document.getElementById('gdriveSignInBtn');
   const signOut = document.getElementById('gdriveSignOutBtn');
   if (!status) return;
+  if (!navigator.onLine) { _setOfflineUI(); return; }
   status.innerHTML = t('gdriveExpired');
   status.className = 'gdrive-status expired';
   if (signIn)  signIn.style.display  = '';
   if (signOut) signOut.style.display = 'none';
 }
+
+function _setOfflineUI() {
+  const status  = document.getElementById('gdriveStatus');
+  const signIn  = document.getElementById('gdriveSignInBtn');
+  const signOut = document.getElementById('gdriveSignOutBtn');
+  if (!status) return;
+  status.innerHTML = t('gdriveOffline');
+  status.className = 'gdrive-status offline';
+  if (gdriveRefresh || gdriveToken) {
+    if (signIn)  signIn.style.display  = 'none';
+    if (signOut) signOut.style.display = '';
+  }
+}
+
+window.addEventListener('offline', () => {
+  if (gdriveRefresh || gdriveToken) _setOfflineUI();
+});
+
+window.addEventListener('online', () => {
+  if (!(gdriveRefresh || gdriveToken)) return;
+  _updateGdriveUI(true);
+  _ensureToken().then(ok => {
+    if (!ok) { _setExpiredUI(); return; }
+    gdriveLoad().then(() => {
+      if (_pendingSave) { _pendingSave = false; gdriveSave(); }
+    });
+  });
+});
 
 window.addEventListener('load', () => {
   const ready = () => {
