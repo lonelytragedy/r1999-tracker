@@ -4,5 +4,7 @@
   const lang = (saved === 'ru' || saved === 'en') ? saved
     : RU.includes((navigator.language || '').split('-')[0].toLowerCase()) ? 'ru' : 'en';
   document.documentElement.lang = lang;
+  const skin = localStorage.getItem('r1999_skin');
+  document.documentElement.dataset.skin = (skin === 'classic') ? 'classic' : 'reversed';
   document.write('<scr' + 'ipt src="localization/' + lang + '.js"><\/scr' + 'ipt>');
 })();

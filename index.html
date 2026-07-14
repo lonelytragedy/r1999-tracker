@@ -29,9 +29,24 @@
       <img src="static/ui/logo.png" alt="Logo" class="site-logo">
       <span class="site-title">Reverse<span class="site-title-colon">:</span> Tracker</span>
     </h1>
-    <div class="lang-switcher">
-      <button class="banner-toggle-btn" id="langRU" onclick="setLang('ru')"><img class="lang-btn-flag" src="static/ui/flag_ru.png" alt=""> RU</button>
-      <button class="banner-toggle-btn" id="langEN" onclick="setLang('en')"><img class="lang-btn-flag" src="static/ui/flag_en.png" alt=""> EN</button>
+    <div class="settings" id="settings">
+      <button class="settings-gear" id="settingsGear" onclick="toggleSettings(event)" aria-label="Settings" title="Settings">⚙</button>
+      <div class="settings-panel" id="settingsPanel">
+        <div class="settings-row">
+          <span class="settings-label" data-i18n="settingsLanguage"></span>
+          <div class="settings-seg">
+            <button class="banner-toggle-btn" id="langRU" onclick="setLang('ru')"><img class="lang-btn-flag" src="static/ui/flag_ru.png" alt=""> RU</button>
+            <button class="banner-toggle-btn" id="langEN" onclick="setLang('en')"><img class="lang-btn-flag" src="static/ui/flag_en.png" alt=""> EN</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-label" data-i18n="settingsSkin"></span>
+          <div class="settings-seg">
+            <button class="banner-toggle-btn" id="skinReversed" onclick="setSkin('reversed')" data-i18n="skinReversed"></button>
+            <button class="banner-toggle-btn" id="skinClassic" onclick="setSkin('classic')" data-i18n="skinClassic"></button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

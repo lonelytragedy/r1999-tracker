@@ -264,13 +264,36 @@ function formatTimelineDate(ms, monthsFull) {
     : `${monthsFull[p.month]} ${p.date}, ${p.year}`;
 }
 
+function toggleSettings(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('settings').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  const s = document.getElementById('settings');
+  if (s && s.classList.contains('open') && !s.contains(e.target)) s.classList.remove('open');
+});
+
+function setSkin(skin) {
+  skin = (skin === 'classic') ? 'classic' : 'reversed';
+  document.documentElement.dataset.skin = skin;
+  localStorage.setItem('r1999_skin', skin);
+  document.getElementById('skinReversed')?.classList.toggle('active', skin === 'reversed');
+  document.getElementById('skinClassic')?.classList.toggle('active', skin === 'classic');
+  // the timeline day-grid / now-tint colours are skin-dependent → redraw it
+  if (typeof renderBannerTimeline === 'function' && document.getElementById('bannerTimelineWrap')?.children.length) {
+    try { renderBannerTimeline(); } catch (_) {}
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   currentLang = detectLang();
   LOCALES[currentLang] = window.LOCALE;
   document.documentElement.lang = currentLang;
   document.getElementById('langRU').classList.toggle('active', currentLang === 'ru');
   document.getElementById('langEN').classList.toggle('active', currentLang === 'en');
-  requestAnimationFrame(() => document.querySelector('.lang-switcher')?.classList.add('ready'));
+  const _skin = document.documentElement.dataset.skin === 'classic' ? 'classic' : 'reversed';
+  document.getElementById('skinReversed')?.classList.toggle('active', _skin === 'reversed');
+  document.getElementById('skinClassic')?.classList.toggle('active', _skin === 'classic');
   applyI18n();
   document.querySelectorAll('.box').forEach(b => b.classList.add('visible'));
   preloadLocales();
@@ -1807,7 +1830,10 @@ function renderBannerTimeline(options = {}) {
     if (p.date === 1) monthStartIndices.push(i);
   }
 
-  const gridLine = `repeating-linear-gradient(to right, transparent 0px, transparent ${DAY_W - 1}px, #2a2114 ${DAY_W - 1}px, #2a2114 ${DAY_W}px)`;
+  const _skinCS   = getComputedStyle(document.documentElement);
+  const _tlGrid   = _skinCS.getPropertyValue('--tl-grid').trim()     || '#2a2114';
+  const _tlNowTnt = _skinCS.getPropertyValue('--tl-now-tint').trim() || 'rgba(224,145,63,0.06)';
+  const gridLine = `repeating-linear-gradient(to right, transparent 0px, transparent ${DAY_W - 1}px, ${_tlGrid} ${DAY_W - 1}px, ${_tlGrid} ${DAY_W}px)`;
   const timelineItems = banners
     .map((b, bIdx) => {
       const info      = BANNERS[b.key] || { name: b.key, type: 'Character' };
@@ -1841,8 +1867,8 @@ function renderBannerTimeline(options = {}) {
     if (nowDayIdx >= 0 && nowDayIdx < totalDays) {
       bgLayers.push(`linear-gradient(to right,
           transparent ${nowDayIdx * DAY_W}px,
-          rgba(224,145,63,0.06) ${nowDayIdx * DAY_W}px,
-          rgba(224,145,63,0.06) ${(nowDayIdx + 1) * DAY_W}px,
+          ${_tlNowTnt} ${nowDayIdx * DAY_W}px,
+          ${_tlNowTnt} ${(nowDayIdx + 1) * DAY_W}px,
           transparent ${(nowDayIdx + 1) * DAY_W}px)`);
     }
     bgLayers.push(gridLine);
