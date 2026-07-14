@@ -135,8 +135,7 @@ h3::before {
   background: linear-gradient(90deg, transparent, var(--accent-gold));
   flex-shrink: 0;
 }
-.charts-header h3::before,
-.banner-box-header h3::before { content: none; }
+/* section-title flourish is shown on every header, including flex ones */
 
 input, button {
   background: var(--bg-input);
@@ -156,7 +155,7 @@ button:hover { background: #33281a; cursor: pointer; }
     rgba(23, 18, 12, 0.74);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
-  border: 1px solid rgba(216, 180, 106, 0.16);
+  border: 1px solid rgba(226, 150, 66, 0.30);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 20px;
@@ -220,9 +219,10 @@ thead th {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: var(--bg-input);
+  background: linear-gradient(180deg, #2c2113, #241b0f);
+  border-bottom: 2px solid rgba(216, 180, 106, 0.38);
   font-size: 20px;
-  padding: 10px 8px;
+  padding: 11px 8px;
   text-align: left;
   white-space: nowrap;
 }
@@ -557,13 +557,16 @@ tr.pity-red    .fifty-mark { color: #ff4d5a; }
   box-shadow: 0 0 0 4px rgba(216, 180, 106, 0.08), 0 2px 12px rgba(0, 0, 0, 0.55);
 }
 .site-title {
+  display: inline-block;
   font-family: var(--font-display);
   font-size: 27px;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #f2ecd8;
-  text-shadow: 0 1px 10px rgba(224, 145, 63, 0.15);
+  text-shadow: 0 0 20px rgba(224, 145, 63, 0.30), 0 0 44px rgba(224, 145, 63, 0.14), 0 1px 2px rgba(0, 0, 0, 0.5);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
 }
 .site-title-colon { color: var(--accent-amber); font-style: italic; }
 .home-button {
@@ -1163,7 +1166,8 @@ body.ui-fade { opacity: 0; }
 .banner-view-panel > .slide-in-right  { animation-name: slide-in-right; }
 .banner-view-panel > .slide-in-left   { animation-name: slide-in-left; }
 
-.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; position: relative; padding: 0 13px; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; position: relative; padding: 0 8px; }
+.table-scroll table { margin-top: 0; }
 .table-scroll::before,
 .table-scroll::after {
   content: '';
