@@ -134,20 +134,28 @@
   <div class="box">
     <h3 data-i18n="pullHistory"></h3>
     <div class="filter-bar">
-      <span data-i18n="filterRarity"></span>
-      <button class="active" onclick="filterByRarity(0,this)" data-i18n="filterAll"></button>
-      <button class="r6" onclick="filterByRarity(6,this)">6★</button>
-      <button class="r5" onclick="filterByRarity(5,this)">5★</button>
-      <button class="r4" onclick="filterByRarity(4,this)">4★</button>
-      <button class="r3" onclick="filterByRarity(3,this)">3★</button>
-      <button class="r2" onclick="filterByRarity(2,this)">2★</button>
-      <span style="margin-left:8px;" data-i18n="filterBannerType"></span>
-      <button class="filter-type-all active" onclick="filterByType(null,this)" data-i18n="filterAll"></button>
-      <button class="filter-type type-limited"   onclick="filterByType('Limited',this)">Limited</button>
-      <button class="filter-type type-character" onclick="filterByType('Character',this)">Character</button>
-      <button class="filter-type type-water"     onclick="filterByType('Water',this)">Water</button>
-      <button class="filter-type type-regular"   onclick="filterByType('Regular',this)">Regular</button>
-      <button class="filter-type type-special"   onclick="filterByType('Special',this)">Special</button>
+      <div class="filter-group">
+        <span data-i18n="filterRarity"></span>
+        <div class="filter-pills">
+          <button class="active" onclick="filterByRarity(0,this)" data-i18n="filterAll"></button>
+          <button class="r6" onclick="filterByRarity(6,this)">6★</button>
+          <button class="r5" onclick="filterByRarity(5,this)">5★</button>
+          <button class="r4" onclick="filterByRarity(4,this)">4★</button>
+          <button class="r3" onclick="filterByRarity(3,this)">3★</button>
+          <button class="r2" onclick="filterByRarity(2,this)">2★</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span data-i18n="filterBannerType"></span>
+        <div class="filter-pills">
+          <button class="filter-type-all active" onclick="filterByType(null,this)" data-i18n="filterAll"></button>
+          <button class="filter-type type-limited"   onclick="filterByType('Limited',this)">Limited</button>
+          <button class="filter-type type-character" onclick="filterByType('Character',this)">Character</button>
+          <button class="filter-type type-water"     onclick="filterByType('Water',this)">Water</button>
+          <button class="filter-type type-regular"   onclick="filterByType('Regular',this)">Regular</button>
+          <button class="filter-type type-special"   onclick="filterByType('Special',this)">Special</button>
+        </div>
+      </div>
     </div>
     <div class="table-scroll">
       <table>
