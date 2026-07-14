@@ -1888,6 +1888,72 @@ function renderBannerTimeline(options = {}) {
   }, 60);
 }
 
+function collectBannerRuns(bannerKey) {
+  const runs = {};
+  processedList.forEach((e, i) => {
+    if (e.poolName !== bannerKey) return;
+    const pid = e.poolId;
+    const run = runs[pid] ??= {
+      poolId: pid, version: gameVersionFromPoolId(pid),
+      firstTime: e.createTime, total: 0, sixStars: []
+    };
+    run.total++;
+    if (e.createTime < run.firstTime) run.firstTime = e.createTime;
+    const char = getChar(e.gainIds[0]);
+    if (char.rarity === 6) {
+      run.sixStars.push({ name: char.name, pity: processedPity[i], fifty: processedFifty[i] });
+    }
+  });
+  return Object.values(runs).sort((a, b) => b.firstTime.localeCompare(a.firstTime));
+}
+
+function bannerSixChipHTML(s) {
+  const colorCls = s.pity < PITY_COLOR_YELLOW ? 'pity-val-green'
+                 : s.pity < PITY_COLOR_RED    ? 'pity-val-yellow' : 'pity-val-red';
+  const src   = `static/characters/${s.name.replace(/\s+/g, '_')}.webp`;
+  const fifty = s.fifty
+    ? `<span class="tl-six-fifty ${s.fifty}" title="${t('fifty_' + s.fifty)}">${fiftyIconSVG(s.fifty)}</span>`
+    : '';
+  return `<div class="tl-six-chip">
+      <span class="tl-chip-avatar tl-six-avatar" data-src="${src}"
+            data-letter="${(s.name.trim()[0] || '?')}" data-fg="#ff4d5a" data-bg="#2a0a0e"></span>
+      <span class="tl-six-name">${escapeHTML(s.name)}</span>
+      <span class="tl-six-pity ${colorCls}">${s.pity}</span>
+      ${fifty}
+    </div>`;
+}
+
+function bannerPullsSectionHTML(b) {
+  const runs  = collectBannerRuns(b.key);
+  const total = runs.reduce((s, r) => s + r.total, 0);
+
+  if (!total) {
+    return `<div class="tl-modal-divider"></div>
+      <div class="tl-modal-section-title">${t('modalYourPulls')}</div>
+      <div class="tl-modal-pulls-empty">${t('modalNoPulls')}</div>`;
+  }
+
+  const runsHTML = runs.map(run => {
+    const date  = run.firstTime.slice(0, 10);
+    const label = run.version ? `v${run.version}` : date;
+    const six   = run.sixStars.length;
+    const meta  = `${date} · ${run.total} ${t('modalPulls')} · ${six ? six + '× ★6' : t('modalNoSix')}`;
+    const chips = six ? run.sixStars.map(bannerSixChipHTML).join('') : '';
+    return `<div class="tl-run">
+        <div class="tl-run-head">
+          <span class="tl-run-ver">${label}</span>
+          <span class="tl-run-meta">${meta}</span>
+        </div>
+        ${chips ? `<div class="tl-run-six">${chips}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  return `<div class="tl-modal-divider"></div>
+    <div class="tl-modal-section-title">${t('modalYourPulls')}
+      <span class="tl-pulls-total">${total} ${t('modalPulls')}</span></div>
+    <div class="tl-modal-runs">${runsHTML}</div>`;
+}
+
 function openBannerModal(b, info, typeClass) {
   const MONTHS_FULL = t('monthsFull');
 
@@ -1942,6 +2008,7 @@ function openBannerModal(b, info, typeClass) {
         ${rateUpChips.length ? `
           <div class="tl-modal-section-title">${t('bannerCharacters')}</div>
           <div class="tl-modal-chips">${rateUpChips}</div>` : ''}
+        ${bannerPullsSectionHTML(b)}
       </div>
     </div>`;
 
