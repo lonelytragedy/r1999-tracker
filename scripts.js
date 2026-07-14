@@ -639,7 +639,7 @@ function loadProfiles() {
 
 function renderProfileSelect() {
   document.getElementById('profileSelect').innerHTML = profiles.map(p =>
-    `<option value="${escapeHTML(p.id)}"${p.id === currentProfile ? ' selected' : ''}>${escapeHTML(p.name)}</option>`
+    `<option value="${escapeHTML(p.id)}"${p.id === currentProfile ? ' selected' : ''}>${escapeHTML(p.name)}${p.accountKey ? ` (UID ${escapeHTML(p.accountKey)})` : ''}</option>`
   ).join('');
 }
 
@@ -779,6 +779,94 @@ function loadFromFile(e) {
   });
 }
 
+// Pulls carry no account id, but the summon link does (?userId=…). The volatile
+// &token= is deliberately ignored — only the stable userId identifies the account.
+function _uidFromUrl(url) {
+  try { return new URL(url).searchParams.get('userId') || null; }
+  catch { return null; }
+}
+
+// Decide which profile a freshly pasted link should import into.
+// Returns a profile id, or null if the user cancelled the account guard.
+async function _resolveUrlTarget(uid) {
+  if (!uid) return currentProfile;                      // no UID in link → current profile (legacy)
+
+  const bound = profiles.find(p => p.accountKey === uid);
+  if (bound) return bound.id;                           // link belongs to a profile we already know
+
+  const cur = profiles.find(p => p.id === currentProfile);
+  if (cur && !cur.accountKey) {                         // current profile not tied to any account yet
+    cur.accountKey = uid;
+    saveProfiles();
+    renderProfileSelect();                              // reflect the freshly bound UID in the list
+    return cur.id;
+  }
+  return await _showAccountGuard(uid, cur ? cur.accountKey : null);  // wrong account → ask
+}
+
+function _showAccountGuard(incomingUid, currentUid) {
+  return new Promise(resolve => {
+    document.getElementById('conflictModal')?.remove();
+
+    const modal     = document.createElement('div');
+    modal.id        = 'conflictModal';
+    modal.className = 'conflict-modal-overlay';
+
+    const others = profiles.filter(p => p.id !== currentProfile);
+    const opts   = others.map(p =>
+      `<option value="${escapeHTML(p.id)}">${escapeHTML(p.name)}${p.accountKey ? ` (UID ${escapeHTML(p.accountKey)})` : ''}</option>`
+    ).join('');
+
+    modal.innerHTML = `
+      <div class="conflict-modal">
+        <div class="conflict-modal-title">${t('acctGuardTitle')}</div>
+        <div class="conflict-modal-subtitle">${t('acctGuardSub', incomingUid, currentUid || '—')}</div>
+        <div class="conflict-actions" style="flex-direction:column;gap:10px;">
+          <button class="conflict-btn-imported" id="agNew">${t('acctGuardNew')}</button>
+          ${others.length ? `
+          <div style="display:flex;gap:8px;">
+            <select id="agSelect" style="flex:1;">${opts}</select>
+            <button class="conflict-btn-local" id="agPick">${t('acctGuardPick')}</button>
+          </div>` : ''}
+          <button class="conflict-btn-local" id="agCancel">${t('acctGuardCancel')}</button>
+        </div>
+      </div>`;
+
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('visible'));
+
+    const close = val => {
+      modal.classList.remove('visible');
+      setTimeout(() => { modal.remove(); resolve(val); }, 250);
+    };
+
+    modal.querySelector('#agNew').addEventListener('click', () => {
+      const name = prompt(t('promptProfileName'), `UID ${incomingUid}`);
+      if (!name) return;                                 // empty name → keep the guard open
+      const id = Date.now();
+      profiles.push({ id, name, accountKey: incomingUid });
+      saveProfiles();
+      renderProfileSelect();
+      close(id);                                         // loadFromURL switches into it
+    });
+
+    modal.querySelector('#agCancel').addEventListener('click', () => close(null));
+
+    const pick = modal.querySelector('#agPick');
+    if (pick) pick.addEventListener('click', () => {
+      const sel = Number(modal.querySelector('#agSelect').value);
+      const p   = profiles.find(x => x.id === sel);
+      if (!p) return;
+      if (p.accountKey && p.accountKey !== incomingUid) {
+        showToast(t('acctGuardPickMismatch', p.accountKey), 'error', 5000);
+        return;
+      }
+      if (!p.accountKey) { p.accountKey = incomingUid; saveProfiles(); }
+      close(p.id);
+    });
+  });
+}
+
 async function loadFromURL() {
   const url = document.getElementById('urlInput').value.trim();
   if (!url)                    { showToast(t('enterUrl'),   'warning'); return; }
@@ -793,6 +881,9 @@ async function loadFromURL() {
   topBar.start();
 
   try {
+    // 1) Fetch + validate FIRST. Nothing is bound or routed until we know the data
+    //    is real, so an expired token or bad link never leaves a profile tied to a
+    //    stray UID (and the account guard won't pop for a dead link).
     const res = await fetch(PROXY + '?url=' + encodeURIComponent(url));
     if (!res.ok) throw new Error(t('serverError', res.status));
 
@@ -800,6 +891,17 @@ async function loadFromURL() {
     loadingToast._dismiss();
     validateImportData(json);
 
+    // 2) Data is good → now route into the right profile (may bind / prompt the guard).
+    const target = await _resolveUrlTarget(_uidFromUrl(url));
+    if (target == null) return;                          // user cancelled the account guard
+    if (target !== currentProfile) {
+      currentProfile = target;
+      localStorage.setItem('r1999_active_profile', target);
+      renderProfileSelect();
+      loadProfileDB();                                   // localDB = that profile's pulls
+    }
+
+    // 3) Merge.
     const before = countPulls(localDB);
     localDB = mergeDatabases(localDB, json.data.pageData);
     parseData(localDB);
@@ -880,84 +982,52 @@ function _dbMeta(profileId, pullsMap, savedAt) {
   };
 }
 
+// Reconcile an imported dataset (from Google Drive or a DB file) against the
+// local profiles. Guiding rule: pulls are immutable and keyed, so merging the
+// SAME account is always lossless — we do it silently. We only prompt when the
+// two sides might be DIFFERENT accounts and we can't tell (unconfirmed identity).
 function _resolveConflicts(importedProfiles, importedPulls, savedAt, silent = false) {
-  if (silent) _resolveConflictsSmart(importedProfiles, importedPulls, savedAt);
-  else        _resolveConflictsAlways(importedProfiles, importedPulls, savedAt);
-}
-
-function _resolveConflictsSmart(importedProfiles, importedPulls, savedAt) {
-  const conflicts  = [];
-  const clean      = [];
-  const localOnly  = [];
-  const importedIds   = new Set(importedProfiles.map(p => p.id));
-  const importedNames = new Set(importedProfiles.map(p => p.name));
+  const ambiguous = [];
 
   importedProfiles.forEach(imp => {
-    const match = profiles.find(p => p.id === imp.id) || profiles.find(p => p.name === imp.name);
-    if (match) conflicts.push({ local: match, imported: imp });
-    else       clean.push(imp);
-  });
-
-  profiles.forEach(local => {
-    if (!importedIds.has(local.id) && !importedNames.has(local.name)) localOnly.push(local);
-  });
-
-  clean.forEach(imp => {
-    profiles.push(imp);
-    localStorage.setItem(`r1999_cache_${imp.id}`, JSON.stringify(importedPulls[imp.id] || []));
-  });
-  if (clean.length) { saveProfiles(); renderProfileSelect(); }
-
-  const needsModal = [];
-
-  conflicts.forEach(({ local, imported }) => {
-    const localCount    = countPulls(readCachedPulls(local.id));
-    const importedCount = countPulls(importedPulls[imported.id] || []);
-    if (localCount === importedCount) return;
-    if (importedCount > localCount) { _applyImported(local, imported, importedPulls); return; }
-    needsModal.push({ local, imported });
-  });
-
-  localOnly.forEach(local => needsModal.push({ local, imported: null }));
-
-  if (!needsModal.length) { _finishImport(true); return; }
-
-  const localPulls = Object.fromEntries(
-    profiles.map(p => [p.id, readCachedPulls(p.id)])
-  );
-
-  let idx = 0;
-  function next() {
-    if (idx >= needsModal.length) { _finishImport(true); return; }
-    const { local, imported } = needsModal[idx++];
-
-    if (!imported) {
-      _showConflictModal({
-        local, imported: null,
-        localMeta:    _dbMeta(local.id, localPulls, null),
-        importedMeta: null,
-        driveDeleted: true,
-        onKeepLocal:   () => next(),
-        onUseImported: () => {
-          localStorage.removeItem(`r1999_cache_${local.id}`);
-          profiles = profiles.filter(p => p.id !== local.id);
-          if (currentProfile === local.id) {
-            currentProfile = profiles[0]?.id || 1;
-            localStorage.setItem('r1999_active_profile', currentProfile);
-          }
-          saveProfiles();
-          renderProfileSelect();
-          next();
-        },
-      });
+    // 1) Same account confirmed by UID → union-merge, no questions.
+    if (imp.accountKey) {
+      const byKey = profiles.find(p => p.accountKey === imp.accountKey);
+      if (byKey) { _mergeInto(byKey, imp, importedPulls); return; }
+    }
+    // 2) Legacy candidate by id, then name — identity NOT confirmed by UID.
+    const legacy = profiles.find(p => p.id === imp.id)
+                || profiles.find(p => p.name === imp.name);
+    if (legacy) {
+      // Both sides bound, but to different accounts → genuinely separate profiles.
+      if (imp.accountKey && legacy.accountKey && imp.accountKey !== legacy.accountKey) {
+        _addProfileFrom(imp, importedPulls, true);
+        return;
+      }
+      ambiguous.push({ local: legacy, imported: imp });
       return;
     }
+    // 3) Nothing matches → brand-new profile.
+    _addProfileFrom(imp, importedPulls);
+  });
 
-    _showConflictModal({
+  // Profiles that exist locally but are absent from the import are kept as-is —
+  // we never delete silently (a missing profile may just be a not-yet-synced device).
+
+  if (!ambiguous.length) { _finishImport(silent); return; }
+
+  const localPulls = Object.fromEntries(profiles.map(p => [p.id, readCachedPulls(p.id)]));
+
+  let idx = 0;
+  function next() {
+    if (idx >= ambiguous.length) { _finishImport(silent); return; }
+    const { local, imported } = ambiguous[idx++];
+    _showReconcileModal({
       local, imported,
       localMeta:    _dbMeta(local.id,    localPulls,    null),
       importedMeta: _dbMeta(imported.id, importedPulls, savedAt),
-      driveDeleted: false,
+      onMerge:       () => { _mergeInto(local, imported, importedPulls); next(); },
+      onKeepBoth:    () => { _addProfileFrom(imported, importedPulls, true); next(); },
       onKeepLocal:   () => next(),
       onUseImported: () => { _applyImported(local, imported, importedPulls); next(); },
     });
@@ -965,41 +1035,28 @@ function _resolveConflictsSmart(importedProfiles, importedPulls, savedAt) {
   next();
 }
 
-function _resolveConflictsAlways(importedProfiles, importedPulls, savedAt) {
-  const conflicts = [];
-  const clean     = [];
-
-  importedProfiles.forEach(imp => {
-    const match = profiles.find(p => p.id === imp.id) || profiles.find(p => p.name === imp.name);
-    if (match) conflicts.push({ local: match, imported: imp });
-    else       clean.push(imp);
-  });
-
-  clean.forEach(imp => {
-    profiles.push(imp);
-    localStorage.setItem(`r1999_cache_${imp.id}`, JSON.stringify(importedPulls[imp.id] || []));
-  });
-  if (clean.length) { saveProfiles(); renderProfileSelect(); }
-
-  if (!conflicts.length) { _finishImport(false); return; }
-
-  const localPulls = Object.fromEntries(
-    profiles.map(p => [p.id, readCachedPulls(p.id)])
-  );
-
-  let idx = 0;
-  function next() {
-    if (idx >= conflicts.length) { _finishImport(false); return; }
-    const { local, imported } = conflicts[idx++];
-    _showConflictModal({
-      local, imported,
-      localMeta:    _dbMeta(local.id,    localPulls,    null),
-      importedMeta: _dbMeta(imported.id, importedPulls, savedAt),
-      onKeepLocal:   () => next(),
-      onUseImported: () => { _applyImported(local, imported, importedPulls); next(); },
-    });
+// Union-merge imported pulls into an existing local profile. Lossless by design:
+// pulls are immutable and keyed by generateKey, so neither side is ever dropped.
+function _mergeInto(local, imported, importedPulls) {
+  const merged = mergeDatabases(readCachedPulls(local.id), importedPulls[imported.id] || []);
+  localStorage.setItem(`r1999_cache_${local.id}`, JSON.stringify(merged));
+  if (imported.accountKey && !local.accountKey) {
+    local.accountKey = imported.accountKey;   // adopt the UID once we learn it
+    saveProfiles();
   }
-  next();
+}
+
+// Add an imported profile as a new local profile. forceNewId avoids colliding
+// with an unrelated local profile that happens to share the same id.
+function _addProfileFrom(imp, importedPulls, forceNewId = false) {
+  let id = forceNewId ? Date.now() : imp.id;
+  if (profiles.some(p => p.id === id)) id = Date.now();
+  const prof = { id, name: imp.name };
+  if (imp.accountKey) prof.accountKey = imp.accountKey;
+  profiles.push(prof);
+  localStorage.setItem(`r1999_cache_${id}`, JSON.stringify(importedPulls[imp.id] || []));
+  saveProfiles();
+  renderProfileSelect();
 }
 
 function _applyImported(local, imported, importedPulls) {
@@ -1024,65 +1081,43 @@ function _finishImport(silent = false) {
   if (!silent) showToast(t('importDone'), 'success', 4000);
 }
 
-function _showConflictModal({ local, imported, localMeta, importedMeta, driveDeleted, onKeepLocal, onUseImported }) {
+function _showReconcileModal({ local, imported, localMeta, importedMeta, onMerge, onKeepBoth, onKeepLocal, onUseImported }) {
   document.getElementById('conflictModal')?.remove();
 
   const localName    = escapeHTML(local.name);
-  const importedName = imported ? escapeHTML(imported.name) : '';
+  const importedName = escapeHTML(imported.name);
 
   const modal     = document.createElement('div');
   modal.id        = 'conflictModal';
   modal.className = 'conflict-modal-overlay';
 
-  if (driveDeleted) {
-    modal.innerHTML = `
-      <div class="conflict-modal">
-        <div class="conflict-modal-title">${t('conflictCloudTitle')}</div>
-        <div class="conflict-modal-subtitle">${t('conflictCloudSub', localName)}</div>
-        <div class="conflict-columns">
-          <div class="conflict-col conflict-col-local">
-            <div class="conflict-col-header">${t('conflictCloudLocal')}</div>
-            <div class="conflict-col-name">${localName}</div>
-            <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${localMeta.count}</b></div>
-            <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${localMeta.lastPull}</b></div>
-          </div>
-          <div class="conflict-col-vs">?</div>
-          <div class="conflict-col conflict-col-imported" style="display:flex;align-items:center;justify-content:center;">
-            <div style="text-align:center;color:#6b6f8a;font-size:13px;">🗑️<br>${t('conflictCloudDel')}</div>
-          </div>
+  modal.innerHTML = `
+    <div class="conflict-modal">
+      <div class="conflict-modal-title">${t('reconcileTitle')}</div>
+      <div class="conflict-modal-subtitle">${t('reconcileSub', importedName)}</div>
+      <div class="conflict-columns">
+        <div class="conflict-col conflict-col-local">
+          <div class="conflict-col-header">${t('conflictLocal')}</div>
+          <div class="conflict-col-name">${localName}</div>
+          <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${localMeta.count}</b></div>
+          <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${localMeta.lastPull}</b></div>
         </div>
-        <div class="conflict-actions">
-          <button class="conflict-btn-local"    id="cmKeepLocal">${t('conflictKeepLocalBtn')}</button>
-          <button class="conflict-btn-imported" id="cmUseImported">${t('conflictDeleteBtn')}</button>
+        <div class="conflict-col-vs">VS</div>
+        <div class="conflict-col conflict-col-imported">
+          <div class="conflict-col-header">${t('conflictImported')}</div>
+          <div class="conflict-col-name">${importedName}</div>
+          <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${importedMeta.count}</b></div>
+          <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${importedMeta.lastPull}</b></div>
+          <div class="conflict-stat"><span>${t('conflictStatSaved')}</span><b>${importedMeta.savedAt}</b></div>
         </div>
-      </div>`;
-  } else {
-    modal.innerHTML = `
-      <div class="conflict-modal">
-        <div class="conflict-modal-title">${t('conflictTitle')}</div>
-        <div class="conflict-modal-subtitle">${t('conflictSubtitle', importedName)}</div>
-        <div class="conflict-columns">
-          <div class="conflict-col conflict-col-local">
-            <div class="conflict-col-header">${t('conflictLocal')}</div>
-            <div class="conflict-col-name">${localName}</div>
-            <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${localMeta.count}</b></div>
-            <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${localMeta.lastPull}</b></div>
-          </div>
-          <div class="conflict-col-vs">VS</div>
-          <div class="conflict-col conflict-col-imported">
-            <div class="conflict-col-header">${t('conflictImported')}</div>
-            <div class="conflict-col-name">${importedName}</div>
-            <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${importedMeta.count}</b></div>
-            <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${importedMeta.lastPull}</b></div>
-            <div class="conflict-stat"><span>${t('conflictStatSaved')}</span><b>${importedMeta.savedAt}</b></div>
-          </div>
-        </div>
-        <div class="conflict-actions">
-          <button class="conflict-btn-local"    id="cmKeepLocal">${t('conflictKeepLocal')}</button>
-          <button class="conflict-btn-imported" id="cmUseImported">${t('conflictUseImport')}</button>
-        </div>
-      </div>`;
-  }
+      </div>
+      <div class="conflict-actions" style="flex-wrap:wrap;gap:8px;">
+        <button class="conflict-btn-imported" id="cmMerge">${t('reconcileMerge')}</button>
+        <button class="conflict-btn-local"    id="cmKeepBoth">${t('reconcileKeepBoth')}</button>
+        <button class="conflict-btn-local"    id="cmKeepLocal">${t('reconcileKeepLocal')}</button>
+        <button class="conflict-btn-local"    id="cmUseImported">${t('reconcileUseImported')}</button>
+      </div>
+    </div>`;
 
   document.body.appendChild(modal);
   requestAnimationFrame(() => modal.classList.add('visible'));
@@ -1092,6 +1127,8 @@ function _showConflictModal({ local, imported, localMeta, importedMeta, driveDel
     setTimeout(() => { modal.remove(); cb(); }, 250);
   }
 
+  modal.querySelector('#cmMerge').addEventListener('click',       () => close(onMerge));
+  modal.querySelector('#cmKeepBoth').addEventListener('click',    () => close(onKeepBoth));
   modal.querySelector('#cmKeepLocal').addEventListener('click',   () => close(onKeepLocal));
   modal.querySelector('#cmUseImported').addEventListener('click', () => close(onUseImported));
 }

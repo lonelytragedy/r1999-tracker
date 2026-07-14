@@ -10,6 +10,7 @@ let gdriveFileId     = null;
 let gdriveCodeClient = null;
 let _autoSaveTimer   = null;
 let _pendingSave     = false;
+let _syncReady       = false;   // block autosave until the first Drive load has merged
 
 const GDRIVE_IN_APP = !!(window.AndroidBridge && window.AndroidBridge.connectDrive);
 
@@ -40,15 +41,27 @@ function gdriveInit() {
   if (!gdriveRefresh) {
     if (_isTokenValid()) {
       _updateGdriveUI(true);
-      gdriveLoad();
-    } else if (gdriveToken) {
-      _setExpiredUI();
+      gdriveLoad().finally(_markSyncReady);
+    } else {
+      if (gdriveToken) _setExpiredUI();
+      _markSyncReady();
     }
     return;
   }
 
   _updateGdriveUI(true);
-  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
+  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI()).finally(_markSyncReady);
+}
+
+// The startup Drive load runs async; until it has merged, an early autosave could
+// push stale/empty local state over good cloud data. Hold saves until it's done.
+function _markSyncReady() {
+  if (_syncReady) return;
+  _syncReady = true;
+  if (_pendingSave && navigator.onLine && (gdriveRefresh || gdriveToken)) {
+    _pendingSave = false;
+    gdriveSave();
+  }
 }
 
 window.__driveConnected = function (refreshToken) {
@@ -172,6 +185,7 @@ async function _workerPost(path, payload) {
 
 function gdriveScheduleSave() {
   if (!gdriveRefresh && !gdriveToken) return;
+  if (!_syncReady) { _pendingSave = true; return; }
   if (!navigator.onLine) { _pendingSave = true; _setOfflineUI(); return; }
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(() => gdriveSave(), GDRIVE_AUTOSAVE_MS);
