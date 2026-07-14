@@ -1,4 +1,4 @@
-const CACHE = 'r1999-tracker-v2';
+const CACHE = 'r1999-tracker-v3';
 
 const CORE = [
   './',
@@ -12,6 +12,7 @@ const CORE = [
   'localization/ru.js',
   'static/fonts/playfair-latin.woff2',
   'static/fonts/playfair-cyrillic.woff2',
+  'static/ui/flourish.svg',
   'https://cdn.jsdelivr.net/npm/chart.js@4'
 ];
 

@@ -76,7 +76,19 @@ body::before {
   background:
     radial-gradient(1300px 950px at 100% 100%, rgba(224, 145, 63, 0.16), transparent 55%),
     radial-gradient(1000px 760px at 6% -8%, rgba(190, 128, 60, 0.09), transparent 55%),
-    radial-gradient(1500px 1050px at 50% 125%, rgba(150, 84, 34, 0.12), transparent 60%);
+    radial-gradient(1500px 1050px at 50% 125%, rgba(150, 84, 34, 0.12), transparent 60%),
+    radial-gradient(540px 380px at 84% 14%, rgba(232, 152, 66, 0.11), transparent 62%),
+    radial-gradient(420px 320px at 16% 60%, rgba(224, 145, 63, 0.08), transparent 64%),
+    radial-gradient(300px 240px at 62% 42%, rgba(240, 170, 80, 0.06), transparent 66%);
+}
+/* golden flourish drawn behind every UI element */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('static/ui/flourish.svg') center center / cover no-repeat;
 }
 ::-webkit-scrollbar       { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
@@ -141,7 +153,9 @@ button:hover { background: #33281a; cursor: pointer; }
   position: relative;
   background:
     linear-gradient(180deg, rgba(255, 240, 214, 0.03), rgba(255, 240, 214, 0) 44%),
-    var(--bg-box);
+    rgba(23, 18, 12, 0.74);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   border: 1px solid rgba(216, 180, 106, 0.16);
   border-radius: 12px;
   padding: 16px;
@@ -258,6 +272,7 @@ canvas { width: 100%; max-height: 280px; height: 280px; display: block; }
 }
 .filter-pills {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 2px;
   background: var(--scrollbar-track);
@@ -535,8 +550,22 @@ tr.pity-red    .fifty-mark { color: #ff4d5a; }
 .banner-stat-pity-value.pity-val-red    { color: var(--c-r6); }
 .banner-stat-empty { text-align: center; color: var(--text-dim); font-size: 14px; padding: 20px 0; }
 
-.site-header { display: flex; align-items: center; gap: 12px; }
-.site-logo   { width: 48px; height: 48px; object-fit: cover; border-radius: 50%; }
+.site-header { display: flex; align-items: center; gap: 15px; }
+.site-logo {
+  width: 52px; height: 52px; object-fit: cover; border-radius: 50%;
+  border: 1px solid rgba(216, 180, 106, 0.55);
+  box-shadow: 0 0 0 4px rgba(216, 180, 106, 0.08), 0 2px 12px rgba(0, 0, 0, 0.55);
+}
+.site-title {
+  font-family: var(--font-display);
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f2ecd8;
+  text-shadow: 0 1px 10px rgba(224, 145, 63, 0.15);
+}
+.site-title-colon { color: var(--accent-amber); font-style: italic; }
 .home-button {
   margin-left: auto; padding: 6px 14px;
   background-color: var(--bg-input); border: 1px solid var(--border);
@@ -597,10 +626,28 @@ tr.pity-red    .fifty-mark { color: #ff4d5a; }
 .active-banner-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 
 .active-banner-card--clickable { cursor: pointer; }
-.active-banner-card--clickable:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(127,119,221,0.4); }
+.active-banner-card--clickable:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(216,180,106,0.45); }
 
+/* film-cell perforations framing each banner card (left & right edges) */
+.active-banner-card::before,
+.active-banner-card::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 8px;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg,
+      transparent 0 6px,
+      rgba(240, 224, 188, 0.16) 6px 11px,
+      transparent 11px 17px) center / 4px auto no-repeat,
+    linear-gradient(rgba(8, 5, 3, 0.92), rgba(8, 5, 3, 0.92));
+}
+.active-banner-card::before { left: 0; }
+.active-banner-card::after  { right: 0; }
 
-.active-banner-type-overlay         { position: absolute; top: 8px; left: 8px; z-index: 2; }
+.active-banner-type-overlay         { position: absolute; top: 8px; left: 12px; z-index: 5; }
 .active-banner-type-overlay .banner-type {
   background-color: rgba(0,0,0,0.55) !important;
   backdrop-filter: blur(4px);
@@ -1005,10 +1052,10 @@ tr.pity-red    .fifty-mark { color: #ff4d5a; }
 .tl-modal-dates  { font-size: 11px; color: var(--text-tl-dim); margin-top: 5px; }
 .tl-modal-countdown-wrap  { text-align: right; flex-shrink: 0; }
 .tl-modal-countdown-label { font-size: 10px; color: var(--text-tl-dim); display: block; white-space: nowrap; }
-.tl-modal-timer           { font-size: 17px; font-weight: 700; color: #80c8ff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tl-modal-timer           { font-size: 17px; font-weight: 700; color: #e8c07a; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 .tl-modal-section-title {
-  font-size: 11px; font-weight: 600; color: #6070a0;
+  font-size: 11px; font-weight: 600; color: #b39b6d;
   text-transform: uppercase; letter-spacing: 0.08em; margin: 16px 0 9px;
 }
 .tl-modal-chips { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1116,13 +1163,34 @@ body.ui-fade { opacity: 0; }
 .banner-view-panel > .slide-in-right  { animation-name: slide-in-right; }
 .banner-view-panel > .slide-in-left   { animation-name: slide-in-left; }
 
-.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; position: relative; padding: 0 13px; }
+.table-scroll::before,
+.table-scroll::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 8px;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg,
+      transparent 0 6px,
+      rgba(240, 224, 188, 0.15) 6px 11px,
+      transparent 11px 17px) center / 4px auto no-repeat,
+    linear-gradient(rgba(8, 5, 3, 0.9), rgba(8, 5, 3, 0.9));
+}
+.table-scroll::before { left: 0; }
+.table-scroll::after  { right: 0; }
 .recent-toggle { display: none; }
 
 @media (max-width: 600px) {
   .box { padding: 14px; }
   .box-header { flex-wrap: wrap; }
   .side-buttons { flex-wrap: wrap; }
+
+  .filter-bar { flex-direction: column; align-items: stretch; gap: 12px; }
+  .filter-group { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .filter-pills { width: 100%; box-sizing: border-box; justify-content: flex-start; }
 
   .db-btn-divider { display: none; }
   .gdrive-block { flex-basis: 100%; flex-wrap: wrap; }
