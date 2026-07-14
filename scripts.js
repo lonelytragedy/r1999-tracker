@@ -1807,7 +1807,7 @@ function renderBannerTimeline(options = {}) {
     if (p.date === 1) monthStartIndices.push(i);
   }
 
-  const gridLine = `repeating-linear-gradient(to right, transparent 0px, transparent ${DAY_W - 1}px, #1e2455 ${DAY_W - 1}px, #1e2455 ${DAY_W}px)`;
+  const gridLine = `repeating-linear-gradient(to right, transparent 0px, transparent ${DAY_W - 1}px, #2a2114 ${DAY_W - 1}px, #2a2114 ${DAY_W}px)`;
   const timelineItems = banners
     .map((b, bIdx) => {
       const info      = BANNERS[b.key] || { name: b.key, type: 'Character' };
@@ -1841,8 +1841,8 @@ function renderBannerTimeline(options = {}) {
     if (nowDayIdx >= 0 && nowDayIdx < totalDays) {
       bgLayers.push(`linear-gradient(to right,
           transparent ${nowDayIdx * DAY_W}px,
-          rgba(100,160,255,0.055) ${nowDayIdx * DAY_W}px,
-          rgba(100,160,255,0.055) ${(nowDayIdx + 1) * DAY_W}px,
+          rgba(224,145,63,0.06) ${nowDayIdx * DAY_W}px,
+          rgba(224,145,63,0.06) ${(nowDayIdx + 1) * DAY_W}px,
           transparent ${(nowDayIdx + 1) * DAY_W}px)`);
     }
     bgLayers.push(gridLine);
