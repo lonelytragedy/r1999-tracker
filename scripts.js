@@ -279,7 +279,9 @@ function setSkin(skin) {
   localStorage.setItem('r1999_skin', skin);
   document.getElementById('skinReversed')?.classList.toggle('active', skin === 'reversed');
   document.getElementById('skinClassic')?.classList.toggle('active', skin === 'classic');
-  // the timeline day-grid / now-tint colours are skin-dependent → redraw it
+  if (window.AndroidBridge && window.AndroidBridge.setSkin) {
+    try { window.AndroidBridge.setSkin(skin); } catch (e) {}
+  }
   if (typeof renderBannerTimeline === 'function' && document.getElementById('bannerTimelineWrap')?.children.length) {
     try { renderBannerTimeline(); } catch (_) {}
   }
@@ -294,6 +296,9 @@ window.addEventListener('DOMContentLoaded', () => {
   const _skin = document.documentElement.dataset.skin === 'classic' ? 'classic' : 'reversed';
   document.getElementById('skinReversed')?.classList.toggle('active', _skin === 'reversed');
   document.getElementById('skinClassic')?.classList.toggle('active', _skin === 'classic');
+  if (window.AndroidBridge && window.AndroidBridge.setSkin) {
+    try { window.AndroidBridge.setSkin(_skin); } catch (e) {}
+  }
   applyI18n();
   document.querySelectorAll('.box').forEach(b => b.classList.add('visible'));
   preloadLocales();
