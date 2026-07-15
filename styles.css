@@ -79,9 +79,13 @@ body::before {
     radial-gradient(1300px 950px at 100% 100%, rgba(224, 145, 63, 0.16), transparent 55%),
     radial-gradient(1000px 760px at 6% -8%, rgba(190, 128, 60, 0.09), transparent 55%),
     radial-gradient(1500px 1050px at 50% 125%, rgba(150, 84, 34, 0.12), transparent 60%),
-    radial-gradient(540px 380px at 84% 14%, rgba(232, 152, 66, 0.11), transparent 62%),
-    radial-gradient(420px 320px at 16% 60%, rgba(224, 145, 63, 0.08), transparent 64%),
-    radial-gradient(300px 240px at 62% 42%, rgba(240, 170, 80, 0.06), transparent 66%);
+    radial-gradient(540px 380px at 84% 14%, rgba(232, 152, 66, 0.13), transparent 62%),
+    radial-gradient(420px 320px at 16% 60%, rgba(224, 145, 63, 0.10), transparent 64%),
+    radial-gradient(300px 240px at 62% 42%, rgba(240, 170, 80, 0.08), transparent 66%),
+    radial-gradient(500px 380px at 40% 6%, rgba(235, 158, 70, 0.10), transparent 62%),
+    radial-gradient(360px 300px at 92% 64%, rgba(228, 150, 64, 0.09), transparent 64%),
+    radial-gradient(440px 360px at 8% 98%, rgba(240, 165, 75, 0.10), transparent 62%),
+    radial-gradient(340px 300px at 70% 88%, rgba(232, 150, 66, 0.08), transparent 66%);
 }
 /* golden flourish drawn behind every UI element */
 body::after {
@@ -943,6 +947,20 @@ tr.pity-red    .fifty-mark { color: #ff4d5a; }
   pointer-events: none;
 }
 .tl-bar:hover { filter: brightness(1.18); box-shadow: inset 0 0 0 1px rgba(216,180,106,0.55), 0 4px 18px rgba(0,0,0,0.5), 0 0 22px rgba(224,145,63,0.25); }
+/* film-strip sprocket holes down the RIGHT edge of every banner bar */
+.tl-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 0;
+  width: 7px;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(6, 4, 2, 0.92) 0 6px,
+      rgba(238, 222, 186, 0.30) 6px 10px,
+      rgba(6, 4, 2, 0.92) 10px 16px);
+}
 
 .tl-bar.type-character { background-color: #3a5bce; }
 .tl-bar.type-limited   { background-color: #9b3fce; }
@@ -996,11 +1014,11 @@ tr.pity-red    .fifty-mark { color: #ff4d5a; }
 .tl-bar-name  { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
 .tl-bar-timer { font-size: 10px; font-weight: 400; opacity: 0.85; white-space: nowrap; flex-shrink: 0; }
 
-.tl-now-line { position: absolute; top: 0; width: 2px; background: rgba(224,168,90,0.9); box-shadow: 0 0 8px rgba(224,145,63,0.5); z-index: 5; pointer-events: none; }
+.tl-now-line { position: absolute; top: 0; width: 2px; background: rgba(224,168,90,0.9); box-shadow: 0 0 8px rgba(224,145,63,0.5); z-index: 8; pointer-events: none; }
 .tl-now-line::before {
-  content: ''; position: absolute; top: -4px; left: -4px;
-  width: 10px; height: 10px; border-radius: 50%;
-  background: #e8b45c; box-shadow: 0 0 7px 2px rgba(224,145,63,0.55);
+  content: ''; position: absolute; top: -7px; left: -5px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #e8b45c; box-shadow: 0 0 8px 2px rgba(224,145,63,0.6);
 }
 
 .tl-modal-overlay {
@@ -1170,6 +1188,12 @@ tr.pity-red    .fifty-mark { color: #ff4d5a; }
   border-radius: 8px; padding: 3px;
 }
 .settings-seg .banner-toggle-btn { padding: 5px 11px; }
+.settings-links {
+  display: flex; flex-direction: column; gap: 7px;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid rgba(216, 180, 106, 0.18);
+}
+.settings-links .side-btn { text-align: center; }
 .lang-btn-flag {
   width: 16px; height: 12px;
   border-radius: 2px;
@@ -1229,6 +1253,8 @@ body.ui-fade { opacity: 0; }
   .filter-bar { flex-direction: column; align-items: stretch; gap: 12px; }
   .filter-group { flex-direction: column; align-items: flex-start; gap: 6px; }
   .filter-pills { width: 100%; box-sizing: border-box; justify-content: flex-start; }
+
+  #scrollTopBtn { display: none !important; }
 
   .db-btn-divider { display: none; }
   .gdrive-block { flex-basis: 100%; flex-wrap: wrap; }
@@ -1376,3 +1402,5 @@ body.ui-fade { opacity: 0; }
 
 [data-skin="classic"] .settings-panel { background: rgba(22,25,50,0.98); border-color: var(--border); }
 [data-skin="classic"] .settings.open .settings-gear { border-color: var(--accent); }
+[data-skin="classic"] .tl-bar::before { display: none; }
+[data-skin="classic"] .settings-links { border-top-color: var(--border); }

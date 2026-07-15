@@ -11,7 +11,7 @@ window.LOCALE = {
   selectFileHint:     'Load individual pull history JSON file',
   exportDbBtn:        '💾 Download Database',
   importDbBtn:        '📂 Load Database',
-  defaultProfile:     'Sonetto',
+  defaultProfile:     'Timekeeper',
   settingsLanguage:   'Language',
   settingsSkin:       'Skin',
   skinReversed:       'Reversed',

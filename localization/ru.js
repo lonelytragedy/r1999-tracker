@@ -11,7 +11,7 @@ window.LOCALE = {
   selectFileHint:     'Загрузить отдельный JSON-файл круток',
   exportDbBtn:        '💾 Скачать базу данных',
   importDbBtn:        '📂 Загрузить базу данных',
-  defaultProfile:     'Sonetto',
+  defaultProfile:     'Timekeeper',
   settingsLanguage:   'Язык',
   settingsSkin:       'Скин',
   skinReversed:       'Reversed',
