@@ -807,29 +807,25 @@ function loadFromFile(e) {
   });
 }
 
-// Pulls carry no account id, but the summon link does (?userId=…). The volatile
-// &token= is deliberately ignored — only the stable userId identifies the account.
 function _uidFromUrl(url) {
   try { return new URL(url).searchParams.get('userId') || null; }
   catch { return null; }
 }
 
-// Decide which profile a freshly pasted link should import into.
-// Returns a profile id, or null if the user cancelled the account guard.
 async function _resolveUrlTarget(uid) {
-  if (!uid) return currentProfile;                      // no UID in link → current profile (legacy)
+  if (!uid) return currentProfile;
 
   const bound = profiles.find(p => p.accountKey === uid);
-  if (bound) return bound.id;                           // link belongs to a profile we already know
+  if (bound) return bound.id;
 
   const cur = profiles.find(p => p.id === currentProfile);
-  if (cur && !cur.accountKey) {                         // current profile not tied to any account yet
+  if (cur && !cur.accountKey) {
     cur.accountKey = uid;
     saveProfiles();
-    renderProfileSelect();                              // reflect the freshly bound UID in the list
+    renderProfileSelect();
     return cur.id;
   }
-  return await _showAccountGuard(uid, cur ? cur.accountKey : null);  // wrong account → ask
+  return await _showAccountGuard(uid, cur ? cur.accountKey : null);
 }
 
 function _showAccountGuard(incomingUid, currentUid) {
@@ -870,12 +866,12 @@ function _showAccountGuard(incomingUid, currentUid) {
 
     modal.querySelector('#agNew').addEventListener('click', () => {
       const name = prompt(t('promptProfileName'), `UID ${incomingUid}`);
-      if (!name) return;                                 // empty name → keep the guard open
+      if (!name) return;
       const id = Date.now();
       profiles.push({ id, name, accountKey: incomingUid });
       saveProfiles();
       renderProfileSelect();
-      close(id);                                         // loadFromURL switches into it
+      close(id);
     });
 
     modal.querySelector('#agCancel').addEventListener('click', () => close(null));
@@ -909,9 +905,7 @@ async function loadFromURL() {
   topBar.start();
 
   try {
-    // 1) Fetch + validate FIRST. Nothing is bound or routed until we know the data
-    //    is real, so an expired token or bad link never leaves a profile tied to a
-    //    stray UID (and the account guard won't pop for a dead link).
+
     const res = await fetch(PROXY + '?url=' + encodeURIComponent(url));
     if (!res.ok) throw new Error(t('serverError', res.status));
 
@@ -919,17 +913,15 @@ async function loadFromURL() {
     loadingToast._dismiss();
     validateImportData(json);
 
-    // 2) Data is good → now route into the right profile (may bind / prompt the guard).
     const target = await _resolveUrlTarget(_uidFromUrl(url));
-    if (target == null) return;                          // user cancelled the account guard
+    if (target == null) return;
     if (target !== currentProfile) {
       currentProfile = target;
       localStorage.setItem('r1999_active_profile', target);
       renderProfileSelect();
-      loadProfileDB();                                   // localDB = that profile's pulls
+      loadProfileDB();
     }
 
-    // 3) Merge.
     const before = countPulls(localDB);
     localDB = mergeDatabases(localDB, json.data.pageData);
     parseData(localDB);
@@ -1010,24 +1002,20 @@ function _dbMeta(profileId, pullsMap, savedAt) {
   };
 }
 
-// Reconcile an imported dataset (from Google Drive or a DB file) against the
-// local profiles. Guiding rule: pulls are immutable and keyed, so merging the
-// SAME account is always lossless — we do it silently. We only prompt when the
-// two sides might be DIFFERENT accounts and we can't tell (unconfirmed identity).
 function _resolveConflicts(importedProfiles, importedPulls, savedAt, silent = false) {
   const ambiguous = [];
 
   importedProfiles.forEach(imp => {
-    // 1) Same account confirmed by UID → union-merge, no questions.
+
     if (imp.accountKey) {
       const byKey = profiles.find(p => p.accountKey === imp.accountKey);
       if (byKey) { _mergeInto(byKey, imp, importedPulls); return; }
     }
-    // 2) Legacy candidate by id, then name — identity NOT confirmed by UID.
+
     const legacy = profiles.find(p => p.id === imp.id)
                 || profiles.find(p => p.name === imp.name);
     if (legacy) {
-      // Both sides bound, but to different accounts → genuinely separate profiles.
+
       if (imp.accountKey && legacy.accountKey && imp.accountKey !== legacy.accountKey) {
         _addProfileFrom(imp, importedPulls, true);
         return;
@@ -1035,12 +1023,9 @@ function _resolveConflicts(importedProfiles, importedPulls, savedAt, silent = fa
       ambiguous.push({ local: legacy, imported: imp });
       return;
     }
-    // 3) Nothing matches → brand-new profile.
+
     _addProfileFrom(imp, importedPulls);
   });
-
-  // Profiles that exist locally but are absent from the import are kept as-is —
-  // we never delete silently (a missing profile may just be a not-yet-synced device).
 
   if (!ambiguous.length) { _finishImport(silent); return; }
 
@@ -1063,19 +1048,15 @@ function _resolveConflicts(importedProfiles, importedPulls, savedAt, silent = fa
   next();
 }
 
-// Union-merge imported pulls into an existing local profile. Lossless by design:
-// pulls are immutable and keyed by generateKey, so neither side is ever dropped.
 function _mergeInto(local, imported, importedPulls) {
   const merged = mergeDatabases(readCachedPulls(local.id), importedPulls[imported.id] || []);
   localStorage.setItem(`r1999_cache_${local.id}`, JSON.stringify(merged));
   if (imported.accountKey && !local.accountKey) {
-    local.accountKey = imported.accountKey;   // adopt the UID once we learn it
+    local.accountKey = imported.accountKey;
     saveProfiles();
   }
 }
 
-// Add an imported profile as a new local profile. forceNewId avoids colliding
-// with an unrelated local profile that happens to share the same id.
 function _addProfileFrom(imp, importedPulls, forceNewId = false) {
   let id = forceNewId ? Date.now() : imp.id;
   if (profiles.some(p => p.id === id)) id = Date.now();

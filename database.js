@@ -203,7 +203,7 @@ const CHARACTERS = {
   3007: { name: "A Knight", rarity: 6 },
   3004: { name: "Lilya", rarity: 6 },
   3003: { name: "Druvis III", rarity: 6 },
-  
+
   3154: { name: "Silverwing Eagle", rarity: 5 },
   3122: { name: "Alexios", rarity: 5 },
   3118: { name: "Name Day", rarity: 5 },
@@ -234,7 +234,7 @@ const CHARACTERS = {
   3016: { name: "Baby Blue", rarity: 5 },
   3011: { name: "Sweetheart", rarity: 5 },
   3010: { name: "X", rarity: 5 },
-  
+
   3138: { name: "Reed", rarity: 4},
   3136: { name: "Lady by the Lake", rarity: 4 },
   3101: { name: "White Rum", rarity: 4 },
@@ -253,7 +253,7 @@ const CHARACTERS = {
   3013: { name: "Зима", rarity: 4 },
   3006: { name: "Eagle", rarity: 4 },
   3005: { name: "Nick Bottom", rarity: 4 },
-  
+
   3096: { name: "Pioneer", rarity: 3 },
   3055: { name: "Sputnik", rarity: 3 },
   3054: { name: "ONiON", rarity: 3 },
@@ -265,7 +265,7 @@ const CHARACTERS = {
   3034: { name: "aliEn T", rarity: 3 },
   3030: { name: "La Source", rarity: 3 },
   3012: { name: "The Fool", rarity: 3 },
-  
+
   3059: { name: "Door", rarity: 2 },
   3027: { name: "Ms. Radio", rarity: 2 }
 };
