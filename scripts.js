@@ -1012,15 +1012,24 @@ function _resolveConflicts(importedProfiles, importedPulls, savedAt, silent = fa
       if (byKey) { _mergeInto(byKey, imp, importedPulls); return; }
     }
 
-    const legacy = profiles.find(p => p.id === imp.id)
-                || profiles.find(p => p.name === imp.name);
-    if (legacy) {
-
-      if (imp.accountKey && legacy.accountKey && imp.accountKey !== legacy.accountKey) {
+    const byId = profiles.find(p => p.id === imp.id);
+    if (byId) {
+      if (imp.accountKey && byId.accountKey && imp.accountKey !== byId.accountKey) {
         _addProfileFrom(imp, importedPulls, true);
         return;
       }
-      ambiguous.push({ local: legacy, imported: imp });
+      _mergeInto(byId, imp, importedPulls);
+      return;
+    }
+
+    const byName = profiles.find(p => p.name === imp.name);
+    if (byName) {
+      if (imp.accountKey && byName.accountKey && imp.accountKey !== byName.accountKey) {
+        _addProfileFrom(imp, importedPulls, true);
+        return;
+      }
+      if (silent) { _mergeInto(byName, imp, importedPulls); return; }
+      ambiguous.push({ local: byName, imported: imp });
       return;
     }
 
