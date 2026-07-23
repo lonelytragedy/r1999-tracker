@@ -2,8 +2,8 @@ const PROXY             = 'https://r1999tracker.posofrefraction.workers.dev/';
 const PITY_MAX          = 70;
 const PITY_COLOR_YELLOW = 50;
 const PITY_COLOR_RED    = 60;
-const BANNER_TYPE_LABELS  = { Limited: 'Limited Event', Character: 'Character Event', Water: 'Water', Regular: 'Regular', Special: 'Special Event' };
-const BANNER_TYPE_CLASSES = { Limited: 'type-limited', Character: 'type-character', Water: 'type-water', Regular: 'type-regular', Special: 'type-special' };
+const BANNER_TYPE_LABELS  = { Limited: 'Limited', Collab: 'Collab', Character: 'Character', Water: 'Water', Regular: 'Regular', Special: 'Special' };
+const BANNER_TYPE_CLASSES = { Limited: 'type-limited', Collab: 'type-collaboration', Character: 'type-character', Water: 'type-water', Regular: 'type-regular', Special: 'type-special' };
 const RU_LOCALES          = ['ru', 'be', 'uk', 'kk', 'ky', 'tg', 'uz', 'tk', 'az', 'hy', 'ka', 'mn'];
 const TIME                = Object.freeze({
   MS_MINUTE: 60000,
@@ -470,9 +470,10 @@ function applyBannerView(mode) {
 }
 
 function getBannerGridTier(info) {
-  if (info.type === 'Limited') return 0;
-  if (info.type === 'Character') return 1;
-  return 2;
+  if (info.type === 'Collab') return 0;
+  if (info.type === 'Limited') return 1;
+  if (info.type === 'Character') return 2;
+  return 3;
 }
 
 function gridBannerSignature(b) {
@@ -1170,7 +1171,7 @@ function parseData(list) {
     if (char.rarity === 6) {
       const type   = getBannerType(e.poolName);
       const rateUp = BANNERS[e.poolName]?.rateUp6;
-      if (type === 'Character' || type === 'Limited' || rateUp) {
+      if (type === 'Character' || type === 'Limited' || type === 'Collab' || rateUp) {
         const g = guarantee[key];
         if (!rateUp) {
           processedFifty[i] = null;
@@ -1276,7 +1277,7 @@ function renderBannerStats() {
           ${t('bannerStatPity')}
           <span class="pity-hint">${t('bannerPityHint')}</span>
         </div>
-        <div class="banner-stat-pity-value banner-stat-pity ${colorCls}">${guaranteed ? `<span class="pity-guarantee-arrow" title="${t('fifty_guaranteed')}">↑</span>` : ''}${pity} / ${PITY_MAX}</div>
+        <div class="banner-stat-pity-value banner-stat-pity ${colorCls}">${guaranteed ? `<span class="pity-guarantee-arrow" title="${t('fifty_guaranteed')}">↑</span>` : ''}${pity}</div>
       </div>`;
 
   activeTypes.forEach(([type, label]) => {
@@ -1299,8 +1300,7 @@ function renderBannerStats() {
 
       card.innerHTML = `
         <div class="banner-stat-card-title">
-          ${typeTag}
-          <select class="banner-stat-select">${options}</select>
+          <select class="banner-stat-select banner-stat-select--water">${options}</select>
         </div>
         ${itemsHTML(segs[0].pulls, pityOf(segs[0].key), processedGuarantee[segs[0].key] === true)}`;
 
@@ -1314,7 +1314,7 @@ function renderBannerStats() {
         const g = processedGuarantee[s.key] === true;
         pullsEl.textContent = s.pulls;
         gemsEl.textContent  = (s.pulls * 180).toLocaleString(locale);
-        pityEl.innerHTML    = `${g ? `<span class="pity-guarantee-arrow" title="${t('fifty_guaranteed')}">↑</span>` : ''}${d.pity} / ${PITY_MAX}`;
+        pityEl.innerHTML    = `${g ? `<span class="pity-guarantee-arrow" title="${t('fifty_guaranteed')}">↑</span>` : ''}${d.pity}`;
         pityEl.className    = `banner-stat-pity-value banner-stat-pity ${d.colorCls}`;
       });
     } else {
@@ -1323,11 +1323,11 @@ function renderBannerStats() {
         if (idx > latestIdx) { latestIdx = idx; latestKey = key; }
       }
       const info = latestKey !== null ? pityOf(latestKey) : { pity: 0, colorCls: 'pity-val-green' };
-      const guaranteed = (type === 'Character' || type === 'Limited') &&
+      const guaranteed = (type === 'Character' || type === 'Limited' || type === 'Collab') &&
         latestKey !== null && processedGuarantee[latestKey] === true;
 
       card.innerHTML = `
-        <div class="banner-stat-card-title">${typeTag} ${label}</div>
+        <div class="banner-stat-card-title">${typeTag}</div>
         ${itemsHTML(data.pulls, info, guaranteed)}`;
     }
 
@@ -1698,9 +1698,10 @@ function getTimelineLaneBestFitEnd(lane, item) {
 }
 
 function getTimelineLaneTier(info) {
-  if (info.type === 'Limited') return 0;
-  if (info.type === 'Character') return 1;
-  return 2;
+  if (info.type === 'Collab') return 0;
+  if (info.type === 'Limited') return 1;
+  if (info.type === 'Character') return 2;
+  return 3;
 }
 
 function assignTimelineLanesGreedy(items) {
@@ -1731,7 +1732,7 @@ function assignTimelineLanesGreedy(items) {
 }
 
 function assignTimelineLanes(items) {
-  const tiers = [[], [], []];
+  const tiers = [[], [], [], []];
 
   items.forEach(item => {
     tiers[getTimelineLaneTier(item.info)].push(item);
@@ -1970,7 +1971,7 @@ function bannerSixChipHTML(s) {
                  : s.pity < PITY_COLOR_RED    ? 'pity-val-yellow' : 'pity-val-red';
   const src   = `static/characters/${s.name.replace(/\s+/g, '_')}.webp`;
   const fifty = s.fifty
-    ? `<span class="tl-six-fifty ${s.fifty}" title="${t('fifty_' + s.fifty)}">${fiftyIconSVG(s.fifty)}</span>`
+    ? `<span class="tl-six-fifty ${s.fifty} ${colorCls}" title="${t('fifty_' + s.fifty)}">${fiftyIconSVG(s.fifty)}</span>`
     : '';
   return `<div class="tl-six-chip">
       <span class="tl-chip-avatar tl-six-avatar" data-src="${src}"
