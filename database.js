@@ -1,4 +1,5 @@
 const BANNERS = {
+  "为什么故事集": { name: "The Book of Whys", type: "Character", rateUp6: ["Flutterpage"] },
   "现实破译法": { name: "Deciphering Reality", type: "Character", rateUp6: ["Enigma"] },
   "虹色五线谱": { name: "Playing in Rainbow Clef", type: "Character", rateUp6: ["Barcarola"] },
   "晴日决胜局": { name: "Clash 'n' Slash", type: "Character", rateUp6: ["J"] },
@@ -34,6 +35,13 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:      "为什么故事集",
+    startUTC: "2026-07-28T10:00:00Z",
+    endUTC:   "2026-08-11T09:59:00Z",
+    image:    "static/banners/The_Book_of_Whys.webp",
+    rateUp:  ["Flutterpage", "Necrologist", "Name Day"]
+  },
   {
     key:      "湖的涟漪",
     startUTC: "2026-07-23T10:00:00Z",
