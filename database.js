@@ -55,6 +55,7 @@ const ACTIVE_BANNERS = [
     key:      "The Myth at Her Fingertips",
     startUTC: "2026-08-14T10:00:00Z",
     endUTC:   "2026-09-03T09:59:00Z",
+    image:    "static/banners/The_Myth_at_Her_Fingertips.webp",
     rateUp:  ["Nautika", "Blonney", "Dikke"]
   },
   {
@@ -106,7 +107,6 @@ const ACTIVE_BANNERS = [
     key:      "湖的企盼",
     startUTC: "2026-08-01T05:00:00Z",
     endUTC:   "2026-08-14T09:59:00Z",
-    image:    "static/banners/Yearning_of_the_Water_Atomic.webp",
     rateUp:  ["Igor", "Cheng Heguang"]
   },
   {
