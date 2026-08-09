@@ -237,6 +237,46 @@ async function _updateFile(fileId, content) {
   if (!res.ok) throw new Error('Update failed: ' + res.statusText);
 }
 
+function _mergeRemoteForSave(remote) {
+  const rpulls = remote.pulls || {};
+  let profilesChanged = false;
+  let currentChanged  = false;
+
+  (remote.profiles || []).forEach(imp => {
+    let local = null;
+    if (imp.accountKey) local = profiles.find(p => p.accountKey === imp.accountKey) || null;
+    if (!local) {
+      const byId = profiles.find(p => p.id === imp.id);
+      if (byId && !(imp.accountKey && byId.accountKey && imp.accountKey !== byId.accountKey)) local = byId;
+    }
+    if (!local) {
+      const byName = profiles.find(p => p.name === imp.name);
+      if (byName && !(imp.accountKey && byName.accountKey && imp.accountKey !== byName.accountKey)) local = byName;
+    }
+
+    if (local) {
+      const before = readCachedPulls(local.id);
+      const merged = mergeDatabases(before, rpulls[imp.id] || []);
+      if (merged.length !== before.length) {
+        localStorage.setItem(`r1999_cache_${local.id}`, JSON.stringify(merged));
+        if (local.id === currentProfile) currentChanged = true;
+      }
+      if (imp.accountKey && !local.accountKey) { local.accountKey = imp.accountKey; profilesChanged = true; }
+    } else {
+      let id = imp.id;
+      if (profiles.some(p => p.id === id)) id = Date.now();
+      const prof = { id, name: imp.name };
+      if (imp.accountKey) prof.accountKey = imp.accountKey;
+      profiles.push(prof);
+      localStorage.setItem(`r1999_cache_${id}`, JSON.stringify(rpulls[imp.id] || []));
+      profilesChanged = true;
+    }
+  });
+
+  if (profilesChanged) { saveProfiles(); renderProfileSelect(); }
+  if (currentChanged) loadProfileDB(false);
+}
+
 async function gdriveSave() {
   if (!navigator.onLine) {
     _pendingSave = true;
@@ -252,6 +292,17 @@ async function gdriveSave() {
   _setSyncing(true);
 
   try {
+    const fileId = await _findFileId();
+
+    if (fileId) {
+      try {
+        const remote = await _downloadFile(fileId);
+        if (remote?.profiles && remote?.pulls) _mergeRemoteForSave(remote);
+      } catch (err) {
+        console.warn('GDrive pre-save merge skipped:', err);
+      }
+    }
+
     const freshProfiles = readJSONStorage('r1999_profiles', []);
     const pulls = {};
     freshProfiles.forEach(p => {
@@ -265,7 +316,6 @@ async function gdriveSave() {
       pulls
     }, null, 2);
 
-    const fileId = await _findFileId();
     if (fileId) {
       await _updateFile(fileId, payload);
     } else {
