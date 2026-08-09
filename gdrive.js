@@ -22,20 +22,20 @@ function gdriveInit() {
   }
 
   if (!GDRIVE_IN_APP) {
-    if (!window.google?.accounts?.oauth2) {
-      console.warn('GIS SDK not loaded yet');
-      return;
+    if (window.google?.accounts?.oauth2) {
+      gdriveCodeClient = google.accounts.oauth2.initCodeClient({
+        client_id: GDRIVE_CLIENT_ID,
+        scope:     GDRIVE_SCOPE,
+        ux_mode:   'popup',
+        callback:  _onCodeResponse,
+        error_callback: err => {
+          console.warn('GIS popup error:', err);
+          showToast(t('gdriveAuthError', err.type || 'popup blocked'), 'error', 5000);
+        },
+      });
+    } else {
+      console.warn('GIS SDK unavailable — sign-in disabled, sync continues');
     }
-    gdriveCodeClient = google.accounts.oauth2.initCodeClient({
-      client_id: GDRIVE_CLIENT_ID,
-      scope:     GDRIVE_SCOPE,
-      ux_mode:   'popup',
-      callback:  _onCodeResponse,
-      error_callback: err => {
-        console.warn('GIS popup error:', err);
-        showToast(t('gdriveAuthError', err.type || 'popup blocked'), 'error', 5000);
-      },
-    });
   }
 
   if (!gdriveRefresh) {
@@ -71,7 +71,7 @@ window.__driveConnected = function (refreshToken) {
   gdriveFileId = null;
   _updateGdriveUI(true);
   showToast(t('gdriveConnectedMsg'), 'success');
-  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
+  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI()).finally(_markSyncReady);
 };
 
 window.__driveRestore = function (refreshToken) {
@@ -79,7 +79,7 @@ window.__driveRestore = function (refreshToken) {
   gdriveRefresh = refreshToken;
   localStorage.setItem('gdrive_refresh', refreshToken);
   _updateGdriveUI(true);
-  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI());
+  _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI()).finally(_markSyncReady);
 };
 
 window.__driveDisconnected = function () {
@@ -423,8 +423,9 @@ window.addEventListener('online', () => {
 });
 
 window.addEventListener('load', () => {
+  const startedAt = Date.now();
   const ready = () => {
-    if (window.google?.accounts?.oauth2) gdriveInit();
+    if (GDRIVE_IN_APP || window.google?.accounts?.oauth2 || Date.now() - startedAt > 5000) gdriveInit();
     else setTimeout(ready, 100);
   };
   ready();
