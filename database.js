@@ -67,7 +67,7 @@ const ACTIVE_BANNERS = [
               "Shamane", "37", "6", "Spathodea", "Ezra", "Getian", "Semmelweis", "Isolde", "Marcus", "Vila",
               "Windsong", "Kakania", "J", "Mercuria", "Tuesday", "Argus", "Lopera", "Willow", "Flutterpage",
               "Barcarola", "Fatutu", "Noire", "Ulrich", "Recoleta", "Aleph", "Hissabeth", "Kiperina", "Moldir",
-              "Sentinel", "Charon", "Rubuska", "Corvus", "Brume", "Marsha", "Igor", "Cheng Heguang", "Coppélia",
+              "Sentinel", "Charon", "Rubuska", "Corvus", "Brume", "Marsha", "Igor", "Cheng Heguang", "Coppelia",
               "Lorentz Butterfly", "Ramona"]
   },
   {
@@ -193,7 +193,7 @@ const CHARACTERS = {
   3147: { name: "Ms. Stranger", rarity: 6},
   3146: { name: "Rhiannon", rarity: 6},
   3145: { name: "Everecho", rarity: 6},
-  3144: { name: "Coppélia", rarity: 6},
+  3144: { name: "Coppelia", rarity: 6},
   3143: { name: "Enigma", rarity: 6},
   3142: { name: "Ramona", rarity: 6},
   3141: { name: "Paper Heron", rarity: 6 },
