@@ -1953,7 +1953,7 @@ function collectBannerRuns(bannerKey) {
     if (e.poolName !== bannerKey) return;
     const pid = e.poolId;
     const run = runs[pid] ??= {
-      poolId: pid, version: gameVersionFromPoolId(pid),
+      poolId: pid, version: gameVersionFromPoolId(pid) || getBannerVersion(bannerKey),
       firstTime: e.createTime, total: 0, sixStars: []
     };
     run.total++;

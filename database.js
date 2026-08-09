@@ -21,7 +21,7 @@ const BANNERS = {
   "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character", rateUp6: ["Tuesday"]},
   "修缮往日": { name: "From the Ruin of the Past", type: "Character", rateUp6: ["Moldir"]},
   "誓言无有烬时": { name: "The Oath Unyielding", type: "Character", rateUp6: ["Marsha"]},
-  "银色拟剧论": { name: "Analysis of Metallic Dramaturgy", type: "Collab", rateUp6: ["The Twins"]},
+  "银色拟剧论": { name: "Analysis of Metallic Dramaturgy", type: "Collab", rateUp6: ["The Twins"], version: "3.6.5"},
   "思维动力学":   { name: "Cognitive Dynamics", type: "Character", rateUp6: ["Ulrich"]},
   "永恒折射角":   { name: "The Brilliance Within", type: "Character", rateUp6: ["Brume"]},
   "仙子振翅入夜": { name: "The Fairies Shining at Night", type: "Character", rateUp6: ["Tooth Fairy"]},
@@ -282,6 +282,7 @@ const CHARACTERS = {
 
 function getBannerName(cn) { return BANNERS[cn]?.name ?? cn; }
 function getBannerType(cn) { return BANNERS[cn]?.type ?? "Character"; }
+function getBannerVersion(cn) { return BANNERS[cn]?.version ?? ""; }
 
 const PITY_SHARED_GROUP = { 3: "STANDARD", 12: "RIPPLES" };
 
