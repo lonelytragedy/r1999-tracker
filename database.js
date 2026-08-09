@@ -11,6 +11,10 @@ const BANNERS = {
   "幕间蒙太奇" : { name: "A Life in Montage", type: "Character", rateUp6: ["Noire"] },
   "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited", rateUp6: ["Liang Yue"]},
   "湖心追述" : { name: "From the Lake's Heart", type: "Water", rateUp6: ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]},
+  "湖的许诺" : { name: "Promise of the Water", type: "Water"},
+  "The Myth at Her Fingertips" : { name: "The Myth at Her Fingertips", type: "Limited", rateUp6: ["Nautika"]},
+  "A Newly Hatched Chapter" : { name: "A Newly Hatched Chapter", type: "Limited", rateUp6: ["Rhiannon"]},
+  "Beneath the Guise of Her Cocoon" : { name: "Beneath the Guise of Her Cocoon", type: "Character", rateUp6: ["Ms. Stranger"]},
   "子夜独角戏" : { name: "The Midnight Flutist", type: "Character", rateUp6: ["Rubuska"]},
   "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited", rateUp6: ["Paper Heron"]},
   "湖的启示" : { name: "Revelation of the Water", type: "Water" },
@@ -35,6 +39,48 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:      "湖的涟漪",
+    startUTC: "2026-08-13T10:00:00Z",
+    endUTC:   "2026-09-24T09:59:00Z",
+    rateUp:  ["Regulus", "Semmelweis", "Recoleta", "Melania", "Medicine Pocket", "Mercuria", "Spathodea"]
+  },
+  {
+    key:      "A Newly Hatched Chapter",
+    startUTC: "2026-08-13T10:00:00Z",
+    endUTC:   "2026-09-24T09:59:00Z",
+    rateUp:  ["Rhiannon", "Ulu", "Avgust"]
+  },
+  {
+    key:      "The Myth at Her Fingertips",
+    startUTC: "2026-08-14T10:00:00Z",
+    endUTC:   "2026-09-03T09:59:00Z",
+    rateUp:  ["Nautika", "Blonney", "Dikke"]
+  },
+  {
+    key:      "湖的许诺",
+    startUTC: "2026-08-22T10:00:00Z",
+    endUTC:   "2026-09-24T09:59:00Z",
+    rateUp:  ["Druvis III", "Lilya", "A Knight", "Sotheby", "Regulus", "Centurion", "An-an Lee", "Medicine Pocket",
+              "Eternity", "Ms. NewBabel", "Voyager", "Melania", "Pickles", "Tooth Fairy", "Jessica", "Kaalaa Baunaa",
+              "Shamane", "37", "6", "Spathodea", "Ezra", "Getian", "Semmelweis", "Isolde", "Marcus", "Vila",
+              "Windsong", "Kakania", "J", "Mercuria", "Tuesday", "Argus", "Lopera", "Willow", "Flutterpage",
+              "Barcarola", "Fatutu", "Noire", "Ulrich", "Recoleta", "Aleph", "Hissabeth", "Kiperina", "Moldir",
+              "Sentinel", "Charon", "Rubuska", "Corvus", "Brume", "Marsha", "Igor", "Cheng Heguang", "Coppélia",
+              "Lorentz Butterfly", "Ramona"]
+  },
+  {
+    key:      "湖心追述",
+    startUTC: "2026-09-01T10:00:00Z",
+    endUTC:   "2026-09-24T09:59:00Z",
+    rateUp:  ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]
+  },
+  {
+    key:      "Beneath the Guise of Her Cocoon",
+    startUTC: "2026-09-03T10:00:00Z",
+    endUTC:   "2026-09-24T09:59:00Z",
+    rateUp:  ["Ms. Stranger", "X", "Barbara"]
+  },
   {
     key:      "为什么故事集",
     startUTC: "2026-07-28T10:00:00Z",
