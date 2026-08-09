@@ -1,4 +1,4 @@
-const CACHE = 'r1999-tracker-v3';
+const CACHE = 'r1999-tracker-v4';
 
 const CORE = [
   './',
@@ -21,7 +21,9 @@ const NETWORK_ONLY = /accounts\.google\.com|googleapis\.com|workers\.dev/;
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE)
-      .then(cache => cache.addAll(CORE.map(u => new Request(u, { cache: 'reload' }))))
+      .then(cache => Promise.allSettled(
+        CORE.map(u => cache.add(new Request(u, { cache: 'reload' })))
+      ))
       .catch(() => {})
       .then(() => self.skipWaiting())
   );
