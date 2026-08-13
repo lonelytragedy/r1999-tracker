@@ -13,7 +13,8 @@ const BANNERS = {
   "湖心追述" : { name: "From the Lake's Heart", type: "Water", rateUp6: ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]},
   "湖的许诺" : { name: "Promise of the Water", type: "Water"},
   "The Myth at Her Fingertips" : { name: "The Myth at Her Fingertips", type: "Limited", rateUp6: ["Nautika"]},
-  "A Newly Hatched Chapter" : { name: "A Newly Hatched Chapter", type: "Limited", rateUp6: ["Rhiannon"]},
+  "故事的新啼" : { name: "A Newly Hatched Chapter", type: "Limited", rateUp6: ["Rhiannon"]},
+  "石心瓦解时" : { name: "A Beating Heart Beneath the Stone", type: "Character", rateUp6: ["Sentinel"]},
   "Beneath the Guise of Her Cocoon" : { name: "Beneath the Guise of Her Cocoon", type: "Character", rateUp6: ["Ms. Stranger"]},
   "子夜独角戏" : { name: "The Midnight Flutist", type: "Character", rateUp6: ["Rubuska"]},
   "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited", rateUp6: ["Paper Heron"]},
@@ -43,13 +44,22 @@ const ACTIVE_BANNERS = [
     key:      "湖的涟漪",
     startUTC: "2026-08-13T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
+    image:    "static/banners/Ripples_on_the_Water_3.7.webp",
     rateUp:  ["Regulus", "Semmelweis", "Recoleta", "Melania", "Medicine Pocket", "Mercuria", "Spathodea"]
   },
   {
-    key:      "A Newly Hatched Chapter",
+    key:      "故事的新啼",
     startUTC: "2026-08-13T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
+    image:    "static/banners/A_Newly_Hatched_Chapter.webp",
     rateUp:  ["Rhiannon", "Ulu", "Avgust"]
+  },
+  {
+    key:      "石心瓦解时",
+    startUTC: "2026-08-11T10:00:00Z",
+    endUTC:   "2026-08-25T09:59:00Z",
+    image:    "static/banners/A_Beating_Heart_Beneath_the_Stone.webp",
+    rateUp:  ["Sentinel", "Balloon Party", "Diggers"]
   },
   {
     key:      "The Myth at Her Fingertips",
