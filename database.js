@@ -12,7 +12,7 @@ const BANNERS = {
   "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited", rateUp6: ["Liang Yue"]},
   "湖心追述" : { name: "From the Lake's Heart", type: "Water", rateUp6: ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]},
   "湖的许诺" : { name: "Promise of the Water", type: "Water"},
-  "The Myth at Her Fingertips" : { name: "The Myth at Her Fingertips", type: "Limited", rateUp6: ["Nautika"]},
+  "神话咫尺之处" : { name: "The Myth at Her Fingertips", type: "Limited", rateUp6: ["Nautika"]},
   "故事的新啼" : { name: "A Newly Hatched Chapter", type: "Limited", rateUp6: ["Rhiannon"]},
   "石心瓦解时" : { name: "A Beating Heart Beneath the Stone", type: "Character", rateUp6: ["Sentinel"]},
   "Beneath the Guise of Her Cocoon" : { name: "Beneath the Guise of Her Cocoon", type: "Character", rateUp6: ["Ms. Stranger"]},
@@ -62,7 +62,7 @@ const ACTIVE_BANNERS = [
     rateUp:  ["Sentinel", "Balloon Party", "Diggers"]
   },
   {
-    key:      "The Myth at Her Fingertips",
+    key:      "神话咫尺之处",
     startUTC: "2026-08-14T10:00:00Z",
     endUTC:   "2026-09-03T09:59:00Z",
     image:    "static/banners/The_Myth_at_Her_Fingertips.webp",
