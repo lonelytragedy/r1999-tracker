@@ -1,4 +1,6 @@
 const BANNERS = {
+  "贝壳漂流记": { name: "A Shell on the Waves", type: "Character", rateUp6: ["Fatutu"]},
+  "湖的应许": {name: "Promise of the Water", type:"Water"},
   "为什么故事集": { name: "The Book of Whys", type: "Character", rateUp6: ["Flutterpage"] },
   "现实破译法": { name: "Deciphering Reality", type: "Character", rateUp6: ["Enigma"] },
   "虹色五线谱": { name: "Playing in Rainbow Clef", type: "Character", rateUp6: ["Barcarola"] },
@@ -41,6 +43,13 @@ const BANNERS = {
 
 const ACTIVE_BANNERS = [
   {
+    key:      "贝壳漂流记",
+    startUTC: "2026-08-25T10:00:00Z",
+    endUTC:   "2026-09-08T09:59:00Z",
+    image:    "static/banners/A_Shell_on_the_Waves.webp",
+    rateUp:  ["Fatutu", "Necrologist", "Bkornblume"]
+  },
+  {
     key:      "湖的涟漪",
     startUTC: "2026-08-13T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
@@ -69,9 +78,10 @@ const ACTIVE_BANNERS = [
     rateUp:  ["Nautika", "Blonney", "Dikke"]
   },
   {
-    key:      "湖的许诺",
+    key:      "湖的应许",
     startUTC: "2026-08-22T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
+    image: "static/banners/Promise_of_the_Water_3.7.webp",
     rateUp:  ["Druvis III", "Lilya", "A Knight", "Sotheby", "Regulus", "Centurion", "An-an Lee", "Medicine Pocket",
               "Eternity", "Ms. NewBabel", "Voyager", "Melania", "Pickles", "Tooth Fairy", "Jessica", "Kaalaa Baunaa",
               "Shamane", "37", "6", "Spathodea", "Ezra", "Getian", "Semmelweis", "Isolde", "Marcus", "Vila",
