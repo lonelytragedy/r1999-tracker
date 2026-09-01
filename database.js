@@ -94,6 +94,7 @@ const ACTIVE_BANNERS = [
     key:      "湖心追述",
     startUTC: "2026-09-01T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
+    image: "static/banners/From_the_Lakes_Heart_3.7.webp",
     rateUp:  ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]
   },
   {
