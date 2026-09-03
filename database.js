@@ -17,7 +17,7 @@ const BANNERS = {
   "神话咫尺之处" : { name: "The Myth at Her Fingertips", type: "Limited", rateUp6: ["Nautika"]},
   "故事的新啼" : { name: "A Newly Hatched Chapter", type: "Limited", rateUp6: ["Rhiannon"]},
   "石心瓦解时" : { name: "A Beating Heart Beneath the Stone", type: "Character", rateUp6: ["Sentinel"]},
-  "Beneath the Guise of Her Cocoon" : { name: "Beneath the Guise of Her Cocoon", type: "Character", rateUp6: ["Ms. Stranger"]},
+  "石心瓦解时" : { name: "Beneath the Guise of Her Cocoon", type: "Character", rateUp6: ["Ms. Stranger"]},
   "子夜独角戏" : { name: "The Midnight Flutist", type: "Character", rateUp6: ["Rubuska"]},
   "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited", rateUp6: ["Paper Heron"]},
   "湖的启示" : { name: "Revelation of the Water", type: "Water" },
@@ -98,9 +98,10 @@ const ACTIVE_BANNERS = [
     rateUp:  ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]
   },
   {
-    key:      "Beneath the Guise of Her Cocoon",
+    key:      "剥茧为名",
     startUTC: "2026-09-03T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
+	image: "static/banners/Beneath_the_Guise_of_Her_Cocoon.webp",
     rateUp:  ["Ms. Stranger", "X", "Barbara"]
   },
   {
