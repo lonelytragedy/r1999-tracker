@@ -1,4 +1,5 @@
 const BANNERS = {
+  "殓骨悼词": { name: "The Mourner's Eulogy", type: "Character", rateUp6: ["Charon"]},
   "贝壳漂流记": { name: "A Shell on the Waves", type: "Character", rateUp6: ["Fatutu"]},
   "湖的应许": {name: "Promise of the Water", type:"Water"},
   "为什么故事集": { name: "The Book of Whys", type: "Character", rateUp6: ["Flutterpage"] },
@@ -42,6 +43,13 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:      "殓骨悼词",
+    startUTC: "2026-09-08T10:00:00Z",
+    endUTC:   "2026-09-22T09:59:00Z",
+    image:    "static/banners/The_Mourners_Eulogy.webp",
+    rateUp:  ["Charon", "Satsuki", "Yenisei"]
+  },
   {
     key:      "贝壳漂流记",
     startUTC: "2026-08-25T10:00:00Z",
