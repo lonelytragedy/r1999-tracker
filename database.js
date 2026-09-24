@@ -1,4 +1,6 @@
 const BANNERS = {
+  "The Future's Foundation": { name: "The Future's Foundation", type: "Character", rateUp6: ["Cornerstone"]},
+  "往昔应我声": { name: "Speak and the Past Will Echo", type: "Character", rateUp6: ["Everecho"]},
   "殓骨悼词": { name: "The Mourner's Eulogy", type: "Character", rateUp6: ["Charon"]},
   "贝壳漂流记": { name: "A Shell on the Waves", type: "Character", rateUp6: ["Fatutu"]},
   "湖的应许": {name: "Promise of the Water", type:"Water"},
@@ -43,6 +45,40 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+    {
+    key:      "往昔应我声",
+    startUTC: "2026-09-24T10:00:00Z",
+    endUTC:   "2026-10-15T09:59:00Z",
+    image:    "static/banners/Speak_and_the_Past_Will_Echo.webp",
+    rateUp:  ["Everecho", "Bkornblume", "Dikke"]
+  },
+    {
+    key:      "渡影归真",
+    startUTC: "2026-09-22T10:00:00Z",
+    endUTC:   "2026-10-06T09:59:00Z",
+    image:    "static/banners/Conduit_of_the_Unseen.webp",
+    rateUp:  ["Ramona", "Tennant", "Baby Blue"]
+  },
+    {
+    key:      "湖的涟漪",
+    startUTC: "2026-09-24T10:00:00Z",
+    endUTC:   "2026-11-05T09:59:00Z",
+    image:    "static/banners/Ripples_on_the_Water_3.8.webp",
+    rateUp:  ["Hissabeth", "J", "Regulus", "Mercuria", "Ms. NewBabel", "A Knight"]
+  },
+    {
+    key:      "The Future's Foundation",
+    startUTC: "2026-10-15T10:00:00Z",
+    endUTC:   "2026-11-05T09:59:00Z",
+    rateUp:  ["Cornerstone", "Diggers", "Desert Flannel"]
+  },
+    {
+    key:      "湖的企盼",
+    startUTC: "2026-10-01T05:00:00Z",
+    endUTC:   "2026-10-15T04:59:00Z",
+    image:    "static/banners/Yearning_of_the_Water_3..webp",
+    rateUp:  ["Lorentz Butterfly", "Enigma"]
+  },
   {
     key:      "殓骨悼词",
     startUTC: "2026-09-08T10:00:00Z",
@@ -227,6 +263,7 @@ const CHARACTERS = {
   3143: { name: "Enigma", rarity: 6},
   3142: { name: "Ramona", rarity: 6},
   3141: { name: "Paper Heron", rarity: 6 },
+  3140: { name: "Cornerstone", rarity: 6},
   3139: { name: "Lorentz Butterfly", rarity: 6},
   3137: { name: "Cheng Heguang", rarity: 6},
   3135: { name: "Brume", rarity: 6 },
