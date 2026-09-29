@@ -6,5 +6,4 @@
   document.documentElement.lang = lang;
   const skin = localStorage.getItem('r1999_skin');
   document.documentElement.dataset.skin = (skin === 'classic') ? 'classic' : 'reversed';
-  document.write('<scr' + 'ipt src="localization/' + lang + '.js"><\/scr' + 'ipt>');
 })();

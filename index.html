@@ -57,7 +57,7 @@
 
   <div class="box">
     <div class="box-header">
-      <h3 data-i18n="dbManagement"></h3>
+      <h2 data-i18n="dbManagement"></h2>
     </div>
 
     <hr style="border:0; border-top:1px solid rgba(216,180,106,0.15); margin:12px 0;">
@@ -98,9 +98,9 @@
     </div>
   </div>
 
-  <div class="box" id="bannerTimelineBox">
+  <div class="box collapsed" id="bannerTimelineBox">
     <div class="banner-box-header">
-      <h3 id="bannerBoxTitle" data-i18n="bannerTimeline"></h3>
+      <h2 id="bannerBoxTitle" data-i18n="bannerTimeline"></h2>
       <div style="display:flex; align-items:center; gap:10px;">
         <label class="tl-tz-toggle" id="tlTzToggle">
           <input type="checkbox" id="tlLocalTimeCheck" onchange="toggleTlLocalTime(this.checked)">
@@ -115,39 +115,43 @@
     </div>
     <div class="banner-view-panel">
       <div id="bannerTimelineWrap" class="banner-timeline-wrap"></div>
-      <div id="activeBannersWrap" style="display:none;">
+      <div id="activeBannersWrap" class="collapse-body" style="display:none;">
         <div class="active-banners-grid" id="activeBanners"></div>
       </div>
     </div>
+    <button class="recent-toggle" onclick="toggleCollapse('bannerTimelineBox')"></button>
   </div>
 
-  <div class="box" id="statsBox">
-    <h3 data-i18n="statistics"></h3>
-    <div class="stats" id="stats"></div>
-    <div class="banner-stats-row" id="bannerStats"></div>
+  <div class="box collapsed" id="statsBox">
+    <h2 data-i18n="statistics"></h2>
+    <div class="collapse-body">
+      <div class="stats" id="stats"></div>
+      <div class="banner-stats-row" id="bannerStats"></div>
+    </div>
+    <button class="recent-toggle" onclick="toggleCollapse('statsBox')"></button>
   </div>
 
   <div class="box collapsed" id="recentSixStarsBox">
-    <h3 data-i18n="recentSixStars"></h3>
-    <div class="recent-six-stars" id="recentSixStars"></div>
+    <h2 data-i18n="recentSixStars"></h2>
+    <div class="recent-six-stars collapse-body" id="recentSixStars"></div>
     <button class="recent-toggle" id="recentToggle" onclick="toggleRecent()"></button>
   </div>
 
   <div class="box" id="chartsBox">
     <div class="charts-header" onclick="toggleChartsBox()">
-      <h3 data-i18n="chartsTitle"></h3>
+      <h2 data-i18n="chartsTitle"></h2>
       <span class="charts-toggle-arrow" id="chartsArrow">▾</span>
     </div>
     <div id="chartsContent" style="display:none">
-      <h4 data-i18n="pityChart"></h4>
+      <h3 data-i18n="pityChart"></h3>
       <canvas id="pityChart"></canvas>
-      <h4 data-i18n="monthlyChart"></h4>
+      <h3 data-i18n="monthlyChart"></h3>
       <canvas id="chart"></canvas>
     </div>
   </div>
 
   <div class="box">
-    <h3 data-i18n="pullHistory"></h3>
+    <h2 data-i18n="pullHistory"></h2>
     <div class="filter-bar">
       <div class="filter-group">
         <span data-i18n="filterRarity"></span>
@@ -190,7 +194,7 @@
     </div>
   </div>
 
-  <p class="version-footer">Version 2.6 Mobile</p>
+  <p class="version-footer">Version 3.3 soft</p>
 
   <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" data-i18n-title="scrollTop">↑</button>
 

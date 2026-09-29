@@ -1,4 +1,4 @@
-const CACHE = 'r1999-tracker-v4';
+const CACHE = 'r1999-tracker-v9';
 
 const CORE = [
   './',
@@ -46,7 +46,9 @@ self.addEventListener('fetch', event => {
     const cache = await caches.open(CACHE);
     try {
       const res = await fetch(req);
-      if (res && res.ok) cache.put(req, res.clone());
+      if (res && res.ok && new URL(req.url).origin === self.location.origin) {
+        cache.put(req, res.clone());
+      }
       return res;
     } catch (err) {
       const cached = await cache.match(req);

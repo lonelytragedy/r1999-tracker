@@ -105,6 +105,8 @@ function refreshDynamicContent() {
   renderTable();
   renderProfileSelect();
   _updateGdriveUILang();
+  _initPillsScroll();
+  updateAllCollapses();
 }
 
 function fmtTimer(diff) {
@@ -287,9 +289,9 @@ function setSkin(skin) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   currentLang = detectLang();
-  LOCALES[currentLang] = window.LOCALE;
+  await loadLocale(currentLang);
   document.documentElement.lang = currentLang;
   document.getElementById('langRU').classList.toggle('active', currentLang === 'ru');
   document.getElementById('langEN').classList.toggle('active', currentLang === 'en');
@@ -300,7 +302,11 @@ window.addEventListener('DOMContentLoaded', () => {
     try { window.AndroidBridge.setSkin(_skin); } catch (e) {}
   }
   applyI18n();
-  document.querySelectorAll('.box').forEach(b => b.classList.add('visible'));
+  _initPillsScroll();
+  document.querySelectorAll('.box').forEach((b, i) => {
+    b.style.animationDelay = (i * 55) + 'ms';
+    b.classList.add('visible');
+  });
   preloadLocales();
   loadProfiles();
   initBannerView();
@@ -369,6 +375,7 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     if (!chart) requestAnimationFrame(drawChartPlaceholder);
+    updateAllCollapses();
   }, 150);
 });
 
@@ -388,11 +395,11 @@ const topBar = (() => {
   function start(work) {
     const bar = getEl();
     clearTimeout(finishTimer);
-    bar.style.width = '0%';
+    bar.style.transform = 'scaleX(0)';
     bar.classList.remove('finishing', 'running');
     startTime = Date.now();
     requestAnimationFrame(() => {
-      bar.style.width = '70%';
+      bar.style.transform = 'scaleX(0.7)';
       bar.classList.add('running');
       if (work) requestAnimationFrame(work);
     });
@@ -407,7 +414,7 @@ const topBar = (() => {
       bar.classList.add('finishing');
       bar.classList.remove('running');
       finishTimer = setTimeout(() => {
-        bar.style.width = '0%';
+        bar.style.transform = 'scaleX(0)';
         bar.classList.remove('finishing');
       }, 650);
     }, delay);
@@ -437,6 +444,7 @@ function applyBannerView(mode) {
 
   const prevMode = tlWrap.style.display === 'none' ? 'grid' : 'timeline';
   const toRight  = mode === 'grid';
+  document.getElementById('bannerTimelineBox')?.classList.toggle('is-grid', mode === 'grid');
 
   function slideIn(el) {
     el.classList.remove('slide-in-right', 'slide-in-left');
@@ -519,12 +527,14 @@ function renderActiveBanners() {
 
   if (!ACTIVE_BANNERS.length) {
     container.innerHTML = '';
+    updateCollapse('bannerTimelineBox');
     return;
   }
 
   const banners = getActiveGridBannersSorted();
   if (!banners.length) {
     container.innerHTML = `<div class="active-banners-grid-empty">${t('activeBannersEmpty')}</div>`;
+    updateCollapse('bannerTimelineBox');
     return;
   }
 
@@ -599,6 +609,7 @@ function renderActiveBanners() {
     if (timerEls.length) activeBannersGridTick = setTimeout(tick, 1000);
   }
 
+  updateCollapse('bannerTimelineBox');
   tick();
 }
 
@@ -1219,7 +1230,12 @@ function parseData(list) {
 
 function gameVersionFromPoolId(poolId) {
   const s = String(poolId ?? '');
-  return s.length === 5 ? `${s[0]}.${s[1]}` : '';
+  if (s.length === 5) return `${s[0]}.${s[1]}`;
+  if (s.length === 6) {
+    const minor = Number(s[1]) - 2;
+    return minor >= 0 ? `${s[0]}.${minor}.${s[2]}` : '';
+  }
+  return '';
 }
 
 function renderBannerStats() {
@@ -1334,6 +1350,7 @@ function renderBannerStats() {
     container.appendChild(card);
     requestAnimationFrame(() => card.classList.add('visible'));
   });
+  updateCollapse('statsBox');
 }
 
 function renderStats() {
@@ -1362,6 +1379,7 @@ function renderStats() {
     <div class="stat">${t('statFifty')}<br><b>${fiftyTotal ? `${fiftyWins}/${fiftyTotal} (${Math.round(fiftyWins / fiftyTotal * 100)}%)` : '—'}</b></div>
   `;
   setTimeout(() => document.querySelectorAll('#stats .stat').forEach(s => s.classList.add('show')), 50);
+  updateCollapse('statsBox');
 }
 
 function renderRecentSixStars() {
@@ -1378,64 +1396,53 @@ function renderRecentSixStars() {
     return;
   }
 
-  container.innerHTML = '';
-
-  sixStars.forEach(item => {
-    const colorClass = item.pity < PITY_COLOR_YELLOW ? 'pity-color-green' : item.pity < PITY_COLOR_RED ? 'pity-color-yellow' : 'pity-color-red';
-    const imgSrc     = `static/characters/${item.char.name.replace(/\s+/g, '_')}.webp`;
-
-    const card        = document.createElement('div');
-    card.className    = `six-star-card ${colorClass} show`;
-
-    const portrait    = document.createElement('div');
-    portrait.className = 'six-star-portrait';
-
-    const img = document.createElement('img');
-    img.src   = imgSrc;
-    img.alt   = item.char.name;
-    img.addEventListener('error', () => {
-      img.style.display    = 'none';
-      portrait.textContent = item.char.name;
-    });
-
-    const pityBadge       = document.createElement('div');
-    pityBadge.className   = 'six-star-pity';
-    pityBadge.textContent = item.pity;
-
-    const nameLabel       = document.createElement('div');
-    nameLabel.className   = 'six-star-name';
-    nameLabel.textContent = item.char.name;
-
-    portrait.appendChild(img);
-    card.appendChild(portrait);
-    card.appendChild(pityBadge);
-    if (item.fifty) {
-      const fiftyBadge     = document.createElement('div');
-      fiftyBadge.className = `six-star-fifty ${item.fifty}`;
-      fiftyBadge.innerHTML = fiftyIconSVG(item.fifty);
-      fiftyBadge.title     = t('fifty_' + item.fifty);
-      card.appendChild(fiftyBadge);
-    }
-    card.appendChild(nameLabel);
-    container.appendChild(card);
-  });
+  container.innerHTML = sixStars.map(item => {
+    const colorClass = item.pity < PITY_COLOR_YELLOW ? 'pity-color-green'
+                     : item.pity < PITY_COLOR_RED    ? 'pity-color-yellow' : 'pity-color-red';
+    const name   = escapeHTML(item.char.name);
+    const imgSrc = escapeHTML(`static/characters/${item.char.name.replace(/\s+/g, '_')}.webp`);
+    const fifty  = item.fifty
+      ? `<div class="six-star-fifty ${item.fifty}" title="${t('fifty_' + item.fifty)}">${fiftyIconSVG(item.fifty)}</div>`
+      : '';
+    return `<div class="six-star-card ${colorClass} show">` +
+        `<div class="six-star-portrait">` +
+          `<img src="${imgSrc}" alt="${name}" loading="lazy" decoding="async" ` +
+               `onerror="this.style.display='none';this.parentNode.textContent=this.alt">` +
+        `</div>` +
+        fifty +
+        `<div class="six-star-pity">${item.pity}</div>` +
+        `<div class="six-star-name">${name}</div>` +
+      `</div>`;
+  }).join('');
 
   updateRecentToggle();
 }
 
-function updateRecentToggle() {
-  const box = document.getElementById('recentSixStarsBox');
-  const btn = document.getElementById('recentToggle');
-  const grid = document.getElementById('recentSixStars');
-  if (!box || !btn || !grid) return;
-  box.classList.toggle('no-collapse', grid.scrollHeight <= 320);
+function updateCollapse(boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  const body = box.querySelector('.collapse-body');
+  const btn  = box.querySelector('.recent-toggle');
+  if (!body || !btn) return;
+  const limit = parseFloat(getComputedStyle(box).getPropertyValue('--collapse-h')) || 300;
+  box.classList.toggle('no-collapse', body.scrollHeight <= limit + 20);
   btn.textContent = box.classList.contains('collapsed') ? t('recentShowAll') : t('recentCollapse');
 }
-
-function toggleRecent() {
-  document.getElementById('recentSixStarsBox').classList.toggle('collapsed');
-  updateRecentToggle();
+function updateAllCollapses() {
+  ['bannerTimelineBox', 'statsBox', 'recentSixStarsBox'].forEach(updateCollapse);
 }
+function toggleCollapse(boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.classList.toggle('collapsed');
+  updateCollapse(boxId);
+  if (box.classList.contains('collapsed') && box.getBoundingClientRect().top < 0) {
+    box.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+}
+function updateRecentToggle() { updateCollapse('recentSixStarsBox'); }
+
+function toggleRecent() { toggleCollapse('recentSixStarsBox'); }
 
 function fiftyIconSVG(status) {
   const heart = 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
@@ -1461,15 +1468,17 @@ function renderTable() {
   });
 
   const tb = document.getElementById('table');
-  tb.innerHTML = '';
 
   if (!filtered.length) {
-    tb.innerHTML = `<tr class="show"><td colspan="6" style="text-align:center;padding:30px;color:#9aa0a6;font-size:18px;">${t('noData')}</td></tr>`;
+    if (_tableIO) { _tableIO.disconnect(); _tableIO = null; }
+    _tableState = null;
+    tb.innerHTML = `<tr class="show"><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted);font-size:18px;">${t('noData')}</td></tr>`;
     return;
   }
 
   const displayIndices = filtered.toReversed();
   const groupRole      = displayIndices.map(() => null);
+  const noFilter       = !currentFilter && !currentTypeFilter;
 
   let gi = 0;
   while (gi < displayIndices.length) {
@@ -1490,48 +1499,106 @@ function renderTable() {
     }
   }
 
-  const fragment = document.createDocumentFragment();
-  const rows     = [];
+  _tableState = { tb, displayIndices, groupRole, noFilter, cursor: 0 };
+  tb.innerHTML = '';
+  _appendTableChunk();
+  _setupTableLazy();
+}
 
-  displayIndices.forEach((origIdx, di) => {
-    const e    = processedList[origIdx];
-    const c    = getChar(e.gainIds[0]);
-    const type = getBannerType(e.poolName);
-    const role = groupRole[di];
+const TABLE_CHUNK = 200;
+let _tableState = null;
+let _tableIO    = null;
 
-    const bracketCell = (role && !currentFilter && !currentTypeFilter)
-      ? `<td class="group-bracket group-${role.replace('-label', '')}">${role.endsWith('-label') ? '<span>×10</span>' : ''}</td>`
-      : '<td class="group-bracket-empty"></td>';
+function _tableRowHTML(di) {
+  const { displayIndices, groupRole, noFilter } = _tableState;
+  const origIdx = displayIndices[di];
+  const e    = processedList[origIdx];
+  const c    = getChar(e.gainIds[0]);
+  const type = getBannerType(e.poolName);
+  const role = groupRole[di];
 
-    const tr     = document.createElement('tr');
-    tr.className = pityRowColor(processedPity[origIdx]);
-    if (e._groupId) tr.dataset.group = e._groupId;
-    tr.innerHTML = `
-      ${bracketCell}
-      <td style="text-align:center;color:#9aa0a6;font-size:13px;">${origIdx + 1}</td>
-      <td><span class="banner-type ${BANNER_TYPE_CLASSES[type] || 'type-other'}">${type}</span> ${getBannerName(e.poolName)}</td>
-      <td>${processedPity[origIdx]}${processedFifty[origIdx] ? `<span class="fifty-mark" title="${t('fifty_' + processedFifty[origIdx])}">${fiftyIconSVG(processedFifty[origIdx])}</span>` : ''}</td>
-      <td><span class="r${c.rarity}">${c.name} ★${c.rarity}</span></td>
-      <td style="text-align:right;color:#9aa0a6;font-size:13px;white-space:nowrap;">${e.createTime}</td>
-    `;
-    fragment.appendChild(tr);
-    rows.push(tr);
+  const bracketCell = (role && noFilter)
+    ? `<td class="group-bracket group-${role.replace('-label', '')}">${role.endsWith('-label') ? '<span>×10</span>' : ''}</td>`
+    : '<td class="group-bracket-empty"></td>';
+
+  const fifty = processedFifty[origIdx]
+    ? `<span class="fifty-mark" title="${t('fifty_' + processedFifty[origIdx])}">${fiftyIconSVG(processedFifty[origIdx])}</span>`
+    : '';
+
+  const groupAttr = e._groupId ? ` data-group="${escapeHTML(e._groupId)}"` : '';
+
+  return `<tr class="${pityRowColor(processedPity[origIdx])} show"${groupAttr}>` +
+      bracketCell +
+      `<td class="col-num">${origIdx + 1}</td>` +
+      `<td><span class="banner-type ${BANNER_TYPE_CLASSES[type] || 'type-other'}">${type}</span> ${escapeHTML(getBannerName(e.poolName))}</td>` +
+      `<td>${processedPity[origIdx]}${fifty}</td>` +
+      `<td><span class="r${c.rarity}">${escapeHTML(c.name)} ★${c.rarity}</span></td>` +
+      `<td class="col-date">${escapeHTML(e.createTime)}</td>` +
+    `</tr>`;
+}
+
+function _appendTableChunk() {
+  if (!_tableState) return false;
+  const { tb, displayIndices, cursor } = _tableState;
+  if (cursor >= displayIndices.length) return false;
+  const end = Math.min(cursor + TABLE_CHUNK, displayIndices.length);
+  let html = '';
+  for (let di = cursor; di < end; di++) html += _tableRowHTML(di);
+  tb.insertAdjacentHTML('beforeend', html);
+  _tableState.cursor = end;
+  return end < displayIndices.length;
+}
+
+function _setupTableLazy() {
+  const wrap = document.querySelector('.table-scroll');
+  if (!wrap) return;
+  let sentinel = document.getElementById('tableSentinel');
+  if (!sentinel) {
+    sentinel = document.createElement('div');
+    sentinel.id = 'tableSentinel';
+    sentinel.setAttribute('aria-hidden', 'true');
+    sentinel.style.cssText = 'height:1px;width:100%;';
+    wrap.appendChild(sentinel);
+  }
+  if (_tableIO) { _tableIO.disconnect(); _tableIO = null; }
+  if (!_tableState || _tableState.cursor >= _tableState.displayIndices.length) return;
+  _tableIO = new IntersectionObserver(entries => {
+    if (!entries.some(en => en.isIntersecting)) return;
+    let more = true;
+    for (let g = 0; g < 2 && more; g++) more = _appendTableChunk();
+    if (!more && _tableIO) { _tableIO.disconnect(); _tableIO = null; }
+  }, { root: null, rootMargin: '900px 0px' });
+  _tableIO.observe(sentinel);
+}
+
+function _updatePillsFade(el) {
+  const max = el.scrollWidth - el.clientWidth;
+  el.classList.toggle('fade-l', max > 2 && el.scrollLeft > 2);
+  el.classList.toggle('fade-r', max > 2 && el.scrollLeft < max - 2);
+}
+function _initPillsScroll() {
+  document.querySelectorAll('.filter-pills').forEach(el => {
+    if (!el.dataset.fadeInit) {
+      el.dataset.fadeInit = '1';
+      el.addEventListener('scroll', () => _updatePillsFade(el), { passive: true });
+    }
+    _updatePillsFade(el);
   });
+}
+window.addEventListener('resize', () => document.querySelectorAll('.filter-pills').forEach(_updatePillsFade));
 
-  tb.appendChild(fragment);
-
-  let idx = 0;
-  (function animateBatch() {
-    rows.slice(idx, idx + 30).forEach(tr => tr.classList.add('show'));
-    idx += 30;
-    if (idx < rows.length) requestAnimationFrame(animateBatch);
-  })();
+function _revealPill(btn) {
+  const row = btn.closest('.filter-pills');
+  if (!row || row.scrollWidth <= row.clientWidth) return;
+  const left = btn.offsetLeft - (row.clientWidth - btn.offsetWidth) / 2;
+  row.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
 }
 
 function filterByRarity(r, btn) {
   currentFilter = r;
   btn.closest('.filter-bar').querySelectorAll('button:not(.filter-type):not(.filter-type-all)').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _revealPill(btn);
   renderTable();
 }
 
@@ -1539,6 +1606,7 @@ function filterByType(type, btn) {
   currentTypeFilter = type;
   btn.closest('.filter-bar').querySelectorAll('button.filter-type, button.filter-type-all').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _revealPill(btn);
   renderTable();
 }
 
@@ -1575,34 +1643,40 @@ function renderChart(monthly) {
 
   if (chart) chart.destroy();
 
-  const colors = { 2: '#9aa0a6', 3: '#00ff9c', 4: '#00c8ff', 5: '#ffd54a', 6: '#ff4d5a' };
+  const cs     = getComputedStyle(document.documentElement);
+  const cvar   = (k, fb) => (cs.getPropertyValue(k).trim() || fb);
+  const colors = { 2: cvar('--c-r2', '#8f9099'), 3: cvar('--c-r3', '#37b98c'), 4: cvar('--c-r4', '#6aa2f2'), 5: cvar('--c-r5', '#e2ac48'), 6: cvar('--c-r6', '#ea5a6e') };
+  const ink    = cvar('--text', '#eaeaf0');
+  const gridc  = cvar('--tl-grid', 'rgba(255,255,255,0.06)');
+
   chart = new Chart(document.getElementById('chart'), {
     type: 'line',
     data: {
       labels,
       datasets: [2, 3, 4, 5, 6].map(r => ({
-        label:            `★${r}`,
-        data:             labels.map(m => monthly[m][r]),
-        borderColor:      colors[r],
-        tension:          0.35,
-        borderWidth:      2,
-        pointRadius:      3,
-        pointHoverRadius: 6,
+        label:                `★${r}`,
+        data:                 labels.map(m => monthly[m][r]),
+        borderColor:          colors[r],
+        pointBackgroundColor: colors[r],
+        tension:              0.35,
+        borderWidth:          2,
+        pointRadius:          3,
+        pointHoverRadius:     6,
       })),
     },
     options: {
       animation: false,
-      plugins: { legend: { labels: { color: '#eaeaf0' } } },
+      plugins: { legend: { labels: { color: ink } } },
       scales: {
-        x: { ticks: { color: '#eaeaf0' }, grid: { display: false } },
-        y: { ticks: { color: '#eaeaf0' }, grid: { display: false } },
+        x: { ticks: { color: ink }, grid: { display: false } },
+        y: { ticks: { color: ink, precision: 0 }, grid: { color: gridc } },
       },
     },
   });
 }
 
 function renderCharts() {
-  if (!chartsMonthly) return;
+  if (!chartsMonthly || typeof Chart === 'undefined') return;
   renderChart(chartsMonthly);
   renderPityChart();
   chartsDirty = false;
@@ -1630,11 +1704,17 @@ function renderPityChart() {
 
   if (pityChart) pityChart.destroy();
 
+  const cs    = getComputedStyle(document.documentElement);
+  const cvar  = (k, fb) => (cs.getPropertyValue(k).trim() || fb);
+  const cG    = cvar('--c-r3', '#37b98c');
+  const cY    = cvar('--c-r5', '#e2ac48');
+  const cR    = cvar('--c-r6', '#ea5a6e');
+  const ink   = cvar('--text', '#eaeaf0');
+  const gridc = cvar('--tl-grid', 'rgba(255,255,255,0.06)');
+
   const colors = counts.map((_, i) => {
     const p = i + 1;
-    return p < PITY_COLOR_YELLOW ? 'rgba(0,255,156,0.75)'
-         : p < PITY_COLOR_RED    ? 'rgba(255,213,74,0.8)'
-         :                         'rgba(255,77,90,0.85)';
+    return p < PITY_COLOR_YELLOW ? cG : p < PITY_COLOR_RED ? cY : cR;
   });
 
   pityChart = new Chart(canvas, {
@@ -1645,6 +1725,7 @@ function renderPityChart() {
         data:               counts,
         backgroundColor:    colors,
         borderWidth:        0,
+        borderRadius:       4,
         barPercentage:      1,
         categoryPercentage: 0.85,
       }],
@@ -1653,8 +1734,8 @@ function renderPityChart() {
       animation: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { ticks: { color: '#eaeaf0', maxTicksLimit: 24 }, grid: { display: false } },
-        y: { ticks: { color: '#eaeaf0', precision: 0 }, grid: { display: false } },
+        x: { ticks: { color: ink, maxTicksLimit: 24 }, grid: { display: false } },
+        y: { ticks: { color: ink, precision: 0 }, grid: { color: gridc } },
       },
     },
   });
