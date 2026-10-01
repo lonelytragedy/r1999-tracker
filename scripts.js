@@ -2404,8 +2404,6 @@ function _updateGdriveUILang() {
   } else {
     status.innerHTML = t('gdriveNotConnected');
   }
-  const connectBtn    = document.getElementById('gdriveSignInBtn');
   const disconnectBtn = document.getElementById('gdriveSignOutBtn');
-  if (connectBtn)    connectBtn.textContent    = t('gdriveConnect');
   if (disconnectBtn) disconnectBtn.textContent = t('gdriveDisconnect');
 }

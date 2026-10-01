@@ -112,8 +112,12 @@
       <div class="db-btn-divider"></div>
       <div class="gdrive-block">
         <img src="static/ui/gdrive.png" alt="Google Drive" class="gdrive-icon" onerror="this.style.display='none'">
-        <span id="gdriveStatus" class="gdrive-status" data-i18n="gdriveNotConnected"></span>
-        <button id="gdriveSignInBtn"  class="db-btn gdrive-btn-signin"  onclick="gdriveSignIn()"  data-i18n="gdriveConnect"></button>
+        <span class="m-only gdrive-cloud"><svg class="icon gd-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg><svg class="icon gd-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 15-5.5 5.5L9 18"/><path d="M5.516 16.07A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 3.501 7.327"/></svg><svg class="icon gd-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12v4"/><path d="M12 20h.01"/><path d="M8.128 16.949A7 7 0 1 1 15.71 8h1.79a1 1 0 0 1 0 9h-1.642"/></svg></span>
+        <span class="gdrive-text">
+          <span class="m-only gdrive-title">Google Drive</span>
+          <span id="gdriveStatus" class="gdrive-status" data-i18n="gdriveNotConnected"></span>
+        </span>
+        <button id="gdriveSignInBtn"  class="db-btn gdrive-btn-signin"  onclick="gdriveSignIn()"><span class="d-only" data-i18n="gdriveConnect"></span><span class="m-only" data-i18n="mConnect"></span></button>
         <button id="gdriveSignOutBtn" class="db-btn gdrive-btn-signout" onclick="gdriveSignOut()" style="display:none" data-i18n="gdriveDisconnect"></button>
       </div>
     </div>

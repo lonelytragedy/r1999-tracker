@@ -225,4 +225,5 @@ window.LOCALE = {
   mFifty:             (w, n) => `${w}/${n} 50/50 wins`,
   mBannerAll:         'Banner',
   mUrlLabel:          'Summon history link',
+  mConnect:           'Connect',
 };
