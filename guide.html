@@ -3,476 +3,334 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Guide — The 1999: Summon Tracker</title>
-  <meta name="description" content="Guide for The 1999: Summon Tracker — how to import your Reverse 1999 pull history.">
+  <title>Guide — Reverse: Tracker</title>
+  <meta name="description" content="Guide for Reverse: Tracker — how to import your Reverse: 1999 pull history and use the tracker.">
   <meta name="robots" content="index, follow">
   <link rel="icon" href="static/ui/favicon.ico" type="image/x-icon">
   <link rel="canonical" href="https://lonelytragedy.github.io/r1999-tracker/guide.html">
   <link rel="stylesheet" href="styles.css">
+  <script src="lang-init.js"></script>
   <style>
-    .icon { width: 1.1em; height: 1.1em; vertical-align: -0.2em; margin-right: 0.3em; flex-shrink: 0; }
-    .guide-screenshot {
-      background: #1b1f40;
-      border: 1px solid #2f3470;
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin: 12px 0;
-      font-size: 13px;
-      color: #9aa0a6;
-    }
-    .guide-screenshot img {
-      max-width: 100%;
-      border-radius: 6px;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .guide-screenshot p {
-      margin: 0;
-      font-family: monospace;
-      color: #60aaff;
-      word-break: break-all;
-    }
-    .guide-code {
-      background: #1b1f40;
-      border: 1px solid #2f3470;
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin: 8px 0;
-      font-family: monospace;
-      font-size: 13px;
-      color: #00ff9c;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-    .guide-step-tag {
-      display: inline-block;
-      background: rgba(127,119,221,.2);
-      border: 1px solid rgba(127,119,221,.4);
-      color: #7F77DD;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
-    .guide-warn {
-      background: rgba(255,80,80,.1);
-      border-left: 3px solid #ff4d5a;
-      border-radius: 0 6px 6px 0;
-      padding: 10px 14px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #ff8a8a;
-    }
-    .guide-tip {
-      background: rgba(0,200,255,.08);
-      border-left: 3px solid #00c8ff;
-      border-radius: 0 6px 6px 0;
-      padding: 10px 14px;
-      margin: 10px 0;
-      font-size: 14px;
-      color: #80dfff;
-    }
-    .method-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .method-card {
-      background: #1b1f40;
-      border: 1px solid #2f3470;
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-    .method-card h4 {
-      margin: 0 0 8px;
-      font-size: 15px;
-      color: #eaeaf0;
-    }
-    .method-card p {
-      margin: 0;
-      font-size: 13px;
-      color: #9aa0a6;
-      line-height: 1.5;
-    }
-    .method-card .badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 2px 7px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-    .badge-easy   { background: rgba(0,255,160,.15); color: #00ffa0; border: 1px solid rgba(0,255,160,.3); }
-    .badge-manual { background: rgba(255,185,60,.15); color: #ffb93c; border: 1px solid rgba(255,185,60,.3); }
-    p, li { line-height: 1.65; }
-    ul { padding-left: 20px; margin: 8px 0; }
-    li { margin-bottom: 4px; }
-
-    .lang-switcher {
-      display: inline-flex;
-      gap: 4px;
-      background: var(--scrollbar-track);
-      border: 1px solid var(--border-tl);
-      border-radius: 8px;
-      padding: 3px;
-      vertical-align: middle;
-    }
-    .lang-btn-flag {
-      width: 16px; height: 12px;
-      border-radius: 2px;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 4px;
-      flex-shrink: 0;
-    }
+    body { max-width: 980px; margin: 0 auto; }
+    .icon { width: 1.1em; height: 1.1em; vertical-align: -0.2em; flex-shrink: 0; }
+    .g-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+    .g-title { display: flex; align-items: center; gap: 12px; margin: 0; font-family: var(--font-display); font-size: 26px; color: var(--text); }
+    .g-title img { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); }
+    .g-actions { display: flex; align-items: center; gap: 8px; }
+    .g-home { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 12px; text-decoration: none; color: var(--text); background: var(--bg-input); border: 1px solid var(--border); font-weight: 600; font-size: 14px; }
+    .box h3 { margin: 0 0 10px; font-family: var(--font-display); font-size: 21px; color: var(--text); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .box p, .box li { line-height: 1.65; color: var(--text); }
+    .box ul, .box ol { padding-left: 0; margin: 8px 0; list-style: none; }
+    .box li { margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; }
+    .box li > .n { flex: 0 0 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--bg-card); border: 1px solid var(--border); color: var(--accent-gold); margin-top: 1px; }
+    .box li > .dot { flex: 0 0 6px; height: 6px; border-radius: 50%; background: var(--accent-gold); margin-top: 11px; }
+    .box li > span:last-child { flex: 1 1 auto; min-width: 0; }
+    .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; color: var(--accent-gold); border: 1px solid var(--hairline-2); background: var(--bg-card); }
+    .ui { display: inline; padding: 1px 7px; border-radius: 7px; background: var(--bg-card); border: 1px solid var(--border); font-weight: 700; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+    .ui .icon { margin-right: 3px; }
+    .note, .warn { display: flex; gap: 10px; padding: 12px 14px; margin: 12px 0; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+    .note { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); }
+    .warn { background: color-mix(in srgb, var(--c-r6) 9%, transparent); border: 1px solid color-mix(in srgb, var(--c-r6) 35%, transparent); color: var(--text); }
+    .note > .icon, .warn > .icon { margin-top: 3px; width: 18px; height: 18px; }
+    .note > .icon { color: var(--accent-gold); }
+    .warn > .icon { color: var(--c-r6); }
+    .code { background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 8px 0; font-family: ui-monospace, monospace; font-size: 13px; color: var(--c-r3); white-space: pre-wrap; word-break: break-all; }
+    .shot { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 10px 0; }
+    .shot img { max-width: 100%; border-radius: 8px; display: block; margin-bottom: 8px; }
+    .shot p { margin: 0; font-family: ui-monospace, monospace; font-size: 12.5px; color: var(--c-r4); word-break: break-all; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 12px; }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
+    .card h4 { margin: 8px 0 6px; font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .card h4 .icon { color: var(--accent-gold); width: 20px; height: 20px; }
+    .card p { margin: 0; font-size: 13.5px; color: var(--text-muted); line-height: 1.55; }
+    .muted { font-size: 13.5px; color: var(--text-muted) !important; }
+    .dl { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; margin-left: 4px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; color: var(--bg-page); background: var(--accent-gold); vertical-align: middle; }
+    .pity-g { color: var(--c-r3); font-weight: 800; } .pity-y { color: var(--c-r5); font-weight: 800; } .pity-r { color: var(--c-r6); font-weight: 800; }
 
     [data-ru], [data-en] { display: none !important; }
-    html[lang="ru"] [data-ru] { display: block !important; }
-    html[lang="en"] [data-en] { display: block !important; }
-    html[lang="ru"] .badge[data-ru] { display: inline-block !important; }
-    html[lang="en"] .badge[data-en] { display: inline-block !important; }
-    html[lang="ru"] span[data-ru] { display: inline !important; }
-    html[lang="en"] span[data-en] { display: inline !important; }
-    html[lang="ru"] a[data-ru] { display: inline !important; }
-    html[lang="en"] a[data-en] { display: inline !important; }
-    html[lang="ru"] li[data-ru] { display: list-item !important; }
-    html[lang="en"] li[data-en] { display: list-item !important; }
-
-    html[lang="ru"] .guide-mobile-only[data-ru],
-    html[lang="en"] .guide-mobile-only[data-en] { display: none !important; }
-
+    html[lang="ru"] [data-ru], html[lang="en"] [data-en] { display: block !important; }
+    html[lang="ru"] span[data-ru], html[lang="en"] span[data-en],
+    html[lang="ru"] a[data-ru], html[lang="en"] a[data-en] { display: inline !important; }
+    html[lang="ru"] li[data-ru], html[lang="en"] li[data-en] { display: flex !important; }
+    html[lang="ru"] h3[data-ru], html[lang="en"] h3[data-en],
+    html[lang="ru"] .note[data-ru], html[lang="en"] .note[data-en],
+    html[lang="ru"] .warn[data-ru], html[lang="en"] .warn[data-en] { display: flex !important; }
+    .only-m { display: none !important; }
     @media (max-width: 600px) {
-      html[lang="ru"] .guide-desktop-only[data-ru],
-      html[lang="en"] .guide-desktop-only[data-en] { display: none !important; }
-      html[lang="ru"] .guide-mobile-only[data-ru],
-      html[lang="en"] .guide-mobile-only[data-en] { display: block !important; }
+      body { padding: 14px 14px 32px; }
+      .g-title { font-size: 21px; }
+      .g-title img { width: 36px; height: 36px; }
+      .only-d { display: none !important; }
+      .only-m { display: revert !important; }
+      html[lang="ru"] .only-m[data-ru], html[lang="en"] .only-m[data-en] { display: block !important; }
+      html[lang="ru"] span.only-m[data-ru], html[lang="en"] span.only-m[data-en] { display: inline !important; }
+      html[lang="ru"] li.only-m[data-ru], html[lang="en"] li.only-m[data-en] { display: flex !important; }
+    }
+    @media (min-width: 601px) {
+      html[lang="ru"] .only-m[data-ru], html[lang="en"] .only-m[data-en] { display: none !important; }
+    }
+    @media (max-width: 600px) {
+      html[lang="ru"] .only-d[data-ru], html[lang="en"] .only-d[data-en] { display: none !important; }
     }
   </style>
 </head>
 <body>
 
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-    <h1 class="site-header" style="margin:0;">
-      <img src="static/ui/logo.png" alt="Logo" class="site-logo">
-      The 1999: Summon Tracker
-    </h1>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <div class="lang-switcher">
-        <button class="banner-toggle-btn" id="langRU" onclick="setLang('ru')"><svg class="lang-btn-flag" viewBox="0 0 16 12" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="4" fill="#fff"/><rect y="4" width="16" height="4" fill="#0039A6"/><rect y="8" width="16" height="4" fill="#D52B1E"/></svg> RU</button>
-        <button class="banner-toggle-btn" id="langEN" onclick="setLang('en')"><svg class="lang-btn-flag" viewBox="0 0 16 12" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="12" fill="#012169"/><path d="M0,0 L16,12 M16,0 L0,12" stroke="#fff" stroke-width="2.4"/><path d="M0,0 L16,12 M16,0 L0,12" stroke="#C8102E" stroke-width="1.4"/><path d="M8,0 V12 M0,6 H16" stroke="#fff" stroke-width="4"/><path d="M8,0 V12 M0,6 H16" stroke="#C8102E" stroke-width="2.4"/></svg> EN</button>
+  <div class="g-top">
+    <h1 class="g-title"><img src="static/ui/logo.png" alt=""><span data-ru>Гайд</span><span data-en>Guide</span></h1>
+    <div class="g-actions">
+      <div class="settings-seg">
+        <button class="banner-toggle-btn" id="langRU" onclick="setLang('ru')"><img class="lang-btn-flag" src="static/ui/flag_ru.png" alt=""> RU</button>
+        <button class="banner-toggle-btn" id="langEN" onclick="setLang('en')"><img class="lang-btn-flag" src="static/ui/flag_en.png" alt=""> EN</button>
       </div>
-      <a href="index.html" class="home-button">
-        <span data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> На главную</span>
-        <span data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Home</span>
-      </a>
+      <a href="index.html" class="g-home"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span data-ru>Трекер</span><span data-en>Tracker</span></a>
     </div>
   </div>
 
   <div class="box">
-    <h3 data-ru>Способы импорта круток</h3>
-    <h3 data-en>Import Methods</h3>
-    <p data-ru>Есть три способа получить историю круток. Выбери наиболее удобный.</p>
-    <p data-en>There are three ways to get your pull history. Choose whichever works best for you.</p>
-    <div class="method-grid">
-      <div class="method-card">
-        <div class="badge badge-easy" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/></svg> Проще всего</div>
-        <div class="badge badge-easy" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/></svg> Easiest</div>
-        <h4 data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg> Авто-граббер ссылки</h4>
-        <h4 data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg> Auto Link Grabber</h4>
-        <p data-ru>Программа автоматически перехватывает ссылку пока ты открываешь историю круток в игре. Ссылка копируется в буфер обмена и вставляется в трекер одним кликом.</p>
-        <p data-en>The app automatically intercepts the link while you open your pull history in-game. The link is copied to your clipboard and can be pasted into the tracker with one click.</p>
+    <h3 data-ru>Как загрузить историю круток</h3>
+    <h3 data-en>How to load your pull history</h3>
+    <p data-ru>Трекеру нужна ссылка на историю призывов из игры. Её можно получить автоматически или вручную, а затем вставить в трекер.</p>
+    <p data-en>The tracker needs the summon history link from the game. You can get it automatically or by hand and then paste it into the tracker.</p>
+    <div class="cards">
+      <div class="card only-d">
+        <span class="tag"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/></svg><span data-ru>Проще всего</span><span data-en>Easiest</span></span>
+        <h4><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-ru>Граббер ссылки для Windows</span><span data-en>Link grabber for Windows</span></h4>
+        <p data-ru>Сам ловит ссылку, пока ты открываешь историю в игре, и копирует её в буфер обмена.</p>
+        <p data-en>Catches the link while you open the history in the game and copies it to the clipboard.</p>
       </div>
-      <div class="method-card">
-        <div class="badge badge-easy" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/></svg> Просто</div>
-        <div class="badge badge-easy" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/></svg> Easy</div>
-        <h4 data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт по ссылке</h4>
-        <h4 data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import by URL</h4>
-        <p data-ru>Получи ссылку через Fiddler или авто-граббер и вставь прямо в трекер — файл скачивать не нужно, данные загрузятся автоматически.</p>
-        <p data-en>Get the URL via Fiddler or the auto-grabber and paste it directly into the tracker — no file download needed, data loads automatically.</p>
+      <div class="card only-m">
+        <span class="tag"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/></svg><span data-ru>Проще всего</span><span data-en>Easiest</span></span>
+        <h4><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg><span data-ru>Приложение для Android</span><span data-en>Android app</span></h4>
+        <p data-ru>Трекер и перехват ссылки в одном приложении. Ссылка ловится и импортируется в пару касаний.</p>
+        <p data-en>The tracker and link capture in one app. The link is caught and imported in a couple of taps.</p>
       </div>
-      <div class="method-card">
-        <div class="badge badge-manual" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></svg> Вручную</div>
-        <div class="badge badge-manual" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></svg> Manual</div>
-        <h4 data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Загрузка файла</h4>
-        <h4 data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> File Upload</h4>
-        <p data-ru>Сохрани JSON-файл с историей круток через Fiddler или браузер и загрузи его напрямую в трекер.</p>
-        <p data-en>Save the pull history JSON file via Fiddler or browser and upload it directly to the tracker.</p>
+      <div class="card">
+        <span class="tag"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-ru>Ссылка</span><span data-en>Link</span></span>
+        <h4><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></svg><span data-ru>Ссылка через Fiddler</span><span data-en>Link via Fiddler</span></h4>
+        <p data-ru>Найди запрос истории призывов в Fiddler на ПК и вставь ссылку в трекер.</p>
+        <p data-en>Find the summon history request in Fiddler on a PC and paste the link into the tracker.</p>
+      </div>
+      <div class="card">
+        <span class="tag"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg><span data-ru>Файл</span><span data-en>File</span></span>
+        <h4><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg><span data-ru>JSON-файл</span><span data-en>JSON file</span></h4>
+        <p data-ru>Сохрани ответ сервера по ссылке как файл и загрузи его в трекер.</p>
+        <p data-en>Save the server response from the link as a file and load it into the tracker.</p>
       </div>
     </div>
-  </div>
-
-  <div class="box guide-desktop-only" data-ru>
-    <h3>Способ 1 — Авто-граббер ссылки (Windows) <span class="guide-step-tag">Рекомендуется</span></h3>
-
-    <p>
-      Специальная утилита автоматически перехватывает ссылку на историю круток пока ты открываешь её в игре. Не требует настройки Fiddler.
-      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Скачать .exe</a>
-    </p>
-
-    <div class="guide-tip">Программа временно включает локальный прокси, перехватывает запрос к истории круток и автоматически копирует ссылку в буфер обмена. Игровые данные не изменяются.</div>
-
-    <ul>
-      <li><span class="guide-step-tag">1</span> Скачай последний релиз со страницы Releases и запусти <b>R1999LinkGrabber.exe</b></li>
-      <li><span class="guide-step-tag">2</span> В консоли появится:</li>
-    </ul>
-    <div class="guide-code">Proxy enabled: 127.0.0.1:8080
-Starting capture...
-Launch the game and open summon history</div>
-    <ul>
-      <li><span class="guide-step-tag">3</span> Запусти <b>Reverse: 1999</b> и открой страницу истории круток <b>(Summon → Record)</b></li>
-      <li><span class="guide-step-tag">4</span> Программа автоматически найдёт ссылку и скопирует её:</li>
-    </ul>
-    <div class="guide-code">=== SUMMON LINK FOUND ===
-https://game-re-en-service.sl916.com/query/summon?...
-Link copied to clipboard</div>
-    <ul>
-      <li><span class="guide-step-tag">5</span> Вставь ссылку в поле <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт по ссылке</b> на главной странице трекера</li>
-    </ul>
-
-    <div class="guide-warn">
-      <b>Важно:</b> не закрывай окно консоли крестиком — это может оставить системный прокси включённым. Выходи только через <b>Ctrl + C</b> или позволь программе завершиться самостоятельно после захвата ссылки.
-    </div>
-
-    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;">
-      Если прокси всё же остался включён: <b>Настройки → Сеть и интернет → Прокси → Настройка прокси вручную</b> → выключи <b>«Использовать прокси-сервер»</b>.
-    </p>
-
-    <p style="font-size:13px; color:#9aa0a6;">
-      Если хочешь запустить Python-скрипт напрямую — нужны Python 3.10–3.12 и зависимости:
-    </p>
-    <div class="guide-code">pip install mitmproxy pyperclip
-python R1999LinkGrabber.py</div>
-  </div>
-
-  <div class="box guide-desktop-only" data-en>
-    <h3>Method 1 — Auto Link Grabber (Windows) <span class="guide-step-tag">Recommended</span></h3>
-
-    <p>
-      A small utility that automatically intercepts your pull history link while you open it in-game. No Fiddler setup required.
-      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Download .exe</a>
-    </p>
-
-    <div class="guide-tip">The utility temporarily enables a local proxy, intercepts the pull history request, and automatically copies the link to your clipboard. No game data is modified.</div>
-
-    <ul>
-      <li><span class="guide-step-tag">1</span> Download the latest release from the Releases page and run <b>R1999LinkGrabber.exe</b></li>
-      <li><span class="guide-step-tag">2</span> The console will show:</li>
-    </ul>
-    <div class="guide-code">Proxy enabled: 127.0.0.1:8080
-Starting capture...
-Launch the game and open summon history</div>
-    <ul>
-      <li><span class="guide-step-tag">3</span> Launch <b>Reverse: 1999</b> and open the pull history page <b>(Summon → Record)</b></li>
-      <li><span class="guide-step-tag">4</span> The app will automatically find and copy the link:</li>
-    </ul>
-    <div class="guide-code">=== SUMMON LINK FOUND ===
-https://game-re-en-service.sl916.com/query/summon?...
-Link copied to clipboard</div>
-    <ul>
-      <li><span class="guide-step-tag">5</span> Paste the link into the <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import by URL</b> field on the tracker's main page</li>
-    </ul>
-
-    <div class="guide-warn">
-      <b>Important:</b> do not close the console window with the X button — this may leave the system proxy enabled. Exit only via <b>Ctrl + C</b> or let the program finish automatically after capturing the link.
-    </div>
-
-    <p style="font-size:13px; color:#9aa0a6; margin-top:12px;">
-      If the proxy remains enabled: <b>Settings → Network & Internet → Proxy → Manual proxy setup</b> → disable <b>"Use a proxy server"</b>.
-    </p>
-
-    <p style="font-size:13px; color:#9aa0a6;">
-      To run the Python script directly — requires Python 3.10–3.12 and dependencies:
-    </p>
-    <div class="guide-code">pip install mitmproxy pyperclip
-python R1999LinkGrabber.py</div>
-  </div>
-
-  <div class="box guide-mobile-only" data-ru>
-    <h3>Способ 1 — Приложение Reverse: Tracker (Android) <span class="guide-step-tag">Рекомендуется</span></h3>
-
-    <p>
-      Официальное Android-приложение содержит и сам трекер, и граббер ссылки — устанавливать что-то ещё не нужно.
-      <a href="https://github.com/lonelytragedy/r1999-TrackerApp/releases/latest" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Скачать APK</a>
-    </p>
-
-    <div class="guide-tip">Приложение поднимает локальный VPN-туннель прямо на телефоне, перехватывает запрос к истории круток и копирует ссылку в буфер обмена. Игровые данные не изменяются, весь остальной трафик игры идёт как обычно.</div>
-
-    <ul>
-      <li><span class="guide-step-tag">1</span> Открой приложение — по умолчанию откроется трекер</li>
-      <li><span class="guide-step-tag">2</span> В нижней панели нажми <b>Импорт</b></li>
-      <li><span class="guide-step-tag">3</span> Нажми <b>Запустить перехват</b></li>
-      <li><span class="guide-step-tag">4</span> Зайди в игру, авторизуйся и открой вкладку <b>Summon</b></li>
-      <li><span class="guide-step-tag">5</span> В шторке уведомлений нажми <b>Запустить VPN</b></li>
-      <li><span class="guide-step-tag">6</span> Дождись, пока игра переподключится к интернету — если сама не переподключится, нажми <b>Reconnect</b> в игре вручную</li>
-      <li><span class="guide-step-tag">7</span> Открой историю круток</li>
-      <li><span class="guide-step-tag">8</span> Возможно, историю придётся открыть 2–3 раза — ссылка ловится не всегда с первой попытки</li>
-      <li><span class="guide-step-tag">9</span> Когда ссылка поймана — придёт уведомление. Она уже скопирована в буфер, а VPN отключится автоматически</li>
-    </ul>
-
-    <div class="guide-tip">Нажми на уведомление о найденной ссылке — приложение откроет экран <b>Импорт</b> с готовой ссылкой. Оттуда жми <b>Импортировать в трекер</b>, чтобы сразу загрузить её в трекер.</div>
-
-    <div class="guide-warn">
-      <b>Важно:</b> шаг 5 (кнопка <b>Запустить VPN</b> в шторке) поднимает сам туннель — до этого момента перехват ещё не идёт. Кнопка <b>Отмена</b> в той же шторке просто отменяет ожидание, ничего не включая.
-    </div>
-
-    <p style="font-size:13px; color:#9aa0a6;">
-      Способ через прокси (без VPN) тоже доступен на экране <b>Импорт → Wi-Fi прокси</b> — там своя инструкция прямо в приложении.
-    </p>
-  </div>
-
-  <div class="box guide-mobile-only" data-en>
-    <h3>Method 1 — Reverse: Tracker App (Android) <span class="guide-step-tag">Recommended</span></h3>
-
-    <p>
-      The official Android app bundles both the tracker and the link grabber — nothing else to install.
-      <a href="https://github.com/lonelytragedy/r1999-TrackerApp/releases/latest" target="_blank" class="home-button" style="padding:2px 8px; margin-left:6px;">Download APK</a>
-    </p>
-
-    <div class="guide-tip">The app runs a local VPN tunnel on your phone, intercepts the pull history request, and copies the link to your clipboard. No game data is modified, and the rest of the game's traffic passes through normally.</div>
-
-    <ul>
-      <li><span class="guide-step-tag">1</span> Open the app — the tracker opens by default</li>
-      <li><span class="guide-step-tag">2</span> Tap <b>Import</b> in the bottom bar</li>
-      <li><span class="guide-step-tag">3</span> Tap <b>Start capture</b></li>
-      <li><span class="guide-step-tag">4</span> Open the game, log in, and go to the <b>Summon</b> tab</li>
-      <li><span class="guide-step-tag">5</span> In the notification shade, tap <b>Start VPN</b></li>
-      <li><span class="guide-step-tag">6</span> Wait for the game to reconnect to the internet — tap <b>Reconnect</b> in-game manually if it doesn't happen on its own</li>
-      <li><span class="guide-step-tag">7</span> Open the pull history</li>
-      <li><span class="guide-step-tag">8</span> You may need to re-open the history 2–3 times — the link isn't always caught on the first try</li>
-      <li><span class="guide-step-tag">9</span> Once the link is caught, a notification appears. It's already copied to your clipboard and the VPN turns off automatically</li>
-    </ul>
-
-    <div class="guide-tip">Tap the "link found" notification and the app opens the <b>Import</b> screen with the link ready. From there tap <b>Import into tracker</b> to load it straight into the tracker.</div>
-
-    <div class="guide-warn">
-      <b>Important:</b> step 5 (the <b>Start VPN</b> button in the notification) is what actually brings up the tunnel — capture is not running before that. <b>Cancel</b> in the same notification just dismisses it without enabling anything.
-    </div>
-
-    <p style="font-size:13px; color:#9aa0a6;">
-      A proxy-based method (no VPN) is also available under <b>Import → Wi-Fi proxy</b> in the app, with its own instructions there.
-    </p>
   </div>
 
   <div class="box">
-    <h3 data-ru>Способ 2 — Импорт по ссылке через Fiddler</h3>
-    <h3 data-en>Method 2 — Import by URL via Fiddler</h3>
-
-    <p data-ru>
-      Если не хочешь использовать авто-граббер, ссылку можно получить вручную через <b>Fiddler Classic</b>.
-      <a href="https://www.telerik.com/download/fiddler" target="_blank" class="home-button" style="padding:2px 6px; margin-left:6px;">Скачать Fiddler</a>
-    </p>
-    <p data-en>
-      If you prefer not to use the auto-grabber, you can get the URL manually via <b>Fiddler Classic</b>.
-      <a href="https://www.telerik.com/download/fiddler" target="_blank" class="home-button" style="padding:2px 6px; margin-left:6px;">Download Fiddler</a>
-    </p>
-
-    <ul>
-      <li data-ru><span class="guide-step-tag">1</span> Запусти <b>Fiddler</b> и игру <b>Reverse: 1999</b></li>
-      <li data-en><span class="guide-step-tag">1</span> Launch <b>Fiddler</b> and <b>Reverse: 1999</b></li>
-      <li data-ru><span class="guide-step-tag">2</span> Открой историю круток в игре <b>(Summon → Record)</b></li>
-      <li data-en><span class="guide-step-tag">2</span> Open pull history in-game <b>(Summon → Record)</b></li>
-      <li data-ru><span class="guide-step-tag">3</span> В Fiddler найди запрос вида:</li>
-      <li data-en><span class="guide-step-tag">3</span> In Fiddler find a request like:</li>
+    <h3 data-ru>Где в трекере импорт</h3>
+    <h3 data-en>Where import lives in the tracker</h3>
+    <ul class="only-d">
+      <li data-ru><span class="dot"></span><span>На ПК всё для импорта собрано в блоке <span class="ui">Управление базой данных</span> вверху страницы: поле для ссылки и кнопка <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт по ссылке</span>, <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Выбрать файл</span>, профили, резервная копия и Google Диск.</span></li>
+      <li data-en><span class="dot"></span><span>On a PC everything for import is in the <span class="ui">Database Management</span> block at the top of the page: the link field with <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import by URL</span>, <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Select File</span>, profiles, backup and Google Drive.</span></li>
     </ul>
-    <div class="guide-screenshot">
-      <img src="static/guide/1.png" alt="Fiddler screenshot">
+    <ul class="only-m">
+      <li data-ru><span class="dot"></span><span>На телефоне нажми кнопку <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg></span> в шапке — откроется окно <b>«Добавить крутки»</b>: ссылка, JSON-файл, профили, резервная копия и Google Диск.</span></li>
+      <li data-en><span class="dot"></span><span>On a phone tap the <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg></span> button in the top bar to open <b>Add pulls</b>: link, JSON file, profiles, backup and Google Drive.</span></li>
+      <li data-ru><span class="dot"></span><span>В приложении там же есть кнопка <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Получить ссылку из игры автоматически</span>, а в нижней панели — вкладка <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт</span>.</span></li>
+      <li data-en><span class="dot"></span><span>In the app the same sheet has <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Grab the link from the game automatically</span>, and the bottom bar has the <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import</span> tab.</span></li>
+    </ul>
+  </div>
+
+  <div class="box only-d">
+    <h3 data-ru>Граббер ссылки для Windows <span class="tag">Рекомендуется</span></h3>
+    <h3 data-en>Link grabber for Windows <span class="tag">Recommended</span></h3>
+    <p data-ru>Небольшая программа, которая ловит ссылку на историю круток, пока ты открываешь её в игре. Fiddler не нужен.
+      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" rel="noopener" class="dl"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>Скачать .exe</a></p>
+    <p data-en>A small program that catches your pull history link while you open it in the game. No Fiddler needed.
+      <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases" target="_blank" rel="noopener" class="dl"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>Download .exe</a></p>
+    <div class="note" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>Программа временно включает локальный прокси, перехватывает запрос к истории круток и копирует ссылку в буфер обмена. Игровые данные не меняются.</span></div>
+    <div class="note" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>The program briefly enables a local proxy, intercepts the pull history request and copies the link to the clipboard. No game data is changed.</span></div>
+    <ol>
+      <li data-ru><span class="n">1</span><span>Скачай последний релиз и запусти <b>R1999LinkGrabber.exe</b>. В консоли появится:</span></li>
+      <li data-en><span class="n">1</span><span>Download the latest release and run <b>R1999LinkGrabber.exe</b>. The console shows:</span></li>
+    </ol>
+    <div class="code">Proxy enabled: 127.0.0.1:8080
+Starting capture...
+Launch the game and open summon history</div>
+    <ol>
+      <li data-ru><span class="n">2</span><span>Запусти <b>Reverse: 1999</b> и открой <b>Призыв → История</b> (Summon → Record). Программа найдёт ссылку и скопирует её:</span></li>
+      <li data-en><span class="n">2</span><span>Launch <b>Reverse: 1999</b> and open <b>Summon → Record</b>. The program finds the link and copies it:</span></li>
+    </ol>
+    <div class="code">=== SUMMON LINK FOUND ===
+https://game-re-en-service.sl916.com/query/summon?...
+Link copied to clipboard</div>
+    <ol>
+      <li data-ru><span class="n">3</span><span>Вставь ссылку в поле в блоке <span class="ui">Управление базой данных</span> и нажми <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт по ссылке</span>.</span></li>
+      <li data-en><span class="n">3</span><span>Paste the link into the field in <span class="ui">Database Management</span> and click <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import by URL</span>.</span></li>
+    </ol>
+    <div class="warn" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Важно:</b> не закрывай консоль крестиком — системный прокси может остаться включённым. Выходи через <b>Ctrl + C</b> или дождись, пока программа завершится сама.</span></div>
+    <div class="warn" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Important:</b> don't close the console with the X button — the system proxy may stay on. Exit with <b>Ctrl + C</b> or let the program finish by itself.</span></div>
+    <p class="muted" data-ru>Если прокси всё же остался включён: <b>Параметры → Сеть и Интернет → Прокси → Настройка прокси вручную</b> → выключи <b>«Использовать прокси-сервер»</b>.</p>
+    <p class="muted" data-en>If the proxy stays on: <b>Settings → Network &amp; Internet → Proxy → Manual proxy setup</b> → turn off <b>"Use a proxy server"</b>.</p>
+    <p class="muted" data-ru>Запуск Python-скрипта напрямую (Python 3.10–3.12):</p>
+    <p class="muted" data-en>Running the Python script directly (Python 3.10–3.12):</p>
+    <div class="code">pip install mitmproxy pyperclip
+python R1999LinkGrabber.py</div>
+  </div>
+
+  <div class="box only-m">
+    <h3 data-ru>Приложение Reverse: Tracker для Android <span class="tag">Рекомендуется</span></h3>
+    <h3 data-en>Reverse: Tracker app for Android <span class="tag">Recommended</span></h3>
+    <p data-ru>Трекер и перехват ссылки в одном приложении, root не нужен.
+      <a href="https://github.com/lonelytragedy/r1999-TrackerApp/releases/latest" target="_blank" rel="noopener" class="dl"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>Скачать APK</a></p>
+    <p data-en>The tracker and link capture in one app, no root needed.
+      <a href="https://github.com/lonelytragedy/r1999-TrackerApp/releases/latest" target="_blank" rel="noopener" class="dl"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>Download APK</a></p>
+    <div class="note" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>Приложение поднимает локальный VPN прямо на телефоне, перехватывает только запрос к истории круток и копирует ссылку. Остальной трафик игры идёт как обычно, игровые данные не меняются.</span></div>
+    <div class="note" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>The app runs a local VPN on your phone, intercepts only the pull history request and copies the link. The rest of the game's traffic goes through as usual and no game data is changed.</span></div>
+    <ol>
+      <li data-ru><span class="n">1</span><span>Войди в игру — до запуска перехвата.</span></li>
+      <li data-en><span class="n">1</span><span>Log in to the game — before starting capture.</span></li>
+      <li data-ru><span class="n">2</span><span>В приложении нажми <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт</span> в нижней панели, выбери <b>VPN</b> и нажми <span class="ui">Запустить перехват</span>. Игра откроется сама.</span></li>
+      <li data-en><span class="n">2</span><span>In the app tap <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import</span> in the bottom bar, choose <b>VPN</b> and tap <span class="ui">Start capture</span>. The game opens by itself.</span></li>
+      <li data-ru><span class="n">3</span><span>Опусти шторку уведомлений и нажми <b>«Запустить VPN»</b>. В первый раз Android попросит разрешить VPN.</span></li>
+      <li data-en><span class="n">3</span><span>Pull down the notification shade and tap <b>Start VPN</b>. The first time, Android asks you to allow the VPN.</span></li>
+      <li data-ru><span class="n">4</span><span>Если игра потеряла соединение, нажми в ней <b>Reconnect</b>. Открой <b>Призыв → История</b>; иногда это нужно сделать 2–3 раза.</span></li>
+      <li data-en><span class="n">4</span><span>If the game loses connection, tap <b>Reconnect</b> in it. Open <b>Summon → Record</b>; sometimes it takes 2–3 tries.</span></li>
+      <li data-ru><span class="n">5</span><span>Когда ссылка поймана, придёт уведомление, а VPN выключится сам. Нажми уведомление — крутки сразу загрузятся в трекер. Или на экране «Импорт» нажми <span class="ui">Импортировать в трекер</span>.</span></li>
+      <li data-en><span class="n">5</span><span>Once the link is caught you get a notification and the VPN turns off by itself. Tap the notification to load the pulls into the tracker, or tap <span class="ui">Import into tracker</span> on the Import screen.</span></li>
+    </ol>
+    <div class="warn" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Перехват начинается только после <b>«Запустить VPN»</b> в уведомлении. Кнопка <b>«Отмена»</b> там же просто убирает уведомление.</span></div>
+    <div class="warn" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Capture starts only after <b>Start VPN</b> in the notification. <b>Cancel</b> in the same notification just dismisses it.</span></div>
+    <p class="muted" data-ru>Если VPN не подходит, на экране «Импорт» есть режим <b>Wi-Fi прокси</b> — нужный адрес и шаги показаны прямо там.</p>
+    <p class="muted" data-en>If VPN doesn't suit you, the Import screen has a <b>Wi-Fi proxy</b> mode — the address and steps are shown right there.</p>
+  </div>
+
+  <div class="box">
+    <h3 data-ru>Ссылка через Fiddler</h3>
+    <h3 data-en>Link via Fiddler</h3>
+    <p data-ru>Ручной способ для ПК через <b>Fiddler Classic</b>.
+      <a href="https://www.telerik.com/download/fiddler" target="_blank" rel="noopener" class="dl"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>Скачать Fiddler</a></p>
+    <p data-en>A manual PC method using <b>Fiddler Classic</b>.
+      <a href="https://www.telerik.com/download/fiddler" target="_blank" rel="noopener" class="dl"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>Download Fiddler</a></p>
+    <ol>
+      <li data-ru><span class="n">1</span><span>Запусти <b>Fiddler</b> и <b>Reverse: 1999</b>, открой <b>Призыв → История</b>.</span></li>
+      <li data-en><span class="n">1</span><span>Launch <b>Fiddler</b> and <b>Reverse: 1999</b>, open <b>Summon → Record</b>.</span></li>
+      <li data-ru><span class="n">2</span><span>Найди в Fiddler запрос вида:</span></li>
+      <li data-en><span class="n">2</span><span>In Fiddler find a request like:</span></li>
+    </ol>
+    <div class="shot">
+      <img src="static/guide/1.png" alt="Fiddler">
       <p>https://game-re-en-service.sl916.com/query/summon?userId=xxx&amp;token=xxx</p>
     </div>
-    <ul>
-      <li data-ru><span class="guide-step-tag">4</span> Выдели эту строку → <b>ПКМ → Copy → Just URL</b></li>
-      <li data-en><span class="guide-step-tag">4</span> Select the row → <b>Right-click → Copy → Just URL</b></li>
-      <li data-ru><span class="guide-step-tag">5</span> Вставь ссылку в поле <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт по ссылке</b> на главной странице трекера и нажми кнопку</li>
-      <li data-en><span class="guide-step-tag">5</span> Paste the link into the <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import by URL</b> field on the tracker's main page and click the button</li>
-    </ul>
-    <div class="guide-tip" data-ru>Данные загрузятся автоматически через прокси — скачивать файл не нужно.</div>
-    <div class="guide-tip" data-en>Data loads automatically via proxy — no file download needed.</div>
+    <ol>
+      <li data-ru><span class="n">3</span><span>Выдели строку → <b>ПКМ → Copy → Just URL</b>.</span></li>
+      <li data-en><span class="n">3</span><span>Select the row → <b>Right-click → Copy → Just URL</b>.</span></li>
+      <li data-ru><span class="n">4</span><span>Вставь ссылку в трекер и нажми <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Импорт по ссылке</span><span class="only-d" data-ru> (блок «Управление базой данных»)</span><span class="only-m" data-ru> (кнопка <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> в шапке)</span>.</span></li>
+      <li data-en><span class="n">4</span><span>Paste the link into the tracker and click <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Import by URL</span><span class="only-d" data-en> (Database Management block)</span><span class="only-m" data-en> (<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> button in the top bar)</span>.</span></li>
+    </ol>
+    <div class="note" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>Данные загрузятся сами — скачивать файл не нужно.</span></div>
+    <div class="note" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>The data loads by itself — no need to download a file.</span></div>
   </div>
 
   <div class="box">
-    <h3 data-ru>Способ 3 — Загрузка JSON-файла вручную</h3>
-    <h3 data-en>Method 3 — Manual JSON File Upload</h3>
-
-    <ul>
-      <li data-ru><span class="guide-step-tag">1</span> Получи ссылку любым из способов выше</li>
-      <li data-en><span class="guide-step-tag">1</span> Get the URL using any method above</li>
-      <li data-ru><span class="guide-step-tag">2</span> Открой ссылку в браузере</li>
-      <li data-en><span class="guide-step-tag">2</span> Open the URL in your browser</li>
-      <li data-ru><span class="guide-step-tag">3</span> Сохрани страницу как файл: <b>ПКМ по странице → Сохранить как</b></li>
-      <li data-en><span class="guide-step-tag">3</span> Save the page as a file: <b>Right-click → Save As</b></li>
-      <li data-ru><span class="guide-step-tag">4</span> На главной странице нажми <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Выбрать файл</b> и выбери сохранённый JSON</li>
-      <li data-en><span class="guide-step-tag">4</span> On the main page click <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Select File</b> and choose the saved JSON</li>
-    </ul>
-    <div class="guide-warn" data-ru><b>Внимание:</b> кнопка «<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Выбрать файл» принимает только оригинальный файл из игры. Для загрузки ранее сохранённой базы трекера используй кнопку <b>«<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Загрузить базу данных»</b>.</div>
-    <div class="guide-warn" data-en><b>Note:</b> the «<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Select File» button only accepts the original in-game file. To load a previously saved tracker database, use the <b>«<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Load Database»</b> button instead.</div>
+    <h3 data-ru>JSON-файл вручную</h3>
+    <h3 data-en>JSON file by hand</h3>
+    <ol>
+      <li data-ru><span class="n">1</span><span>Получи ссылку любым способом выше и открой её в браузере.</span></li>
+      <li data-en><span class="n">1</span><span>Get the link with any method above and open it in a browser.</span></li>
+      <li data-ru><span class="n">2</span><span>Сохрани страницу как файл: <b>ПКМ → Сохранить как</b>.</span></li>
+      <li data-en><span class="n">2</span><span>Save the page as a file: <b>Right-click → Save As</b>.</span></li>
+      <li data-ru><span class="n">3</span><span>В трекере нажми <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Выбрать файл</span> и выбери сохранённый JSON.</span></li>
+      <li data-en><span class="n">3</span><span>In the tracker click <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Select File</span> and pick the saved JSON.</span></li>
+    </ol>
+    <div class="warn" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Внимание:</b> <b>«Выбрать файл»</b> принимает только оригинальный файл из игры. Для резервной копии трекера используй <b>«Загрузить базу данных»</b>.</span></div>
+    <div class="warn" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Note:</b> <b>Select File</b> only takes the original in-game file. For a tracker backup use <b>Load Database</b>.</span></div>
   </div>
 
   <div class="box">
-    <h3 data-ru>Работа с профилями</h3>
-    <h3 data-en>Managing Profiles</h3>
-
+    <h3 data-ru>Что показывает трекер</h3>
+    <h3 data-en>What the tracker shows</h3>
     <ul>
-      <li data-ru>Создать новый профиль — кнопка <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></b></li>
-      <li data-en>Create a new profile — click <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></b></li>
-      <li data-ru>Переключить профиль — выпадающий список</li>
-      <li data-en>Switch profiles — use the dropdown</li>
-      <li data-ru>Удалить профиль — кнопка <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></b> (стандартный профиль удалить нельзя, только очистить)</li>
-      <li data-en>Delete a profile — click <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></b> (the default profile cannot be deleted, only cleared)</li>
+      <li data-ru><span class="dot"></span><span><b>Текущий pity</b> — сколько круток прошло с последнего 6★ на каждом типе баннеров, из 70. Цвет: <span class="pity-g">до 50</span>, <span class="pity-y">50–59</span>, <span class="pity-r">60+</span>. Метка <b>Гарант</b> значит, что прошлые 50/50 проиграны и следующий 6★ будет персонажем с баннера.</span></li>
+      <li data-en><span class="dot"></span><span><b>Current pity</b> — pulls since the last 6★ for each banner type, out of 70. Colour: <span class="pity-g">under 50</span>, <span class="pity-y">50–59</span>, <span class="pity-r">60+</span>. <b>Guaranteed</b> means the last 50/50 was lost, so the next 6★ is the banner's character.</span></li>
+      <li data-ru><span class="dot"></span><span><b>Баннеры</b> — что идёт сейчас и что скоро: таймер и твой pity на каждом баннере. Нажми на баннер — откроются персонажи и твои крутки на нём. Можно переключиться на таймлайн.</span></li>
+      <li data-en><span class="dot"></span><span><b>Banners</b> — what's live and what's coming: a timer and your pity on each banner. Tap a banner for its characters and your pulls on it. You can switch to the timeline.</span></li>
+      <li data-ru><span class="dot"></span><span><b>Последние 6★</b> — портреты с pity, на котором они выпали, и счёт побед 50/50.</span></li>
+      <li data-en><span class="dot"></span><span><b>Recent 6★</b> — portraits with the pity they came at and your 50/50 tally.</span></li>
+      <li data-ru><span class="dot"></span><span><b>Статистика и графики</b> — всего круток, число и доля 6★, средний pity, распределение 6★ по pity и крутки по месяцам.</span></li>
+      <li data-en><span class="dot"></span><span><b>Stats and charts</b> — total pulls, 6★ count and rate, average pity, 6★ by pity and pulls by month.</span></li>
+      <li data-ru><span class="dot"></span><span><b>История круток</b> — все крутки с фильтрами по редкости и типу баннера; десятки сгруппированы.</span></li>
+      <li data-en><span class="dot"></span><span><b>Pull history</b> — every pull with rarity and banner type filters; 10-pulls are grouped.</span></li>
     </ul>
-    <div class="guide-tip" data-ru>Профили хранятся локально в браузере. Для переноса на другое устройство используй <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Скачать базу данных</b> или подключи <b>Google Диск</b> — тогда все профили синхронизируются автоматически.</div>
-    <div class="guide-tip" data-en>Profiles are stored locally in the browser. To transfer to another device, use <b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Download Database</b> or connect <b>Google Drive</b> — all profiles will sync automatically.</div>
+    <p class="muted only-m" data-ru>На телефоне между разделами удобно переходить через нижнюю панель.</p>
+    <p class="muted only-m" data-en>On a phone, use the bottom bar to jump between sections.</p>
+    <p class="muted" data-ru>Шестерёнка <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> в шапке — язык, скин (Reversed или Classic), этот гайд и история баннеров.</p>
+    <p class="muted" data-en>The <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> gear in the top bar holds language, skin (Reversed or Classic), this guide and banner history.</p>
   </div>
 
   <div class="box">
-    <h3 data-ru>Экспорт и импорт базы данных</h3>
-    <h3 data-en>Export &amp; Import Database</h3>
-
+    <h3 data-ru>Профили</h3>
+    <h3 data-en>Profiles</h3>
     <ul>
-      <li data-ru><b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Скачать базу данных</b> — сохраняет <b>все профили</b> в один JSON-файл для резервной копии или переноса на другое устройство</li>
-      <li data-en><b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Download Database</b> — saves <b>all profiles</b> into a single JSON file for backup or transfer to another device</li>
-      <li data-ru><b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Загрузить базу данных</b> — загружает ранее сохранённый файл базы</li>
-      <li data-en><b><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Load Database</b> — loads a previously saved database file</li>
+      <li data-ru class="only-d"><span class="dot"></span><span>Переключай профили в выпадающем списке в блоке «Управление базой данных», создавай кнопкой <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>, удаляй кнопкой <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></span>.</span></li>
+      <li data-en class="only-d"><span class="dot"></span><span>Switch profiles in the dropdown in Database Management, create one with <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span>, delete with <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></span>.</span></li>
+      <li data-ru class="only-m"><span class="dot"></span><span>Переключай профиль, нажав на его имя в шапке. Создать <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span> или удалить <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></span> профиль можно в окне <b>«Добавить крутки»</b>.</span></li>
+      <li data-en class="only-m"><span class="dot"></span><span>Switch profile by tapping its name in the top bar. Create <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span> or delete <span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></span> a profile in the <b>Add pulls</b> sheet.</span></li>
+      <li data-ru><span class="dot"></span><span>При первом импорте по ссылке профиль привязывается к UID аккаунта. Если потом загрузить ссылку от другого аккаунта, трекер предложит создать для него отдельный профиль — крутки разных аккаунтов не смешаются.</span></li>
+      <li data-en><span class="dot"></span><span>The first link import binds the profile to the account UID. If you later load a link from another account, the tracker offers to make a separate profile for it — pulls from different accounts never mix.</span></li>
+      <li data-ru><span class="dot"></span><span>Стандартный профиль удалить нельзя — только очистить.</span></li>
+      <li data-en><span class="dot"></span><span>The default profile can't be deleted, only cleared.</span></li>
     </ul>
-    <div class="guide-tip" data-ru>При загрузке файла трекер сравнивает каждый профиль с локальными данными. Если профиль из файла совпадает — он игнорируется. Если в файле круток <b>больше</b> — профиль обновляется автоматически. Если в файле круток <b>меньше</b> — появится окно с выбором: оставить локальный или заменить данными из файла.</div>
-    <div class="guide-tip" data-en>When loading a file, the tracker compares each profile with local data. If a profile from the file matches — it is ignored. If the file has <b>more</b> pulls — the profile is updated automatically. If the file has <b>fewer</b> pulls — a dialog appears to choose whether to keep local data or replace it.</div>
-    <div class="guide-warn" data-ru><b>Внимание:</b> кнопка «<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Загрузить базу данных» предназначена только для файлов, ранее сохранённых через «<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Скачать базу данных». Для загрузки оригинального файла из игры используй кнопку <b>«<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Выбрать файл»</b>.</div>
-    <div class="guide-warn" data-en><b>Note:</b> the «<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Load Database» button is only for files previously saved via «<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Download Database». To load the original in-game file, use the <b>«<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg> Select File»</b> button.</div>
+    <div class="note" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>Профили хранятся на устройстве. Чтобы перенести их, используй резервную копию или Google Диск.</span></div>
+    <div class="note" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>Profiles are stored on the device. To move them, use a backup or Google Drive.</span></div>
+  </div>
+
+  <div class="box">
+    <h3 data-ru>Резервная копия</h3>
+    <h3 data-en>Backup</h3>
+    <ul>
+      <li data-ru><span class="dot"></span><span><span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Скачать базу данных</span> — все профили в одном JSON-файле.</span></li>
+      <li data-en><span class="dot"></span><span><span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg> Download Database</span> — all profiles in one JSON file.</span></li>
+      <li data-ru><span class="dot"></span><span><span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Загрузить базу данных</span> — вернуть ранее сохранённую копию.</span></li>
+      <li data-en><span class="dot"></span><span><span class="ui"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg> Load Database</span> — bring back a saved copy.</span></li>
+    </ul>
+    <div class="note" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>При загрузке каждый профиль сравнивается с тем, что уже есть. Если профиль совпадает по UID — крутки объединяются. Если совпадает только имя — трекер спросит: объединить, оставить оба, оставить локальный или взять из файла.</span></div>
+    <div class="note" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"/></svg><span>On load, each profile is matched against what you have. A matching UID merges the pulls. If only the name matches, the tracker asks: merge, keep both, keep local or use the file.</span></div>
+    <div class="warn" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Внимание:</b> «Загрузить базу данных» — только для файлов, сохранённых через «Скачать базу данных». Файл из игры загружай через «Выбрать файл».</span></div>
+    <div class="warn" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Note:</b> Load Database is only for files saved with Download Database. Load the in-game file with Select File.</span></div>
   </div>
 
   <div class="box">
     <h3 data-ru>Синхронизация с Google Диском</h3>
-    <h3 data-en>Google Drive Sync</h3>
+    <h3 data-en>Google Drive sync</h3>
+    <p data-ru>Все профили можно синхронизировать через Google Диск. Данные лежат в скрытой папке приложения и не видны в твоём Диске.</p>
+    <p data-en>All profiles can sync through Google Drive. The data sits in a hidden app folder and doesn't show up in your Drive.</p>
+    <ol>
+      <li data-ru><span class="n">1</span><span>Нажми <span class="ui">Подключить</span> в карточке Google Drive<span class="only-d" data-ru> (блок «Управление базой данных»)</span><span class="only-m" data-ru> (внизу окна «Добавить крутки»)</span>.</span></li>
+      <li data-en><span class="n">1</span><span>Tap <span class="ui">Connect</span> on the Google Drive card<span class="only-d" data-en> (Database Management block)</span><span class="only-m" data-en> (at the bottom of the Add pulls sheet)</span>.</span></li>
+      <li data-ru><span class="n">2</span><span>Войди в Google и разреши доступ. В приложении вход откроется во вкладке браузера и вернёт тебя обратно.</span></li>
+      <li data-en><span class="n">2</span><span>Sign in to Google and allow access. In the app, sign-in opens in a browser tab and brings you back.</span></li>
+      <li data-ru><span class="n">3</span><span>Дальше трекер сам загружает данные из облака и сохраняет изменения через пару секунд после каждого импорта. Подключение запоминается.</span></li>
+      <li data-en><span class="n">3</span><span>From then on the tracker loads data from the cloud and saves changes a couple of seconds after each import. The connection is remembered.</span></li>
+    </ol>
+    <div class="warn" data-ru><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Конфликты:</b> если в облаке данных больше — они применяются сами. Если меньше — появится окно с выбором.</span></div>
+    <div class="warn" data-en><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span><b>Conflicts:</b> if the cloud has more data, it's applied automatically. If less, a dialog lets you choose.</span></div>
+  </div>
 
-    <p data-ru>Трекер поддерживает автоматическую синхронизацию всех профилей через Google Drive. Данные хранятся в скрытой папке приложения — они не отображаются в твоём Диске.</p>
-    <p data-en>The tracker supports automatic sync of all profiles via Google Drive. Data is stored in a hidden app folder — it does not appear in your Drive.</p>
+  <div class="box only-m">
+    <h3 data-ru>Ещё в приложении</h3>
+    <h3 data-en>More in the app</h3>
     <ul>
-      <li data-ru><span class="guide-step-tag">1</span> Нажми <b>Подключить Google Диск</b> в блоке управления базой данных</li>
-      <li data-en><span class="guide-step-tag">1</span> Click <b>Connect Google Drive</b> in the database management section</li>
-      <li data-ru><span class="guide-step-tag">2</span> Войди в аккаунт Google и разреши доступ</li>
-      <li data-en><span class="guide-step-tag">2</span> Sign in to your Google account and grant access</li>
-      <li data-ru><span class="guide-step-tag">3</span> Трекер автоматически загрузит данные из облака и в дальнейшем будет сохранять изменения сам</li>
-      <li data-en><span class="guide-step-tag">3</span> The tracker will automatically load data from the cloud and save changes going forward</li>
+      <li data-ru><span class="dot"></span><span><b>Виджет на рабочий стол</b> — отсчёт до ежедневного сброса и текущие и будущие баннеры с таймерами. Добавь его из списка виджетов лаунчера. Список баннеров обновляется, когда открываешь трекер в приложении.</span></li>
+      <li data-en><span class="dot"></span><span><b>Home-screen widget</b> — the daily reset countdown and current and upcoming banners with timers. Add it from your launcher's widget list. The banner list refreshes when you open the tracker in the app.</span></li>
+      <li data-ru><span class="dot"></span><span><b>Напоминания</b> — уведомление в момент старта нового баннера, в том числе после перезагрузки телефона.</span></li>
+      <li data-en><span class="dot"></span><span><b>Reminders</b> — a notification when a new banner starts, also after a phone restart.</span></li>
+      <li data-ru><span class="dot"></span><span><b>Обновления</b> — приложение само находит новую версию, скачивает и предлагает установить. В первый раз Android попросит разрешить установку из этого источника.</span></li>
+      <li data-en><span class="dot"></span><span><b>Updates</b> — the app finds a new version, downloads it and offers to install. The first time, Android asks you to allow installs from this source.</span></li>
+      <li data-ru><span class="dot"></span><span>Язык и скин приложения следуют настройкам трекера в шестерёнке.</span></li>
+      <li data-en><span class="dot"></span><span>The app's language and skin follow the tracker's settings in the gear menu.</span></li>
     </ul>
-    <div class="guide-tip" data-ru>После подключения статус изменится на <b>Подключено</b>. При каждом импорте круток данные автоматически сохраняются в облако через 2 секунды после последнего изменения.</div>
-    <div class="guide-tip" data-en>After connecting, the status changes to <b>Connected</b>. After each pull import, data is automatically saved to the cloud 2 seconds after the last change.</div>
-    <div class="guide-tip" data-ru>Подключение сохраняется между сессиями. При следующем открытии трекер автоматически восстановит соединение и синхронизируется без необходимости входить заново.</div>
-    <div class="guide-tip" data-en>The connection persists between sessions. On the next visit, the tracker will automatically reconnect and sync without requiring a new sign-in.</div>
-    <div class="guide-warn" data-ru><b>Конфликты:</b> если в облаке данных больше — они применяются автоматически. Если меньше — появится окно с выбором.</div>
-    <div class="guide-warn" data-en><b>Conflicts:</b> if the cloud has more data — it is applied automatically. If less — a dialog appears for you to choose.</div>
   </div>
 
   <script>
-    (function() {
-      const RU = ['ru','be','uk','kk','ky','tg','uz','tk','az','hy','ka','mn'];
-      const saved = localStorage.getItem('r1999_lang');
-      const lang = (saved === 'ru' || saved === 'en') ? saved
-        : RU.includes((navigator.language || '').split('-')[0].toLowerCase()) ? 'ru' : 'en';
-      document.documentElement.lang = lang;
+    (function () {
+      const lang = document.documentElement.lang === 'en' ? 'en' : 'ru';
       document.getElementById('langRU').classList.toggle('active', lang === 'ru');
       document.getElementById('langEN').classList.toggle('active', lang === 'en');
-      requestAnimationFrame(() => document.querySelector('.lang-switcher')?.classList.add('ready'));
       document.querySelectorAll('.box').forEach(b => b.classList.add('visible'));
     })();
 
