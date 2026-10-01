@@ -83,7 +83,8 @@ function preloadLocales() {
 
 function applyI18n() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.dataset.i18n);
+    if (el.dataset.icon) el.innerHTML = icon(el.dataset.icon) + `<span>${escapeHTML(t(el.dataset.i18n))}</span>`;
+    else el.textContent = t(el.dataset.i18n);
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.placeholder = t(el.dataset.i18nPlaceholder);
@@ -969,10 +970,10 @@ function _showAccountGuard(incomingUid, currentUid) {
 
     modal.innerHTML = `
       <div class="conflict-modal">
-        <div class="conflict-modal-title">${t('acctGuardTitle')}</div>
+        <div class="conflict-modal-title">${icon('alert')}${t('acctGuardTitle')}</div>
         <div class="conflict-modal-subtitle">${t('acctGuardSub', incomingUid, currentUid || '—')}</div>
         <div class="conflict-actions" style="flex-direction:column;gap:10px;">
-          <button class="conflict-btn-imported" id="agNew">${t('acctGuardNew')}</button>
+          <button class="conflict-btn-imported" id="agNew">${icon('plus')}${t('acctGuardNew')}</button>
           ${others.length ? `
           <div style="display:flex;gap:8px;">
             <select id="agSelect" style="flex:1;">${opts}</select>
@@ -1023,7 +1024,7 @@ async function loadFromURL() {
   if (!url.startsWith('http')) { showToast(t('invalidUrl'), 'error');   return; }
 
   const btn          = document.querySelector('.url-import button');
-  const originalText = btn.textContent;
+  const originalHTML = btn.innerHTML;
   btn.disabled       = true;
   btn.textContent    = t('loading');
 
@@ -1067,7 +1068,7 @@ async function loadFromURL() {
   } finally {
     topBar.finish();
     btn.disabled    = false;
-    btn.textContent = originalText;
+    btn.innerHTML   = originalHTML;
   }
 }
 
@@ -1239,18 +1240,18 @@ function _showReconcileModal({ local, imported, localMeta, importedMeta, onMerge
 
   modal.innerHTML = `
     <div class="conflict-modal">
-      <div class="conflict-modal-title">${t('reconcileTitle')}</div>
+      <div class="conflict-modal-title">${icon('alert')}${t('reconcileTitle')}</div>
       <div class="conflict-modal-subtitle">${t('reconcileSub', importedName)}</div>
       <div class="conflict-columns">
         <div class="conflict-col conflict-col-local">
-          <div class="conflict-col-header">${t('conflictLocal')}</div>
+          <div class="conflict-col-header">${icon('local')}${t('conflictLocal')}</div>
           <div class="conflict-col-name">${localName}</div>
           <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${localMeta.count}</b></div>
           <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${localMeta.lastPull}</b></div>
         </div>
         <div class="conflict-col-vs">VS</div>
         <div class="conflict-col conflict-col-imported">
-          <div class="conflict-col-header">${t('conflictImported')}</div>
+          <div class="conflict-col-header">${icon('imported')}${t('conflictImported')}</div>
           <div class="conflict-col-name">${importedName}</div>
           <div class="conflict-stat"><span>${t('conflictStatPulls')}</span><b>${importedMeta.count}</b></div>
           <div class="conflict-stat"><span>${t('conflictStatLast')}</span><b>${importedMeta.lastPull}</b></div>
@@ -1258,10 +1259,10 @@ function _showReconcileModal({ local, imported, localMeta, importedMeta, onMerge
         </div>
       </div>
       <div class="conflict-actions" style="flex-wrap:wrap;gap:8px;">
-        <button class="conflict-btn-imported" id="cmMerge">${t('reconcileMerge')}</button>
-        <button class="conflict-btn-local"    id="cmKeepBoth">${t('reconcileKeepBoth')}</button>
-        <button class="conflict-btn-local"    id="cmKeepLocal">${t('reconcileKeepLocal')}</button>
-        <button class="conflict-btn-local"    id="cmUseImported">${t('reconcileUseImported')}</button>
+        <button class="conflict-btn-imported" id="cmMerge">${icon('merge')}${t('reconcileMerge')}</button>
+        <button class="conflict-btn-local"    id="cmKeepBoth">${icon('copy')}${t('reconcileKeepBoth')}</button>
+        <button class="conflict-btn-local"    id="cmKeepLocal">${icon('local')}${t('reconcileKeepLocal')}</button>
+        <button class="conflict-btn-local"    id="cmUseImported">${icon('imported')}${t('reconcileUseImported')}</button>
       </div>
     </div>`;
 
@@ -1404,7 +1405,7 @@ function renderBannerStats() {
       <div class="banner-stat-item">
         <div class="banner-stat-label">
           ${t('bannerStatPulls')}
-          <span class="sub"><img src="static/ui/ClearDrop.webp" alt="💎" onerror="this.outerHTML='💎'"> <span class="banner-stat-gems">${(pulls * 180).toLocaleString(locale)}</span></span>
+          <span class="sub"><img src="static/ui/ClearDrop.webp" alt="" onerror="this.remove()"> <span class="banner-stat-gems">${(pulls * 180).toLocaleString(locale)}</span></span>
         </div>
         <div class="banner-stat-value banner-stat-pulls">${pulls}</div>
       </div>
@@ -1540,7 +1541,7 @@ function renderRecentSixStars() {
     .reverse();
 
   if (!sixStars.length) {
-    container.innerHTML = `<div class="recent-six-stars-placeholder">${t('sixStarsPlaceholder')}</div>`;
+    container.innerHTML = `<div class="recent-six-stars-placeholder">${icon('star')}${t('sixStarsPlaceholder')}</div>`;
     updateRecentToggle();
     return;
   }
@@ -1621,7 +1622,7 @@ function renderTable() {
   if (!filtered.length) {
     if (_tableIO) { _tableIO.disconnect(); _tableIO = null; }
     _tableState = null;
-    tb.innerHTML = `<tr class="show"><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted);font-size:18px;">${t('noData')}</td></tr>`;
+    tb.innerHTML = `<tr class="show"><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted);font-size:18px;">${icon('inbox')}${t('noData')}</td></tr>`;
     return;
   }
 
@@ -2315,7 +2316,7 @@ function openBannerModal(b, info, typeClass) {
         ${hasBannerImage(b) ? `<img src="${escapeHTML(b.image)}" alt="${escapeHTML(info.name)}" onerror="this.closest('.tl-modal-img-wrap').classList.add('tl-modal-img-wrap--placeholder');this.remove()">` : ''}
         ${bannerPlaceholderHTML(info, typeClass, 'tl-modal-img-placeholder')}
         <div class="tl-modal-img-gradient"></div>
-        <button class="tl-modal-close">✕</button>
+        <button class="tl-modal-close" aria-label="Close">${icon('x')}</button>
       </div>
       <div class="tl-modal-body">
         <div class="tl-modal-header">
@@ -2399,7 +2400,7 @@ function _updateGdriveUILang() {
       ? `<span class="gdrive-spinner"></span>${t('gdriveSyncing')}`
       : t('gdriveConnected');
   } else if (status.classList.contains('expired')) {
-    status.innerHTML = t('gdriveExpired');
+    status.innerHTML = icon('alert') + t('gdriveExpired');
   } else {
     status.innerHTML = t('gdriveNotConnected');
   }

@@ -1019,6 +1019,14 @@ body.is-offline .offline-badge { display: inline-flex; }
 [data-skin="classic"] .offline-dot { background: #7c8cff; box-shadow: 0 0 6px #7c8cff; }
 [data-skin="classic"] #scrollTopBtn { color: var(--accent-gold); }
 
+.icon { width: 1.15em; height: 1.15em; flex-shrink: 0; vertical-align: -0.2em; }
+[data-icon] { display: inline-flex; align-items: center; justify-content: center; gap: 0.5em; }
+.settings-gear .icon, .profiles button .icon, #scrollTopBtn .icon, .tl-modal-close .icon { width: 20px; height: 20px; }
+.profiles button { display: inline-flex; align-items: center; justify-content: center; }
+.conflict-modal-title, .conflict-col-header { display: flex; align-items: center; gap: 0.45em; }
+.conflict-actions button { display: inline-flex; align-items: center; justify-content: center; gap: 0.45em; }
+.recent-six-stars-placeholder .icon, #table td[colspan] .icon { margin-right: 0.4em; color: var(--accent-gold); }
+.gdrive-status .icon { margin-right: 0.3em; }
 .m-only { display: none !important; }
 html:not(.in-app) .in-app-only { display: none !important; }
 
@@ -1275,8 +1283,19 @@ html:not(.in-app) .in-app-only { display: none !important; }
   .import-box .file-upload > div:first-child span { margin-left: 0 !important; font-size: 12px !important; }
   .import-box .profiles select { flex: 1 1 auto; min-width: 0; }
   .import-box .profiles button { width: 44px; height: 44px; padding: 0; }
-  .import-box .db-buttons-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
-  .import-box .db-btn { height: 48px; margin: 0; white-space: normal; line-height: 1.2; }
+  .import-box .db-buttons-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+  .import-box .db-btn:not(.gdrive-btn-signin):not(.gdrive-btn-signout),
+  .import-box .file-upload > div:first-child > button {
+    height: auto; min-height: 84px; margin: 0; padding: 12px 14px; border-radius: 16px;
+    flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 8px;
+    background: transparent; border: 1px solid var(--border);
+    white-space: normal; text-align: left; line-height: 1.25; font-size: 14px; font-weight: 800;
+  }
+  .import-box .db-btn .icon,
+  .import-box .file-upload > div:first-child > button .icon { width: 22px; height: 22px; color: var(--accent-gold); }
+  .import-box .file-upload > div:first-child > button { width: 100%; min-height: 0; flex-direction: row; align-items: center; }
+  .import-box .file-upload > div:first-child { flex-direction: column; align-items: stretch !important; }
+  .m-url-label { display: block !important; font-weight: 800; font-size: 15px; color: var(--text); }
   .import-box .gdrive-block {
     grid-column: 1 / -1; padding: 12px 14px; margin-top: 4px;
     background: var(--bg-card); border: 1px solid var(--hairline); border-radius: 16px;

@@ -388,7 +388,7 @@ function _setExpiredUI() {
   const signOut = document.getElementById('gdriveSignOutBtn');
   if (!status) return;
   if (!navigator.onLine) { _setOfflineUI(); return; }
-  status.innerHTML = t('gdriveExpired');
+  status.innerHTML = icon('alert') + t('gdriveExpired');
   status.className = 'gdrive-status expired';
   if (signIn)  signIn.style.display  = '';
   if (signOut) signOut.style.display = 'none';
