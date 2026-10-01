@@ -1265,6 +1265,13 @@ html:not(.in-app) .in-app-only { display: none !important; }
     transform: translateY(105%); transition: transform 0.3s var(--ease-out); visibility: hidden;
   }
   body.sheet-open .import-box { transform: none; visibility: visible; }
+  html.in-app .import-box {
+    left: 14px; right: 14px; bottom: 92px; max-height: calc(100vh - 110px);
+    border: 1px solid var(--hairline-2); border-radius: 24px;
+    padding-bottom: 20px;
+    transform: translateY(calc(100% + 110px));
+  }
+  html.in-app body.sheet-open .import-box { transform: none; }
   .import-box::before, .import-box::after { display: none; }
   .import-box hr { display: none; }
   .sheet-grip { width: 40px; height: 4px; border-radius: 4px; background: var(--hairline-2); margin: 0 auto 6px; }
