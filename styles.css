@@ -1159,6 +1159,7 @@ html:not(.in-app) .in-app-only { display: none !important; }
   .active-banner-mypity b { color: var(--text); }
 
   #recentSixStarsBox.collapsed .collapse-body { max-height: none; -webkit-mask-image: none; mask-image: none; }
+  #recentSixStarsBox .recent-six-stars { overflow-x: auto; overflow-y: hidden; touch-action: pan-x pan-y; }
   #recentSixStarsBox .recent-toggle { display: none !important; }
   .recent-six-stars {
     display: flex; flex-wrap: nowrap; gap: 10px; padding: 2px 2px 8px;
@@ -1225,6 +1226,7 @@ html:not(.in-app) .in-app-only { display: none !important; }
 
   #bannerStats { display: none; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .stats .stat:nth-child(5) { display: none; }
   #statsBox.collapsed .collapse-body { max-height: none; -webkit-mask-image: none; mask-image: none; }
   #statsBox .recent-toggle { display: none !important; }
 
@@ -1240,6 +1242,7 @@ html:not(.in-app) .in-app-only { display: none !important; }
     color: var(--text-dim); text-decoration: none; font-size: 11px; font-weight: 700; border-radius: 18px;
   }
   .m-nav a.active { color: var(--accent-gold); }
+  .m-nav .icon, .m-import-btn .icon, .sheet-close .icon, .m-autolink .icon { width: 22px; height: 22px; }
   html.in-app .m-nav { display: none !important; }
   .offline-badge { bottom: calc(92px + env(safe-area-inset-bottom)); }
 

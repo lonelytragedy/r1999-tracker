@@ -400,6 +400,14 @@ window.addEventListener('scroll', () => {
   if ((MOBILE_MQ.matches || IN_APP) && !mNavRaf) mNavRaf = requestAnimationFrame(() => { mNavRaf = 0; updateMNavActive(); });
 }, { passive: true });
 
+document.addEventListener('wheel', ev => {
+  const strip = ev.target.closest?.('#recentSixStars');
+  if (!strip || !MOBILE_MQ.matches || Math.abs(ev.deltaX) > Math.abs(ev.deltaY)) return;
+  if (strip.scrollWidth <= strip.clientWidth) return;
+  strip.scrollLeft += ev.deltaY;
+  ev.preventDefault();
+}, { passive: false });
+
 function openImportSheet() {
   if (!MOBILE_MQ.matches) {
     document.getElementById('importBox')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
