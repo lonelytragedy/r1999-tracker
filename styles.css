@@ -1188,6 +1188,9 @@ html:not(.in-app) .in-app-only { display: none !important; }
     flex: 0 0 auto; height: 40px; margin: 0; padding: 0 12px; border-radius: 999px;
     background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 13px;
   }
+  .m-type-select:focus, .m-type-select:focus-visible,
+  #historyBox .filter-pills button:focus-visible { border-radius: 999px; }
+  .m-profile select:focus-visible { border-radius: 12px; }
   #historyBox tbody td:nth-child(5) > span { display: flex; justify-content: space-between; gap: 8px; }
   #historyBox tbody td:nth-child(5) .star { flex: 0 0 auto; }
   #historyBox tbody tr.row-r6 { background: rgba(234, 90, 110, 0.08) !important; }
