@@ -1030,7 +1030,8 @@ html:not(.in-app) .in-app-only { display: none !important; }
   body { padding: 0 14px calc(104px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; }
   #statsBox          { order: 5; }
   #chartsBox         { order: 6; }
-  .version-footer    { order: 7; }
+  #historyBox        { order: 7; }
+  .version-footer    { order: 8; }
 
   .top-row {
     position: sticky; top: 0; z-index: 50; gap: 8px;
@@ -1041,8 +1042,6 @@ html:not(.in-app) .in-app-only { display: none !important; }
   }
   .top-row .site-title { display: none; }
   .top-row .site-logo  { width: 36px; height: 36px; box-shadow: none; }
-  body::before { background: var(--bg-page); }
-  body::after  { display: none; }
   .m-profile {
     position: relative; flex: 1 1 auto; min-width: 0; height: 44px; padding: 0 12px;
     display: flex !important; align-items: center; gap: 8px;
@@ -1051,8 +1050,10 @@ html:not(.in-app) .in-app-only { display: none !important; }
   .m-profile select { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
   .m-profile-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--text-dim); }
   .m-profile-dot.bound { background: var(--c-r3); }
-  .m-profile-name { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-  .m-profile-uid { margin-left: auto; font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+  .m-profile-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+  .m-profile-name { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-profile-uid { font-size: 11.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-profile-uid:empty { display: none; }
   .top-row .settings-gear { background: transparent; color: var(--text-muted); }
   .m-import-btn {
     width: 44px; height: 44px; padding: 0; margin: 0; flex: 0 0 auto;
@@ -1231,6 +1232,7 @@ html:not(.in-app) .in-app-only { display: none !important; }
     color: var(--text-dim); text-decoration: none; font-size: 11px; font-weight: 700; border-radius: 18px;
   }
   .m-nav a.active { color: var(--accent-gold); }
+  html.in-app .m-nav { display: none !important; }
   .offline-badge { bottom: calc(92px + env(safe-area-inset-bottom)); }
 
   .sheet-backdrop {

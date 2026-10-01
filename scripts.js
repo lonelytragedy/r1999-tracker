@@ -329,8 +329,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   document.documentElement.classList.toggle('in-app', IN_APP);
   applyI18n();
   _initPillsScroll();
-  syncWebNav();
-  MOBILE_MQ.addEventListener?.('change', syncWebNav);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImportSheet(); });
   document.querySelectorAll('.box').forEach((b, i) => {
     b.style.animationDelay = (i * 55) + 'ms';
@@ -398,14 +396,8 @@ window.addEventListener('offline', applyOfflineLocks);
 let mNavRaf = 0;
 window.addEventListener('scroll', () => {
   document.getElementById('scrollTopBtn')?.classList.toggle('visible', window.scrollY > 400);
-  if (MOBILE_MQ.matches && !mNavRaf) mNavRaf = requestAnimationFrame(() => { mNavRaf = 0; updateMNavActive(); });
+  if ((MOBILE_MQ.matches || IN_APP) && !mNavRaf) mNavRaf = requestAnimationFrame(() => { mNavRaf = 0; updateMNavActive(); });
 }, { passive: true });
-
-function syncWebNav() {
-  if (window.AndroidBridge && typeof window.AndroidBridge.setWebNav === 'function') {
-    try { window.AndroidBridge.setWebNav(MOBILE_MQ.matches); } catch (_) {}
-  }
-}
 
 function openImportSheet() {
   if (!MOBILE_MQ.matches) {
@@ -428,7 +420,13 @@ function openNativeImport() {
 
 function mNavGo(ev, link) {
   ev.preventDefault();
-  const id = link.dataset.target;
+  scrollToSection(link.dataset.target);
+}
+
+window.trackerScrollTo = scrollToSection;
+
+function scrollToSection(id) {
+  closeImportSheet();
   if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
   const el = document.getElementById(id);
   if (!el || el.offsetParent === null) return;
@@ -447,7 +445,15 @@ function updateMNavActive() {
     if (el && el.offsetParent !== null && el.getBoundingClientRect().top <= probe) current = id;
   });
   links.forEach(a => a.classList.toggle('active', a.dataset.target === current));
+  if (current !== lastReportedSection) {
+    lastReportedSection = current;
+    if (window.AndroidBridge && typeof window.AndroidBridge.setSection === 'function') {
+      try { window.AndroidBridge.setSection(current); } catch (_) {}
+    }
+  }
 }
+
+let lastReportedSection = 'top';
 
 let resizeTimer;
 window.addEventListener('resize', () => {
@@ -773,7 +779,7 @@ function renderProfileSelect() {
   const nameEl = document.getElementById('mProfileName');
   const uidEl  = document.getElementById('mProfileUid');
   if (nameEl) nameEl.textContent = cur ? cur.name : '';
-  if (uidEl)  uidEl.textContent  = cur?.accountKey ? `UID …${String(cur.accountKey).slice(-4)}` : '';
+  if (uidEl)  uidEl.textContent  = cur?.accountKey ? `UID ${cur.accountKey}` : '';
   document.getElementById('mProfileDot')?.classList.toggle('bound', !!cur?.accountKey);
 }
 
