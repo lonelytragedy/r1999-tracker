@@ -22,7 +22,7 @@ function gdriveInit() {
     try { gdriveToken = JSON.parse(savedTok); } catch { gdriveToken = null; }
   }
 
-  _initCodeClient();
+  if (!GDRIVE_IN_APP && Net.isOnline()) _loadGisScript().then(_initCodeClient);
 
   if (!Net.isOnline()) {
     if (gdriveRefresh || gdriveToken) _setOfflineUI();
@@ -443,7 +443,7 @@ Net.onChange(online => {
     if (gdriveRefresh || gdriveToken) _setOfflineUI();
     return;
   }
-  _initCodeClient();
+  if (!GDRIVE_IN_APP) _loadGisScript().then(_initCodeClient);
   if (!(gdriveRefresh || gdriveToken)) { _updateGdriveUI(false); return; }
   _updateGdriveUI(true);
   _ensureToken().then(ok => {
@@ -455,10 +455,5 @@ Net.onChange(online => {
 });
 
 window.addEventListener('load', () => {
-  const startedAt = Date.now();
-  const ready = () => {
-    if (GDRIVE_IN_APP || window.google?.accounts?.oauth2 || Date.now() - startedAt > 5000) Net.check().finally(gdriveInit);
-    else setTimeout(ready, 100);
-  };
-  ready();
+  Net.check().finally(gdriveInit);
 });

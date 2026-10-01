@@ -397,6 +397,28 @@ document.addEventListener('click', ev => {
 }, true);
 
 Net.onChange(applyOfflineLocks);
+Net.onChange(online => { if (online) { retryBrokenImages(); cacheBannerArt(); } });
+
+function retryBrokenImages() {
+  document.querySelectorAll('img').forEach(img => {
+    if (img.src && img.complete && img.naturalWidth === 0) {
+      const src = img.src;
+      img.removeAttribute('src');
+      img.src = src;
+    }
+  });
+  applyBannerView(localStorage.getItem('bannerView') || (MOBILE_MQ.matches ? 'grid' : 'timeline'));
+  if (processedList.length) renderRecentSixStars();
+}
+
+function cacheBannerArt() {
+  if (!Net.isOnline() || !navigator.serviceWorker?.controller || typeof ACTIVE_BANNERS === 'undefined') return;
+  const now  = Date.now();
+  const urls = ACTIVE_BANNERS
+    .filter(b => hasBannerImage(b) && b.endUTC && parseTimeMs(b.endUTC) > now)
+    .map(b => new URL(b.image, location.href).href);
+  if (urls.length) navigator.serviceWorker.controller.postMessage({ type: 'cache-static', urls });
+}
 
 let mNavRaf = 0;
 window.addEventListener('scroll', () => {

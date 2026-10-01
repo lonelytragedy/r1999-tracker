@@ -12,7 +12,6 @@
   <link rel="icon" href="static/ui/favicon.ico" type="image/x-icon">
   <link rel="canonical" href="https://lonelytragedy.github.io/r1999-tracker/">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="lang-init.js"></script>
   <script src="icons.js" defer></script>
   <script src="database.js" defer></script>
@@ -274,6 +273,7 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.ready.then(() => setTimeout(() => window.cacheBannerArt?.(), 1500));
       });
     }
   </script>
