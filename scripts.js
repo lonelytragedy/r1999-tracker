@@ -816,6 +816,7 @@ function filterByTypeSelect(select) {
 function switchProfile(id) {
   currentProfile = Number(id);
   localStorage.setItem('r1999_active_profile', currentProfile);
+  renderProfileSelect();
   loadProfileDB(true);
   showToast(t('profileSwitched'), 'info');
 }
