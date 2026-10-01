@@ -16,13 +16,11 @@
   <script src="lang-init.js"></script>
   <script src="icons.js" defer></script>
   <script src="database.js" defer></script>
+  <script src="net.js"></script>
   <script src="gdrive.js" defer></script>
 </head>
 <body>
   <div id="top-bar"></div>
-  <div id="offlineBadge" class="offline-badge">
-    <span class="offline-dot"></span><span data-i18n="offlineMode"></span>
-  </div>
 
   <div class="top-row" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
     <h1 class="site-header" style="margin:0;">
@@ -64,6 +62,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="offline-bar" id="offlineBar" role="status">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.94 5.274A7 7 0 0 1 15.71 10h1.79a4.5 4.5 0 0 1 4.222 6.057"/><path d="M18.796 18.81A4.5 4.5 0 0 1 17.5 19H9A7 7 0 0 1 5.79 5.78"/><path d="m2 2 20 20"/></svg>
+    <span class="offline-bar-text"><b data-i18n="offlineBarTitle"></b><span data-i18n="offlineBarText"></span></span>
   </div>
 
   <div class="sheet-backdrop m-only" id="sheetBackdrop" onclick="closeImportSheet()"></div>

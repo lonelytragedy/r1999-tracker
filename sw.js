@@ -1,4 +1,4 @@
-const CACHE = 'r1999-tracker-v12';
+const CACHE = 'r1999-tracker-v13';
 
 const CORE = [
   './',
@@ -6,6 +6,7 @@ const CORE = [
   'styles.css',
   'lang-init.js',
   'database.js',
+  'net.js',
   'gdrive.js',
   'icons.js',
   'scripts.js',

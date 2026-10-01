@@ -226,4 +226,6 @@ window.LOCALE = {
   mBannerAll:         'Баннер',
   mUrlLabel:          'Ссылка на историю призывов',
   mConnect:           'Подключить',
+  offlineBarTitle:    'Офлайн-режим',
+  offlineBarText:     'Показаны сохранённые данные. Импорт, Google Диск и ссылки заработают, когда появится интернет.',
 };

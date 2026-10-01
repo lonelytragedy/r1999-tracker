@@ -22,21 +22,12 @@ function gdriveInit() {
     try { gdriveToken = JSON.parse(savedTok); } catch { gdriveToken = null; }
   }
 
-  if (!GDRIVE_IN_APP) {
-    if (window.google?.accounts?.oauth2) {
-      gdriveCodeClient = google.accounts.oauth2.initCodeClient({
-        client_id: GDRIVE_CLIENT_ID,
-        scope:     GDRIVE_SCOPE,
-        ux_mode:   'popup',
-        callback:  _onCodeResponse,
-        error_callback: err => {
-          console.warn('GIS popup error:', err);
-          showToast(t('gdriveAuthError', err.type || 'popup blocked'), 'error', 5000);
-        },
-      });
-    } else {
-      console.warn('GIS SDK unavailable — sign-in disabled, sync continues');
-    }
+  _initCodeClient();
+
+  if (!Net.isOnline()) {
+    if (gdriveRefresh || gdriveToken) _setOfflineUI();
+    _markSyncReady();
+    return;
   }
 
   if (!gdriveRefresh) {
@@ -54,10 +45,35 @@ function gdriveInit() {
   _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI()).finally(_markSyncReady);
 }
 
+function _initCodeClient() {
+  if (GDRIVE_IN_APP || gdriveCodeClient || !window.google?.accounts?.oauth2) return;
+  gdriveCodeClient = google.accounts.oauth2.initCodeClient({
+    client_id: GDRIVE_CLIENT_ID,
+    scope:     GDRIVE_SCOPE,
+    ux_mode:   'popup',
+    callback:  _onCodeResponse,
+    error_callback: err => {
+      console.warn('GIS popup error:', err);
+      showToast(t('gdriveAuthError', err.type || 'popup blocked'), 'error', 5000);
+    },
+  });
+}
+
+function _loadGisScript() {
+  return new Promise(resolve => {
+    if (window.google?.accounts?.oauth2) { resolve(); return; }
+    const script   = document.createElement('script');
+    script.src     = 'https://accounts.google.com/gsi/client';
+    script.onload  = () => resolve();
+    script.onerror = () => { script.remove(); resolve(); };
+    document.head.appendChild(script);
+  });
+}
+
 function _markSyncReady() {
   if (_syncReady) return;
   _syncReady = true;
-  if (_pendingSave && navigator.onLine && (gdriveRefresh || gdriveToken)) {
+  if (_pendingSave && Net.isOnline() && (gdriveRefresh || gdriveToken)) {
     _pendingSave = false;
     gdriveSave();
   }
@@ -79,6 +95,7 @@ window.__driveRestore = function (refreshToken) {
   if (!refreshToken) return;
   gdriveRefresh = refreshToken;
   localStorage.setItem('gdrive_refresh', refreshToken);
+  if (!Net.isOnline()) { _setOfflineUI(); _markSyncReady(); return; }
   _updateGdriveUI(true);
   _ensureToken().then(ok => ok ? gdriveLoad() : _setExpiredUI()).finally(_markSyncReady);
 };
@@ -87,8 +104,10 @@ window.__driveDisconnected = function () {
   gdriveSignOut();
 };
 
-function gdriveSignIn() {
+async function gdriveSignIn() {
+  if (!Net.isOnline()) { showToast(t('offlineLocked'), 'warning'); return; }
   if (GDRIVE_IN_APP) { window.AndroidBridge.connectDrive(); return; }
+  if (!gdriveCodeClient) { await _loadGisScript(); _initCodeClient(); }
   if (!gdriveCodeClient) { showToast(t('gdriveSDKError'), 'error'); return; }
   gdriveCodeClient.requestCode();
 }
@@ -160,6 +179,7 @@ async function _ensureToken() {
     return true;
   } catch (err) {
     console.warn('GDrive refresh failed:', err);
+    if (!err.status) await Net.check();
     if (err.status === 400 || err.status === 401) {
       gdriveRefresh = null;
       localStorage.removeItem('gdrive_refresh');
@@ -186,7 +206,7 @@ async function _workerPost(path, payload) {
 function gdriveScheduleSave() {
   if (!gdriveRefresh && !gdriveToken) return;
   if (!_syncReady) { _pendingSave = true; return; }
-  if (!navigator.onLine) { _pendingSave = true; _setOfflineUI(); return; }
+  if (!Net.isOnline()) { _pendingSave = true; _setOfflineUI(); return; }
   clearTimeout(_autoSaveTimer);
   _autoSaveTimer = setTimeout(() => gdriveSave(), GDRIVE_AUTOSAVE_MS);
 }
@@ -280,7 +300,7 @@ function _mergeRemoteForSave(remote) {
 }
 
 async function gdriveSave() {
-  if (!navigator.onLine) {
+  if (!Net.isOnline()) {
     _pendingSave = true;
     _setOfflineUI();
     return;
@@ -326,6 +346,7 @@ async function gdriveSave() {
     }
   } catch (err) {
     if (session !== _driveSession) return;
+    if (!await Net.check()) { _pendingSave = true; return; }
     console.error('GDrive save error:', err);
     showToast(t('gdriveSaveError', err.message), 'error', 5000);
   } finally {
@@ -334,7 +355,7 @@ async function gdriveSave() {
 }
 
 async function gdriveLoad() {
-  if (!navigator.onLine) return;
+  if (!Net.isOnline()) return;
   if (!await _ensureToken()) return;
 
   const session = _driveSession;
@@ -351,6 +372,7 @@ async function gdriveLoad() {
     _resolveConflicts(data.profiles, data.pulls, data.savedAt, true);
   } catch (err) {
     if (session !== _driveSession) return;
+    if (!await Net.check()) return;
     console.error('GDrive load error:', err);
     showToast(t('gdriveLoadError', err.message), 'error', 5000);
   } finally {
@@ -381,6 +403,7 @@ function _setSyncing(active) {
   const status = document.getElementById('gdriveStatus');
   if (!status) return;
   if (!gdriveToken && !gdriveRefresh) { _updateGdriveUI(false); return; }
+  if (!active && !Net.isOnline()) { _setOfflineUI(); return; }
   if (active) {
     status.innerHTML = `<span class="gdrive-spinner"></span>${t('gdriveSyncing')}`;
     status.className = 'gdrive-status connected syncing';
@@ -395,7 +418,7 @@ function _setExpiredUI() {
   const signIn  = document.getElementById('gdriveSignInBtn');
   const signOut = document.getElementById('gdriveSignOutBtn');
   if (!status) return;
-  if (!navigator.onLine) { _setOfflineUI(); return; }
+  if (!Net.isOnline()) { _setOfflineUI(); return; }
   status.innerHTML = icon('alert') + t('gdriveExpired');
   status.className = 'gdrive-status expired';
   if (signIn)  signIn.style.display  = '';
@@ -415,12 +438,13 @@ function _setOfflineUI() {
   }
 }
 
-window.addEventListener('offline', () => {
-  if (gdriveRefresh || gdriveToken) _setOfflineUI();
-});
-
-window.addEventListener('online', () => {
-  if (!(gdriveRefresh || gdriveToken)) return;
+Net.onChange(online => {
+  if (!online) {
+    if (gdriveRefresh || gdriveToken) _setOfflineUI();
+    return;
+  }
+  _initCodeClient();
+  if (!(gdriveRefresh || gdriveToken)) { _updateGdriveUI(false); return; }
   _updateGdriveUI(true);
   _ensureToken().then(ok => {
     if (!ok) { _setExpiredUI(); return; }
@@ -433,7 +457,7 @@ window.addEventListener('online', () => {
 window.addEventListener('load', () => {
   const startedAt = Date.now();
   const ready = () => {
-    if (GDRIVE_IN_APP || window.google?.accounts?.oauth2 || Date.now() - startedAt > 5000) gdriveInit();
+    if (GDRIVE_IN_APP || window.google?.accounts?.oauth2 || Date.now() - startedAt > 5000) Net.check().finally(gdriveInit);
     else setTimeout(ready, 100);
   };
   ready();

@@ -364,11 +364,14 @@ const OFFLINE_LOCK_SELECTORS = [
   '.url-import button',
   '.side-btn[href$="guide.html"]',
   '.side-btn[target="_blank"]',
-  '#gdriveSignInBtn'
+  '#gdriveSignInBtn',
+  '#gdriveSignOutBtn',
+  '.m-autolink',
+  '#mNav a.in-app-only',
 ];
 
 function applyOfflineLocks() {
-  const offline = !navigator.onLine;
+  const offline = !Net.isOnline();
   document.body.classList.toggle('is-offline', offline);
   OFFLINE_LOCK_SELECTORS.forEach(sel => {
     document.querySelectorAll(sel).forEach(el => {
@@ -385,16 +388,15 @@ function applyOfflineLocks() {
 }
 
 document.addEventListener('click', ev => {
-  if (navigator.onLine) return;
-  const locked = ev.target.closest('.offline-locked');
+  if (Net.isOnline()) return;
+  const locked = ev.target.closest('.offline-locked, a[target="_blank"]');
   if (!locked) return;
   ev.preventDefault();
   ev.stopImmediatePropagation();
   showToast(t('offlineLocked'), 'warning');
 }, true);
 
-window.addEventListener('online', applyOfflineLocks);
-window.addEventListener('offline', applyOfflineLocks);
+Net.onChange(applyOfflineLocks);
 
 let mNavRaf = 0;
 window.addEventListener('scroll', () => {
@@ -1050,7 +1052,11 @@ async function loadFromURL() {
 
   try {
 
-    const res = await fetch(PROXY + '?url=' + encodeURIComponent(url));
+    if (!await Net.check()) throw new Error(t('offlineLocked'));
+    const res = await fetch(PROXY + '?url=' + encodeURIComponent(url)).catch(async err => {
+      await Net.check();
+      throw err;
+    });
     if (!res.ok) throw new Error(t('serverError', res.status));
 
     const json = await res.json();
