@@ -440,7 +440,7 @@ function updateMNavActive() {
   const links = document.querySelectorAll('#mNav a[data-target]');
   const probe = window.innerHeight * 0.35;
   let current = 'top';
-  links.forEach(a => {
+  if (window.scrollY > 40) links.forEach(a => {
     const id = a.dataset.target;
     if (id === 'top') return;
     const el = document.getElementById(id);
