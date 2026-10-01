@@ -11,6 +11,7 @@ let gdriveCodeClient = null;
 let _autoSaveTimer   = null;
 let _pendingSave     = false;
 let _syncReady       = false;
+let _driveSession    = 0;
 
 const GDRIVE_IN_APP = !!(window.AndroidBridge && window.AndroidBridge.connectDrive);
 
@@ -93,6 +94,7 @@ function gdriveSignIn() {
 }
 
 function gdriveSignOut() {
+  _driveSession++;
   if (!GDRIVE_IN_APP && gdriveToken?.access_token) {
     google.accounts.oauth2.revoke(gdriveToken.access_token, () => {});
   }
@@ -289,6 +291,7 @@ async function gdriveSave() {
     return;
   }
 
+  const session = _driveSession;
   _setSyncing(true);
 
   try {
@@ -322,10 +325,11 @@ async function gdriveSave() {
       await _createFile(payload);
     }
   } catch (err) {
+    if (session !== _driveSession) return;
     console.error('GDrive save error:', err);
     showToast(t('gdriveSaveError', err.message), 'error', 5000);
   } finally {
-    _setSyncing(false);
+    if (session === _driveSession) _setSyncing(false);
   }
 }
 
@@ -333,21 +337,24 @@ async function gdriveLoad() {
   if (!navigator.onLine) return;
   if (!await _ensureToken()) return;
 
+  const session = _driveSession;
   _setSyncing(true);
 
   try {
     const fileId = await _findFileId();
-    if (!fileId) return;
+    if (!fileId || session !== _driveSession) return;
 
     const data = await _downloadFile(fileId);
+    if (session !== _driveSession) return;
     if (!data?.profiles || !data?.pulls) throw new Error(t('gdriveInvalidFile'));
 
     _resolveConflicts(data.profiles, data.pulls, data.savedAt, true);
   } catch (err) {
+    if (session !== _driveSession) return;
     console.error('GDrive load error:', err);
     showToast(t('gdriveLoadError', err.message), 'error', 5000);
   } finally {
-    _setSyncing(false);
+    if (session === _driveSession) _setSyncing(false);
   }
 }
 
@@ -373,6 +380,7 @@ function _updateGdriveUI(signedIn) {
 function _setSyncing(active) {
   const status = document.getElementById('gdriveStatus');
   if (!status) return;
+  if (!gdriveToken && !gdriveRefresh) { _updateGdriveUI(false); return; }
   if (active) {
     status.innerHTML = `<span class="gdrive-spinner"></span>${t('gdriveSyncing')}`;
     status.className = 'gdrive-status connected syncing';
