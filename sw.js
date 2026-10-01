@@ -1,4 +1,4 @@
-const CACHE = 'r1999-tracker-v11';
+const CACHE = 'r1999-tracker-v12';
 
 const CORE = [
   './',
@@ -62,8 +62,12 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
     try {
-      const res = await fetch(req);
-      if (res && res.ok && new URL(req.url).origin === self.location.origin) {
+      const sameOrigin = new URL(req.url).origin === self.location.origin;
+      const netReq = !sameOrigin ? req
+        : req.mode === 'navigate' ? new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })
+        : new Request(req, { cache: 'no-cache' });
+      const res = await fetch(netReq);
+      if (res && res.ok && sameOrigin) {
         cache.put(req, res.clone());
       }
       return res;
