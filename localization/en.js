@@ -218,4 +218,10 @@ window.LOCALE = {
   mNavHistory:        'History',
   mNavStats:          'Stats',
   mNavLink:           'Import',
+  mNowTitle:          'Live now',
+  mTimelineLink:      'Timeline →',
+  mCardsLink:         'Cards →',
+  mRecentSix:         'Recent 6★',
+  mFifty:             (w, n) => `${w}/${n} 50/50 wins`,
+  mBannerAll:         'Banner',
 };

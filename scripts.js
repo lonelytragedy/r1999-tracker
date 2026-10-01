@@ -531,12 +531,15 @@ function applyBannerView(mode) {
     el.classList.add(toRight ? 'slide-in-right' : 'slide-in-left');
   }
 
+  const viewSwitch = document.getElementById('mViewSwitch');
+  if (viewSwitch) viewSwitch.textContent = mode === 'grid' ? t('mTimelineLink') : t('mCardsLink');
+
   if (mode === 'grid') {
     tlWrap.style.display   = 'none';
     gridWrap.style.display = '';
     btnTl.classList.remove('active');
     btnGrid.classList.add('active');
-    title.textContent = t('activeBanners');
+    title.textContent = MOBILE_MQ.matches ? t('mNowTitle') : t('activeBanners');
     if (tzToggle) tzToggle.style.display = 'none';
     if (prevMode !== 'grid') slideIn(gridWrap);
     renderActiveBanners();
@@ -764,8 +767,27 @@ function renderProfileSelect() {
   ).join('');
   const top = document.getElementById('profileSelectTop');
   if (top) top.innerHTML = profiles.map(p =>
-    `<option value="${escapeHTML(p.id)}"${p.id === currentProfile ? ' selected' : ''}>${escapeHTML(p.name)}</option>`
+    `<option value="${escapeHTML(p.id)}"${p.id === currentProfile ? ' selected' : ''}>${escapeHTML(p.name)}${p.accountKey ? ` (UID ${escapeHTML(p.accountKey)})` : ''}</option>`
   ).join('');
+  const cur = profiles.find(p => p.id === currentProfile);
+  const nameEl = document.getElementById('mProfileName');
+  const uidEl  = document.getElementById('mProfileUid');
+  if (nameEl) nameEl.textContent = cur ? cur.name : '';
+  if (uidEl)  uidEl.textContent  = cur?.accountKey ? `UID …${String(cur.accountKey).slice(-4)}` : '';
+  document.getElementById('mProfileDot')?.classList.toggle('bound', !!cur?.accountKey);
+}
+
+function toggleMobileBannerView() {
+  const mode = localStorage.getItem('bannerView') || (MOBILE_MQ.matches ? 'grid' : 'timeline');
+  setBannerView(mode === 'grid' ? 'timeline' : 'grid');
+}
+
+function filterByTypeSelect(select) {
+  const type = select.value || null;
+  const btn  = type
+    ? document.querySelector(`.filter-bar button.filter-type.${BANNER_TYPE_CLASSES[type]}`)
+    : document.querySelector('.filter-bar button.filter-type-all');
+  if (btn) filterByType(type, btn);
 }
 
 function switchProfile(id) {
@@ -1457,11 +1479,8 @@ function renderMobilePity(cards) {
   grid.innerHTML = cards.map(c => {
     const pct = Math.min(100, Math.round(c.pity / PITY_MAX * 100));
     return `<article class="m-pity-card ${c.colorCls}">
-        <div class="m-pity-top">
-          <span class="banner-type ${BANNER_TYPE_CLASSES[c.type]}">${c.type}</span>
-          ${c.guaranteed ? `<span class="m-pity-guar">${t('mGuarantee')}</span>` : ''}
-        </div>
-        <div class="m-pity-num"><b>${c.pity}</b><span>/${PITY_MAX}</span></div>
+        <span class="banner-type ${BANNER_TYPE_CLASSES[c.type]}">${c.type}</span>
+        <div class="m-pity-num"><b>${c.pity}</b><span>/${PITY_MAX}</span>${c.guaranteed ? `<em class="m-pity-guar">${t('mGuarantee')}</em>` : ''}</div>
         <div class="m-pity-bar"><i style="width:${pct}%"></i></div>
       </article>`;
   }).join('');
@@ -1493,6 +1512,8 @@ function renderStats() {
   });
 
   const pulls = processedList.length;
+  const fiftyEl = document.getElementById('mFiftyStat');
+  if (fiftyEl) fiftyEl.textContent = fiftyTotal ? t('mFifty', fiftyWins, fiftyTotal) : '';
   document.getElementById('stats').innerHTML = `
     <div class="stat">${t('statTotalPulls')}<br><b>${pulls}</b></div>
     <div class="stat">${t('statSixStars')}<br><b>${sixCount}</b></div>
@@ -1649,12 +1670,12 @@ function _tableRowHTML(di) {
 
   const groupAttr = (e._groupId ? ` data-group="${escapeHTML(e._groupId)}"` : '') + _tableHeadAttrs(di, role);
 
-  return `<tr class="${pityRowColor(processedPity[origIdx])} show"${groupAttr}>` +
+  return `<tr class="${pityRowColor(processedPity[origIdx])}${c.rarity === 6 ? ' row-r6' : ''} show"${groupAttr}>` +
       bracketCell +
       `<td class="col-num">${origIdx + 1}</td>` +
       `<td><span class="banner-type ${BANNER_TYPE_CLASSES[type] || 'type-other'}">${type}</span> ${escapeHTML(getBannerName(e.poolName))}</td>` +
       `<td>${processedPity[origIdx]}${fifty}</td>` +
-      `<td><span class="r${c.rarity}">${escapeHTML(c.name)} ★${c.rarity}</span></td>` +
+      `<td><span class="r${c.rarity}">${escapeHTML(c.name)} <span class="star">★${c.rarity}</span></span></td>` +
       `<td class="col-date">${escapeHTML(e.createTime)}</td>` +
     `</tr>`;
 }

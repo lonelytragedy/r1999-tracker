@@ -1041,10 +1041,19 @@ html:not(.in-app) .in-app-only { display: none !important; }
   }
   .top-row .site-title { display: none; }
   .top-row .site-logo  { width: 36px; height: 36px; box-shadow: none; }
+  body::before { background: var(--bg-page); }
+  body::after  { display: none; }
   .m-profile {
-    flex: 1 1 auto; min-width: 0; height: 44px; margin: 0;
-    font-weight: 700; font-size: 15px; border-radius: 12px; background: var(--bg-card);
+    position: relative; flex: 1 1 auto; min-width: 0; height: 44px; padding: 0 12px;
+    display: flex !important; align-items: center; gap: 8px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
   }
+  .m-profile select { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .m-profile-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--text-dim); }
+  .m-profile-dot.bound { background: var(--c-r3); }
+  .m-profile-name { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .m-profile-uid { margin-left: auto; font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+  .top-row .settings-gear { background: transparent; color: var(--text-muted); }
   .m-import-btn {
     width: 44px; height: 44px; padding: 0; margin: 0; flex: 0 0 auto;
     display: grid !important; place-items: center;
@@ -1059,7 +1068,8 @@ html:not(.in-app) .in-app-only { display: none !important; }
   .box:not(#chartsBox):not(.import-box)::before,
   .box:not(#chartsBox):not(.import-box)::after { display: none; }
   .box { scroll-margin-top: 76px; }
-  h2 { font-size: 23px; margin-bottom: 12px; }
+  h2 { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
   h2::before { display: none; }
 
   .m-sec-head { display: flex !important; align-items: baseline; justify-content: space-between; gap: 10px; }
@@ -1073,9 +1083,11 @@ html:not(.in-app) .in-app-only { display: none !important; }
   }
   .m-pity-card.pity-val-yellow { --pc: var(--c-r5); }
   .m-pity-card.pity-val-red    { --pc: var(--c-r6); }
-  .m-pity-top  { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
-  .m-pity-top .banner-type { font-size: 11px; }
-  .m-pity-guar { font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-r6); white-space: nowrap; }
+  .m-pity-card .banner-type {
+    align-self: flex-start; padding: 0; border: 0; background: none !important; box-shadow: none;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  }
+  .m-pity-guar { margin-left: auto; font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #f0c7cf; white-space: nowrap; }
   .m-pity-num  { display: flex; align-items: baseline; gap: 3px; }
   .m-pity-num b { font-size: 36px; line-height: 1; font-weight: 800; color: var(--pc); font-variant-numeric: tabular-nums; }
   .m-pity-num span { color: var(--text-dim); font-weight: 600; }
@@ -1096,6 +1108,18 @@ html:not(.in-app) .in-app-only { display: none !important; }
   }
   .m-primary:hover { background: var(--accent-gold); filter: brightness(1.08); }
 
+  .banner-box-header .banner-view-toggle { display: none !important; }
+  .banner-box-header .m-link { order: 1; }
+  .m-link {
+    flex: 0 0 auto; height: 44px; margin: 0; padding: 0 2px; border: 0; background: none !important;
+    color: var(--accent-gold); font-size: 14px; font-weight: 700;
+  }
+  .active-banner-timer::before {
+    content: ''; display: inline-block; width: 13px; height: 13px; margin-right: 5px; vertical-align: -1px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2.5 2.5M9 2h6'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4'%3E%3Ccircle cx='12' cy='13' r='8'/%3E%3Cpath d='M12 9v4l2.5 2.5M9 2h6'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
   #bannerTimelineBox.collapsed .collapse-body { max-height: none; -webkit-mask-image: none; mask-image: none; }
   #bannerTimelineBox .recent-toggle { display: none !important; }
   .active-banners-grid { display: flex; flex-direction: column; gap: 10px; }
@@ -1141,9 +1165,22 @@ html:not(.in-app) .in-app-only { display: none !important; }
     padding: 1px 5px; border-radius: 7px; border: 0; font-size: 12px; font-weight: 800;
   }
   .six-star-fifty { display: none; }
+  .six-star-card .six-star-portrait { box-shadow: none !important; }
+  .six-star-card .six-star-pity { background: rgba(12, 9, 6, 0.88); text-shadow: none; box-shadow: none; }
+  .pity-color-green  .six-star-pity { color: var(--c-r3); }
+  .pity-color-yellow .six-star-pity { color: var(--c-r5); }
+  .pity-color-red    .six-star-pity { color: var(--c-r6); }
   .six-star-name { font-size: 11px; margin-top: 4px; font-weight: 600; color: var(--text); }
 
   #historyBox .filter-group > span { display: none; }
+  #historyBox .filter-group + .filter-group { display: none; }
+  .m-type-select {
+    flex: 0 0 auto; height: 40px; margin: 0; padding: 0 12px; border-radius: 999px;
+    background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 13px;
+  }
+  #historyBox tbody td:nth-child(5) > span { display: flex; justify-content: space-between; gap: 8px; }
+  #historyBox tbody td:nth-child(5) .star { flex: 0 0 auto; }
+  #historyBox tbody tr.row-r6 { background: rgba(234, 90, 110, 0.08) !important; }
   #historyBox .filter-pills { background: none; border: 0; padding: 0; gap: 8px; }
   #historyBox .filter-pills button { height: 40px; padding: 0 14px; border: 1px solid var(--border); }
   #historyBox .filter-pills button.active { border-color: var(--hairline-2); }

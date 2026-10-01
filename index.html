@@ -28,7 +28,12 @@
       <img src="static/ui/logo.png" alt="Logo" class="site-logo">
       <span class="site-title">Reverse<span class="site-title-colon">:</span> Tracker</span>
     </h1>
-    <select id="profileSelectTop" class="m-only m-profile" onchange="switchProfile(this.value)" data-i18n-title="mProfile"></select>
+    <label class="m-only m-profile">
+      <span class="m-profile-dot" id="mProfileDot"></span>
+      <span class="m-profile-name" id="mProfileName"></span>
+      <span class="m-profile-uid" id="mProfileUid"></span>
+      <select id="profileSelectTop" onchange="switchProfile(this.value)" data-i18n-title="mProfile"></select>
+    </label>
     <button type="button" class="m-only m-import-btn" onclick="openImportSheet()" data-i18n-title="mImport" aria-label="Import">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg>
     </button>
@@ -131,6 +136,7 @@
           <span data-i18n="tlLocalTime"></span>
           <span class="tl-tz-label" id="tlTzLabel"></span>
         </label>
+        <button type="button" class="m-only m-link" id="mViewSwitch" onclick="toggleMobileBannerView()"></button>
         <div class="banner-view-toggle">
           <button class="banner-toggle-btn active" id="toggleTimeline" onclick="setBannerView('timeline')" data-i18n="viewTimeline"></button>
           <button class="banner-toggle-btn" id="toggleGrid" onclick="setBannerView('grid')" data-i18n="viewGrid"></button>
@@ -156,7 +162,10 @@
   </div>
 
   <div class="box collapsed" id="recentSixStarsBox">
-    <h2 data-i18n="recentSixStars"></h2>
+    <div class="sec-head">
+      <h2><span class="d-only" data-i18n="recentSixStars"></span><span class="m-only" data-i18n="mRecentSix"></span></h2>
+      <span class="m-only m-sec-sub" id="mFiftyStat"></span>
+    </div>
     <div class="recent-six-stars collapse-body" id="recentSixStars"></div>
     <button class="recent-toggle" id="recentToggle" onclick="toggleRecent()"></button>
   </div>
@@ -186,6 +195,15 @@
           <button class="r4" onclick="filterByRarity(4,this)">4★</button>
           <button class="r3" onclick="filterByRarity(3,this)">3★</button>
           <button class="r2" onclick="filterByRarity(2,this)">2★</button>
+          <select class="m-only m-type-select" id="mTypeSelect" onchange="filterByTypeSelect(this)" data-i18n-title="filterBannerType">
+            <option value="" data-i18n="mBannerAll"></option>
+            <option value="Limited">Limited</option>
+            <option value="Collab">Collab</option>
+            <option value="Character">Character</option>
+            <option value="Water">Water</option>
+            <option value="Regular">Regular</option>
+            <option value="Special">Special</option>
+          </select>
         </div>
       </div>
       <div class="filter-group">

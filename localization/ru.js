@@ -218,4 +218,10 @@ window.LOCALE = {
   mNavHistory:        'История',
   mNavStats:          'Аналитика',
   mNavLink:           'Импорт',
+  mNowTitle:          'Сейчас в игре',
+  mTimelineLink:      'Таймлайн →',
+  mCardsLink:         'Карточки →',
+  mRecentSix:         'Последние 6★',
+  mFifty:             (w, n) => `${w}/${n} побед 50/50`,
+  mBannerAll:         'Баннер',
 };
