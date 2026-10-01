@@ -13,6 +13,9 @@ const TIME                = Object.freeze({
   SERVER_RESET_HOUR: 5,
 });
 
+const MOBILE_MQ = window.matchMedia('(max-width: 600px)');
+const IN_APP    = !!(window.AndroidBridge && window.AndroidBridge.showImport);
+
 const LOCALES   = {};
 let currentLang = 'ru';
 
@@ -91,7 +94,7 @@ function applyI18n() {
 }
 
 function refreshDynamicContent() {
-  const mode = localStorage.getItem('bannerView') || 'timeline';
+  const mode = localStorage.getItem('bannerView') || (MOBILE_MQ.matches ? 'grid' : 'timeline');
   applyBannerView(mode);
   renderBannerStats();
   if (processedList.length > 0) {
@@ -323,8 +326,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (window.AndroidBridge && window.AndroidBridge.setSkin) {
     try { window.AndroidBridge.setSkin(_skin); } catch (e) {}
   }
+  document.documentElement.classList.toggle('in-app', IN_APP);
   applyI18n();
   _initPillsScroll();
+  syncWebNav();
+  MOBILE_MQ.addEventListener?.('change', syncWebNav);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImportSheet(); });
   document.querySelectorAll('.box').forEach((b, i) => {
     b.style.animationDelay = (i * 55) + 'ms';
     b.classList.add('visible');
@@ -388,9 +395,59 @@ document.addEventListener('click', ev => {
 window.addEventListener('online', applyOfflineLocks);
 window.addEventListener('offline', applyOfflineLocks);
 
+let mNavRaf = 0;
 window.addEventListener('scroll', () => {
   document.getElementById('scrollTopBtn')?.classList.toggle('visible', window.scrollY > 400);
-});
+  if (MOBILE_MQ.matches && !mNavRaf) mNavRaf = requestAnimationFrame(() => { mNavRaf = 0; updateMNavActive(); });
+}, { passive: true });
+
+function syncWebNav() {
+  if (window.AndroidBridge && typeof window.AndroidBridge.setWebNav === 'function') {
+    try { window.AndroidBridge.setWebNav(MOBILE_MQ.matches); } catch (_) {}
+  }
+}
+
+function openImportSheet() {
+  if (!MOBILE_MQ.matches) {
+    document.getElementById('importBox')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  document.body.classList.add('sheet-open');
+}
+
+function closeImportSheet() {
+  document.body.classList.remove('sheet-open');
+}
+
+function openNativeImport() {
+  closeImportSheet();
+  if (window.AndroidBridge && typeof window.AndroidBridge.showImport === 'function') {
+    try { window.AndroidBridge.showImport(); } catch (_) {}
+  }
+}
+
+function mNavGo(ev, link) {
+  ev.preventDefault();
+  const id = link.dataset.target;
+  if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  const el = document.getElementById(id);
+  if (!el || el.offsetParent === null) return;
+  if (id === 'statsBox' && el.classList.contains('collapsed')) toggleCollapse(id);
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function updateMNavActive() {
+  const links = document.querySelectorAll('#mNav a[data-target]');
+  const probe = window.innerHeight * 0.35;
+  let current = 'top';
+  links.forEach(a => {
+    const id = a.dataset.target;
+    if (id === 'top') return;
+    const el = document.getElementById(id);
+    if (el && el.offsetParent !== null && el.getBoundingClientRect().top <= probe) current = id;
+  });
+  links.forEach(a => a.classList.toggle('active', a.dataset.target === current));
+}
 
 let resizeTimer;
 window.addEventListener('resize', () => {
@@ -448,7 +505,7 @@ const topBar = (() => {
 function initBannerView() {
   const localTimeCheck = document.getElementById('tlLocalTimeCheck');
   if (localTimeCheck) localTimeCheck.checked = tlUseLocalTime;
-  applyBannerView(localStorage.getItem('bannerView') || 'timeline');
+  applyBannerView(localStorage.getItem('bannerView') || (MOBILE_MQ.matches ? 'grid' : 'timeline'));
 }
 
 function setBannerView(mode) {
@@ -572,6 +629,7 @@ function renderActiveBanners() {
     const typeClass = BANNER_TYPE_CLASSES[info.type] || 'type-other';
     const timerId   = 'grid-timer-' + b.key.replace(/[^a-z0-9]/gi, '_') + '_' + Math.random().toString(36).slice(2);
     const labelId   = timerId + '-label';
+    const myPity    = bannerCurrentPity(b.key);
 
     const card = document.createElement('div');
     card.className = 'active-banner-card active-banner-card--clickable';
@@ -591,6 +649,7 @@ function renderActiveBanners() {
       <div class="active-banner-countdown">
         <span class="active-banner-countdown-label" id="${labelId}">${t('countdownLabel')}</span>
         <span class="active-banner-timer" id="${timerId}">—</span>
+        ${myPity !== null ? `<span class="active-banner-mypity m-only">${t('mPityShort')} <b>${myPity}</b></span>` : ''}
       </div>`;
 
     card.appendChild(typeBadge);
@@ -702,6 +761,10 @@ function loadProfiles() {
 function renderProfileSelect() {
   document.getElementById('profileSelect').innerHTML = profiles.map(p =>
     `<option value="${escapeHTML(p.id)}"${p.id === currentProfile ? ' selected' : ''}>${escapeHTML(p.name)}${p.accountKey ? ` (UID ${escapeHTML(p.accountKey)})` : ''}</option>`
+  ).join('');
+  const top = document.getElementById('profileSelectTop');
+  if (top) top.innerHTML = profiles.map(p =>
+    `<option value="${escapeHTML(p.id)}"${p.id === currentProfile ? ' selected' : ''}>${escapeHTML(p.name)}</option>`
   ).join('');
 }
 
@@ -832,6 +895,7 @@ function loadFromFile(e) {
       parseData(localDB);
       saveToStorage();
       topBar.finish();
+      closeImportSheet();
       const added = countPulls(localDB) - before;
       showToast(
         added === 0 ? t('noNewPulls') : t('addedPulls', added, countPulls(localDB)),
@@ -962,6 +1026,7 @@ async function loadFromURL() {
     saveToStorage();
 
     const added = countPulls(localDB) - before;
+    closeImportSheet();
     showToast(
       added === 0 ? t('noNewPulls') : t('addedPulls', added, countPulls(localDB)),
       added === 0 ? 'warning' : 'success',
@@ -1128,6 +1193,7 @@ function _applyImported(local, imported, importedPulls) {
 }
 
 function _finishImport(silent = false) {
+  if (!silent) closeImportSheet();
   loadProfileDB(false);
   if (typeof gdriveScheduleSave === 'function') gdriveScheduleSave();
   if (!silent) showToast(t('importDone'), 'success', 4000);
@@ -1231,6 +1297,9 @@ function parseData(list) {
   processedGuarantee    = guarantee;
 
   const hasData = processedList.length > 0;
+  document.getElementById('mPityBox')?.classList.toggle('is-empty', !hasData);
+  const totalEl = document.getElementById('mPullsTotal');
+  if (totalEl) totalEl.textContent = hasData ? t('mPullsTotal', processedList.length.toLocaleString(t('dateLocale'))) : '';
 
   renderBannerStats();
   ['statsBox', 'recentSixStarsBox', 'chartsBox'].forEach(id => {
@@ -1293,6 +1362,7 @@ function renderBannerStats() {
   container.style.setProperty('--banner-col-count', activeTypes.length || 1);
 
   const locale = t('dateLocale');
+  const mCards = [];
 
   const pityOf = key => {
     const pity = (processedPityCounters[key] ?? 1) - 1;
@@ -1336,6 +1406,7 @@ function renderBannerStats() {
 
       const options = segs.map((s, idx) => `<option value="${idx}">${escapeHTML(s.optLabel)}</option>`).join('');
 
+      mCards.push({ type, ...pityOf(segs[0].key), guaranteed: processedGuarantee[segs[0].key] === true });
       card.innerHTML = `
         <div class="banner-stat-card-title">
           <select class="banner-stat-select banner-stat-select--water">${options}</select>
@@ -1364,6 +1435,7 @@ function renderBannerStats() {
       const guaranteed = (type === 'Character' || type === 'Limited' || type === 'Collab') &&
         latestKey !== null && processedGuarantee[latestKey] === true;
 
+      mCards.push({ type, ...info, guaranteed });
       card.innerHTML = `
         <div class="banner-stat-card-title">${typeTag}</div>
         ${itemsHTML(data.pulls, info, guaranteed)}`;
@@ -1372,7 +1444,35 @@ function renderBannerStats() {
     container.appendChild(card);
     requestAnimationFrame(() => card.classList.add('visible'));
   });
+  renderMobilePity(mCards);
   updateCollapse('statsBox');
+}
+
+function renderMobilePity(cards) {
+  const grid = document.getElementById('mPity');
+  if (!grid) return;
+  const totalEl = document.getElementById('mPullsTotal');
+  if (totalEl) totalEl.textContent = processedList.length
+    ? t('mPullsTotal', processedList.length.toLocaleString(t('dateLocale'))) : '';
+  grid.innerHTML = cards.map(c => {
+    const pct = Math.min(100, Math.round(c.pity / PITY_MAX * 100));
+    return `<article class="m-pity-card ${c.colorCls}">
+        <div class="m-pity-top">
+          <span class="banner-type ${BANNER_TYPE_CLASSES[c.type]}">${c.type}</span>
+          ${c.guaranteed ? `<span class="m-pity-guar">${t('mGuarantee')}</span>` : ''}
+        </div>
+        <div class="m-pity-num"><b>${c.pity}</b><span>/${PITY_MAX}</span></div>
+        <div class="m-pity-bar"><i style="width:${pct}%"></i></div>
+      </article>`;
+  }).join('');
+}
+
+function bannerCurrentPity(bannerKey) {
+  for (let i = processedList.length - 1; i >= 0; i--) {
+    const e = processedList[i];
+    if (e.poolName === bannerKey) return (processedPityCounters[getPityKey(e)] ?? 1) - 1;
+  }
+  return null;
 }
 
 function renderStats() {
@@ -1547,7 +1647,7 @@ function _tableRowHTML(di) {
     ? `<span class="fifty-mark" title="${t('fifty_' + processedFifty[origIdx])}">${fiftyIconSVG(processedFifty[origIdx])}</span>`
     : '';
 
-  const groupAttr = e._groupId ? ` data-group="${escapeHTML(e._groupId)}"` : '';
+  const groupAttr = (e._groupId ? ` data-group="${escapeHTML(e._groupId)}"` : '') + _tableHeadAttrs(di, role);
 
   return `<tr class="${pityRowColor(processedPity[origIdx])} show"${groupAttr}>` +
       bracketCell +
@@ -1557,6 +1657,20 @@ function _tableRowHTML(di) {
       `<td><span class="r${c.rarity}">${escapeHTML(c.name)} ★${c.rarity}</span></td>` +
       `<td class="col-date">${escapeHTML(e.createTime)}</td>` +
     `</tr>`;
+}
+
+function _tableHeadAttrs(di, role) {
+  const { displayIndices } = _tableState;
+  const e    = processedList[displayIndices[di]];
+  const prev = di > 0 ? processedList[displayIndices[di - 1]] : null;
+  const inGroup = role && role !== null;
+  if (inGroup && !role.startsWith('start')) return '';
+  if (!inGroup && prev && !prev._groupId && prev.poolName === e.poolName &&
+      prev.createTime.slice(0, 10) === e.createTime.slice(0, 10)) return '';
+  const name = getBannerName(e.poolName);
+  const head = inGroup ? `×10 · ${name}` : name;
+  const when = `${e.createTime.slice(8, 10)}.${e.createTime.slice(5, 7)} ${e.createTime.slice(11, 16)}`;
+  return ` data-head="${escapeHTML(head)}" data-when="${escapeHTML(when)}"`;
 }
 
 function _appendTableChunk() {

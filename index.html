@@ -23,11 +23,15 @@
     <span class="offline-dot"></span><span data-i18n="offlineMode"></span>
   </div>
 
-  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+  <div class="top-row" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
     <h1 class="site-header" style="margin:0;">
       <img src="static/ui/logo.png" alt="Logo" class="site-logo">
       <span class="site-title">Reverse<span class="site-title-colon">:</span> Tracker</span>
     </h1>
+    <select id="profileSelectTop" class="m-only m-profile" onchange="switchProfile(this.value)" data-i18n-title="mProfile"></select>
+    <button type="button" class="m-only m-import-btn" onclick="openImportSheet()" data-i18n-title="mImport" aria-label="Import">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg>
+    </button>
     <div class="settings" id="settings">
       <button class="settings-gear" id="settingsGear" onclick="toggleSettings(event)" aria-label="Settings" title="Settings">⚙</button>
       <div class="settings-panel" id="settingsPanel">
@@ -54,10 +58,19 @@
     </div>
   </div>
 
-  <div class="box">
+  <div class="sheet-backdrop m-only" id="sheetBackdrop" onclick="closeImportSheet()"></div>
+  <div class="box import-box" id="importBox" role="dialog" aria-labelledby="importTitle">
+    <div class="sheet-grip m-only"></div>
     <div class="box-header">
-      <h2 data-i18n="dbManagement"></h2>
+      <h2 id="importTitle"><span class="d-only" data-i18n="dbManagement"></span><span class="m-only" data-i18n="mAddPulls"></span></h2>
+      <button type="button" class="m-only sheet-close" onclick="closeImportSheet()" data-i18n-title="mClose" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
     </div>
+    <button type="button" class="m-only in-app-only m-autolink" onclick="openNativeImport()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+      <span data-i18n="mAutoLink"></span>
+    </button>
 
     <hr style="border:0; border-top:1px solid rgba(216,180,106,0.15); margin:12px 0;">
 
@@ -96,6 +109,18 @@
       </div>
     </div>
   </div>
+
+  <section class="box m-only" id="mPityBox" aria-labelledby="mPityTitle">
+    <div class="m-sec-head">
+      <h2 id="mPityTitle" data-i18n="mPityTitle"></h2>
+      <span class="m-sec-sub" id="mPullsTotal"></span>
+    </div>
+    <div class="m-pity-grid" id="mPity"></div>
+    <div class="m-empty" id="mEmpty">
+      <p data-i18n="mEmptyText"></p>
+      <button type="button" class="m-primary" onclick="openImportSheet()" data-i18n="mAddPulls"></button>
+    </div>
+  </section>
 
   <div class="box collapsed" id="bannerTimelineBox">
     <div class="banner-box-header">
@@ -149,7 +174,7 @@
     </div>
   </div>
 
-  <div class="box">
+  <div class="box" id="historyBox">
     <h2 data-i18n="pullHistory"></h2>
     <div class="filter-bar">
       <div class="filter-group">
@@ -192,6 +217,24 @@
       </table>
     </div>
   </div>
+
+  <nav class="m-nav m-only" id="mNav" aria-label="Sections">
+    <a href="#" data-target="top" class="active" onclick="mNavGo(event,this)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg>
+      <span data-i18n="mNavOverview"></span></a>
+    <a href="#" data-target="bannerTimelineBox" onclick="mNavGo(event,this)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+      <span data-i18n="mNavBanners"></span></a>
+    <a href="#" data-target="historyBox" onclick="mNavGo(event,this)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+      <span data-i18n="mNavHistory"></span></a>
+    <a href="#" data-target="statsBox" onclick="mNavGo(event,this)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+      <span data-i18n="mNavStats"></span></a>
+    <a href="#" class="in-app-only" onclick="event.preventDefault();openNativeImport()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+      <span data-i18n="mNavLink"></span></a>
+  </nav>
 
   <p class="version-footer">Version 3.3 soft</p>
 
