@@ -228,4 +228,6 @@ window.LOCALE = {
   mConnect:           'Подключить',
   offlineBarTitle:    'Офлайн-режим',
   offlineBarText:     'Показаны сохранённые данные. Импорт, Google Диск и ссылки заработают, когда появится интернет.',
+  mEndsIn:            'до конца',
+  mStartsIn:          'до начала',
 };

@@ -698,6 +698,7 @@ function renderActiveBanners() {
       <div class="active-banner-name">${info.name}</div>
       <div class="active-banner-countdown">
         <span class="active-banner-countdown-label" id="${labelId}">${t('countdownLabel')}</span>
+        <span class="active-banner-when m-only" id="${labelId}-m"></span>
         <span class="active-banner-timer" id="${timerId}">—</span>
         ${myPity !== null ? `<span class="active-banner-mypity m-only">${t('mPityShort')} <b>${myPity}</b></span>` : ''}
       </div>`;
@@ -707,7 +708,7 @@ function renderActiveBanners() {
     card.appendChild(infoDiv);
     card.addEventListener('click', () => openBannerModal(b, info, typeClass));
     container.appendChild(card);
-    timerEls.push({ el: document.getElementById(timerId), labelEl: document.getElementById(labelId), startTime, endTime });
+    timerEls.push({ el: document.getElementById(timerId), labelEl: document.getElementById(labelId), whenEl: document.getElementById(labelId + '-m'), card, startTime, endTime });
   });
 
   function tick() {
@@ -720,7 +721,7 @@ function renderActiveBanners() {
     }
 
     for (let i = timerEls.length - 1; i >= 0; i--) {
-      const { el, labelEl, startTime, endTime } = timerEls[i];
+      const { el, labelEl, whenEl, card, startTime, endTime } = timerEls[i];
       if (!el) { timerEls.splice(i, 1); continue; }
       const countdown = getBannerCountdownState(startTime, endTime, now);
       if (countdown.state === 'ended') {
@@ -728,6 +729,8 @@ function renderActiveBanners() {
         return;
       }
       if (labelEl) labelEl.textContent = countdown.label;
+      if (whenEl) whenEl.textContent = countdown.state === 'upcoming' ? t('mStartsIn') : t('mEndsIn');
+      card?.classList.toggle('is-upcoming', countdown.state === 'upcoming');
       el.textContent = fmtTimer(countdown.diff);
       const urgency =
         countdown.state === 'active' &&

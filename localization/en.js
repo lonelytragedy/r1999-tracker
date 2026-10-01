@@ -228,4 +228,6 @@ window.LOCALE = {
   mConnect:           'Connect',
   offlineBarTitle:    'Offline mode',
   offlineBarText:     'Showing saved data. Import, Google Drive and links will work again once you are back online.',
+  mEndsIn:            'ends in',
+  mStartsIn:          'starts in',
 };

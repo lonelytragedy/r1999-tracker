@@ -1171,6 +1171,10 @@ html:not(.in-app) .in-app-only { display: none !important; }
   .active-banner-countdown-label { display: none; }
   .active-banner-timer { font-size: 14px; font-weight: 800; }
   .active-banner-mypity { font-size: 13px; color: var(--text-muted); }
+  .active-banner-when { font-size: 12.5px; color: var(--text-muted); margin-right: -6px; }
+  .active-banner-card.is-upcoming { border-style: dashed; border-color: var(--hairline-2); }
+  .active-banner-card.is-upcoming > .active-banner-img { filter: saturate(0.35) brightness(0.8); }
+  .active-banner-card.is-upcoming .active-banner-timer { color: var(--accent-gold); }
   .active-banner-mypity b { color: var(--text); }
 
   #recentSixStarsBox.collapsed .collapse-body { max-height: none; -webkit-mask-image: none; mask-image: none; }
