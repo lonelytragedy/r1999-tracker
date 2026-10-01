@@ -62,6 +62,7 @@ async function setLang(lang) {
     document.getElementById('langEN').classList.toggle('active', lang === 'en');
     applyI18n();
     refreshDynamicContent();
+    syncAppLang();
     requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('ui-fade')));
   }, 130);
 }
@@ -328,6 +329,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     try { window.AndroidBridge.setSkin(_skin); } catch (e) {}
   }
   document.documentElement.classList.toggle('in-app', IN_APP);
+  syncAppLang();
   applyI18n();
   _initPillsScroll();
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImportSheet(); });
@@ -407,6 +409,12 @@ document.addEventListener('wheel', ev => {
   strip.scrollLeft += ev.deltaY;
   ev.preventDefault();
 }, { passive: false });
+
+function syncAppLang() {
+  if (window.AndroidBridge && typeof window.AndroidBridge.setLang === 'function') {
+    try { window.AndroidBridge.setLang(currentLang); } catch (_) {}
+  }
+}
 
 function openImportSheet() {
   if (!MOBILE_MQ.matches) {
