@@ -978,6 +978,13 @@ body.is-offline .offline-badge { display: inline-flex; }
 [data-skin="classic"] .settings.open .settings-gear { border-color: var(--accent); }
 [data-skin="classic"] .settings-panel { background: #171a22; border-color: var(--border); }
 [data-skin="classic"] .settings-links { border-top-color: var(--border); }
+[data-skin="classic"] .settings-seg,
+[data-skin="classic"] .lang-switcher,
+[data-skin="classic"] .banner-view-toggle,
+[data-skin="classic"] .tl-tz-label { background: rgba(8, 10, 14, 0.6); }
+[data-skin="classic"] .filter-pills { background: rgba(8, 10, 14, 0.5); }
+[data-skin="classic"] .settings-gear:hover,
+[data-skin="classic"] #scrollTopBtn:hover { background: rgba(255, 255, 255, 0.06); }
 
 [data-skin="classic"] .banner-timeline-wrap { background: var(--bg-timeline); border-color: var(--border); }
 [data-skin="classic"] .banner-timeline-header { background: var(--bg-input); }
