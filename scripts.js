@@ -157,6 +157,8 @@ function createBannerMedia(banner, info, typeClass, extraClass = '', options = {
   }
 
   const imgEl = document.createElement('img');
+  imgEl.loading   = 'lazy';
+  imgEl.decoding  = 'async';
   imgEl.className = options.imgClass || 'active-banner-img';
   imgEl.alt       = info.name;
   imgEl.src       = banner.image;
@@ -166,16 +168,36 @@ function createBannerMedia(banner, info, typeClass, extraClass = '', options = {
   return imgEl;
 }
 
+let timelineImageIO = null;
+
+function resetTimelineImageObserver(root) {
+  if (timelineImageIO) timelineImageIO.disconnect();
+  timelineImageIO = 'IntersectionObserver' in window
+    ? new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          timelineImageIO.unobserve(entry.target);
+          entry.target._loadImage?.();
+        });
+      }, { root, rootMargin: '0px 480px' })
+    : null;
+}
+
 function applyTimelineBarImage(bar, banner, onMissing) {
   if (!hasBannerImage(banner)) {
     onMissing();
     return;
   }
 
-  const img = new Image();
-  img.onload  = () => { bar.style.backgroundImage = `url(${banner.image})`; };
-  img.onerror = onMissing;
-  img.src     = banner.image;
+  bar._loadImage = () => {
+    bar._loadImage = null;
+    const img = new Image();
+    img.onload  = () => { bar.style.backgroundImage = `url(${banner.image})`; };
+    img.onerror = onMissing;
+    img.src     = banner.image;
+  };
+  if (timelineImageIO) timelineImageIO.observe(bar);
+  else bar._loadImage();
 }
 
 function getBannerCountdownState(startMs, endMs, now = Date.now()) {
@@ -1675,8 +1697,27 @@ function renderChart(monthly) {
   });
 }
 
+const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js@4';
+let chartJsPromise = null;
+
+function loadChartJs() {
+  if (typeof Chart !== 'undefined') return Promise.resolve(true);
+  chartJsPromise ??= new Promise(resolve => {
+    const script   = document.createElement('script');
+    script.src     = CHART_JS_URL;
+    script.onload  = () => resolve(true);
+    script.onerror = () => { script.remove(); chartJsPromise = null; resolve(false); };
+    document.head.appendChild(script);
+  });
+  return chartJsPromise;
+}
+
 function renderCharts() {
-  if (!chartsMonthly || typeof Chart === 'undefined') return;
+  if (!chartsMonthly) return;
+  if (typeof Chart === 'undefined') {
+    loadChartJs().then(ok => { if (ok && chartsOpen) renderCharts(); });
+    return;
+  }
   renderChart(chartsMonthly);
   renderPityChart();
   chartsDirty = false;
@@ -1931,6 +1972,7 @@ function renderBannerTimeline(options = {}) {
 
   const lanes = assignTimelineLanes(timelineItems);
   lanes.forEach(lane => packTimelineLaneItems(lane));
+  resetTimelineImageObserver(wrap);
 
   lanes.forEach(lane => {
     const row     = document.createElement('div');

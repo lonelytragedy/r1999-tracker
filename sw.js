@@ -1,4 +1,4 @@
-const CACHE = 'r1999-tracker-v9';
+const CACHE = 'r1999-tracker-v10';
 
 const CORE = [
   './',
@@ -17,6 +17,16 @@ const CORE = [
 ];
 
 const NETWORK_ONLY = /accounts\.google\.com|googleapis\.com|workers\.dev/;
+const STATIC_ASSET = /\/static\/.+\.(webp|png|svg|ico|woff2)$/;
+
+async function cacheFirst(req) {
+  const cache  = await caches.open(CACHE);
+  const cached = await cache.match(req);
+  if (cached) return cached;
+  const res = await fetch(req);
+  if (res && res.ok) cache.put(req, res.clone());
+  return res;
+}
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -41,6 +51,12 @@ self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
   if (NETWORK_ONLY.test(req.url)) return;
+
+  const url = new URL(req.url);
+  if (url.origin === self.location.origin && STATIC_ASSET.test(url.pathname)) {
+    event.respondWith(cacheFirst(req));
+    return;
+  }
 
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
