@@ -254,6 +254,9 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 16px 0; }
 .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .settings-row + .settings-row { margin-top: 11px; }
 .settings-row[hidden] { display: none; }
+.settings-stack { flex-direction: column; align-items: stretch; gap: 8px; }
+.settings-stack .settings-seg { display: grid; grid-template-columns: 1fr 1fr; }
+.settings-stack .banner-toggle-btn { white-space: nowrap; text-align: center; }
 .settings-label { font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
 .settings-seg {
   display: inline-flex; gap: 3px;
