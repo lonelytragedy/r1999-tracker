@@ -253,6 +253,7 @@ hr { border: 0; border-top: 1px solid var(--hairline); margin: 16px 0; }
 .settings.open .settings-panel { display: block; }
 .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .settings-row + .settings-row { margin-top: 11px; }
+.settings-row[hidden] { display: none; }
 .settings-label { font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
 .settings-seg {
   display: inline-flex; gap: 3px;

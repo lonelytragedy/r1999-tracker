@@ -316,6 +316,26 @@ function setSkin(skin) {
   }
 }
 
+let _reminders = null;
+function initReminders() {
+  const row = document.getElementById('remindersRow');
+  if (!row || !window.AndroidBridge || typeof window.AndroidBridge.getReminders !== 'function') return;
+  try { _reminders = JSON.parse(window.AndroidBridge.getReminders()); } catch (_) { return; }
+  row.hidden = false;
+  renderReminders();
+}
+function renderReminders() {
+  if (!_reminders) return;
+  document.getElementById('remindStart')?.classList.toggle('active', !!_reminders.start);
+  document.getElementById('remindEnd')?.classList.toggle('active', !!_reminders.end);
+}
+function toggleReminder(kind) {
+  if (!_reminders) return;
+  _reminders[kind] = !_reminders[kind];
+  renderReminders();
+  try { window.AndroidBridge.setReminders(!!_reminders.start, !!_reminders.end); } catch (_) {}
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
   currentLang = detectLang();
   await loadLocale(currentLang);
@@ -329,6 +349,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     try { window.AndroidBridge.setSkin(_skin); } catch (e) {}
   }
   document.documentElement.classList.toggle('in-app', IN_APP);
+  initReminders();
   syncAppLang();
   applyI18n();
   _initPillsScroll();
