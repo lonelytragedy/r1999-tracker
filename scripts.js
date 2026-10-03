@@ -30,8 +30,8 @@ let pityChart             = null;
 let chartsMonthly         = null;
 let chartsDirty           = false;
 let chartsOpen            = false;
-let currentFilter         = 0;
-let currentTypeFilter     = null;
+let currentFilter         = new Set();
+let currentTypeFilter     = new Set();
 let profiles              = [];
 let currentProfile        = null;
 let timelineTickInterval  = null;
@@ -851,14 +851,6 @@ function renderProfileSelect() {
 function toggleMobileBannerView() {
   const mode = localStorage.getItem('bannerView') || (MOBILE_MQ.matches ? 'grid' : 'timeline');
   setBannerView(mode === 'grid' ? 'timeline' : 'grid');
-}
-
-function filterByTypeSelect(select) {
-  const type = select.value || null;
-  const btn  = type
-    ? document.querySelector(`.filter-bar button.filter-type.${BANNER_TYPE_CLASSES[type]}`)
-    : document.querySelector('.filter-bar button.filter-type-all');
-  if (btn) filterByType(type, btn);
 }
 
 function switchProfile(id) {
@@ -1681,8 +1673,8 @@ function pityRowColor(v) {
 function renderTable() {
   const filtered = [];
   processedList.forEach((e, i) => {
-    if (currentFilter     && getChar(e.gainIds[0]).rarity !== currentFilter)     return;
-    if (currentTypeFilter && getBannerType(e.poolName)    !== currentTypeFilter) return;
+    if (currentFilter.size     && !currentFilter.has(getChar(e.gainIds[0]).rarity))  return;
+    if (currentTypeFilter.size && !currentTypeFilter.has(getBannerType(e.poolName))) return;
     filtered.push(i);
   });
 
@@ -1697,7 +1689,7 @@ function renderTable() {
 
   const displayIndices = filtered.toReversed();
   const groupRole      = displayIndices.map(() => null);
-  const noFilter       = !currentFilter && !currentTypeFilter;
+  const noFilter       = !currentFilter.size && !currentTypeFilter.size;
 
   let gi = 0;
   while (gi < displayIndices.length) {
@@ -1827,20 +1819,23 @@ function _revealPill(btn) {
   row.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
 }
 
-function filterByRarity(r, btn) {
-  currentFilter = r;
-  btn.closest('.filter-bar').querySelectorAll('button:not(.filter-type):not(.filter-type-all)').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function _toggleFilter(set, value, btn, parse) {
+  if (value == null) set.clear();
+  else if (set.has(value)) set.delete(value);
+  else set.add(value);
+  btn.closest('.filter-pills').querySelectorAll('button').forEach(b => {
+    b.classList.toggle('active', b.dataset.f ? set.has(parse(b.dataset.f)) : !set.size);
+  });
   _revealPill(btn);
   renderTable();
 }
 
+function filterByRarity(r, btn) {
+  _toggleFilter(currentFilter, r || null, btn, Number);
+}
+
 function filterByType(type, btn) {
-  currentTypeFilter = type;
-  btn.closest('.filter-bar').querySelectorAll('button.filter-type, button.filter-type-all').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  _revealPill(btn);
-  renderTable();
+  _toggleFilter(currentTypeFilter, type, btn, String);
 }
 
 function drawChartPlaceholder() {

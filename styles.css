@@ -165,6 +165,7 @@ input:focus, select:focus { border-color: var(--hairline-2); }
 button:active:not(.settings-gear) { transform: scale(0.97); }
 select { color-scheme: dark; }
 option, optgroup { background-color: var(--panel-solid); color: var(--text); }
+html { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
 button:hover { background: rgba(48, 36, 21, 0.8); border-color: var(--hairline-2); }
 
@@ -1207,12 +1208,7 @@ html:not(.in-app) .in-app-only { display: none !important; }
   .six-star-name { font-size: 11px; margin-top: 4px; font-weight: 600; color: var(--text); }
 
   #historyBox .filter-group > span { display: none; }
-  #historyBox .filter-group + .filter-group { display: none; }
-  .m-type-select {
-    flex: 0 0 auto; height: 40px; margin: 0; padding: 0 12px; border-radius: 999px;
-    background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-weight: 700; font-size: 13px;
-  }
-  .m-type-select:focus, .m-type-select:focus-visible,
+  #historyBox .filter-bar { gap: 8px; }
   #historyBox .filter-pills button:focus-visible { border-radius: 999px; }
   .m-profile select:focus-visible { border-radius: 12px; }
   #historyBox tbody td:nth-child(5) > span { display: flex; justify-content: space-between; gap: 8px; }
@@ -1298,6 +1294,17 @@ html:not(.in-app) .in-app-only { display: none !important; }
   html.in-app body.sheet-open .import-box { transform: none; }
   html.in-app .tl-modal-overlay { padding: 16px 14px 96px; }
   html.in-app .tl-modal { max-height: 100%; }
+  .tl-modal { scrollbar-width: auto; scrollbar-color: auto; }
+  .tl-modal::-webkit-scrollbar { width: 4px; }
+  .tl-modal::-webkit-scrollbar-track { background: transparent; margin: 18px 0; }
+  .tl-modal::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 2px; }
+  .import-box .profiles select { height: 44px; box-sizing: border-box; }
+
+  button:not(.settings-gear):active, a:active, select:active,
+  .active-banner-card--clickable:active, .tl-bar:active, .six-star-card:active {
+    transform: scale(0.97); filter: brightness(1.18);
+  }
+  .settings-gear:active { filter: brightness(1.18); }
   .import-box::before, .import-box::after { display: none; }
   .import-box hr { display: none; }
   .sheet-grip { width: 40px; height: 4px; border-radius: 4px; background: var(--hairline-2); margin: 0 auto 6px; }

@@ -206,33 +206,24 @@
       <div class="filter-group">
         <span data-i18n="filterRarity"></span>
         <div class="filter-pills">
-          <button class="active" onclick="filterByRarity(0,this)" data-i18n="filterAll"></button>
-          <button class="r6" onclick="filterByRarity(6,this)">6★</button>
-          <button class="r5" onclick="filterByRarity(5,this)">5★</button>
-          <button class="r4" onclick="filterByRarity(4,this)">4★</button>
-          <button class="r3" onclick="filterByRarity(3,this)">3★</button>
-          <button class="r2" onclick="filterByRarity(2,this)">2★</button>
-          <select class="m-only m-type-select" id="mTypeSelect" onchange="filterByTypeSelect(this)" data-i18n-title="filterBannerType">
-            <option value="" data-i18n="mBannerAll"></option>
-            <option value="Limited">Limited</option>
-            <option value="Collab">Collab</option>
-            <option value="Character">Character</option>
-            <option value="Water">Water</option>
-            <option value="Regular">Regular</option>
-            <option value="Special">Special</option>
-          </select>
+          <button class="filter-all active" onclick="filterByRarity(0,this)" data-i18n="filterAll"></button>
+          <button class="r6" data-f="6" onclick="filterByRarity(6,this)">6★</button>
+          <button class="r5" data-f="5" onclick="filterByRarity(5,this)">5★</button>
+          <button class="r4" data-f="4" onclick="filterByRarity(4,this)">4★</button>
+          <button class="r3" data-f="3" onclick="filterByRarity(3,this)">3★</button>
+          <button class="r2" data-f="2" onclick="filterByRarity(2,this)">2★</button>
         </div>
       </div>
       <div class="filter-group">
         <span data-i18n="filterBannerType"></span>
         <div class="filter-pills">
           <button class="filter-type-all active" onclick="filterByType(null,this)" data-i18n="filterAll"></button>
-          <button class="filter-type type-limited"   onclick="filterByType('Limited',this)">Limited</button>
-          <button class="filter-type type-collaboration" onclick="filterByType('Collab',this)">Collab</button>
-          <button class="filter-type type-character" onclick="filterByType('Character',this)">Character</button>
-          <button class="filter-type type-water"     onclick="filterByType('Water',this)">Water</button>
-          <button class="filter-type type-regular"   onclick="filterByType('Regular',this)">Regular</button>
-          <button class="filter-type type-special"   onclick="filterByType('Special',this)">Special</button>
+          <button class="filter-type type-limited"   data-f="Limited" onclick="filterByType('Limited',this)">Limited</button>
+          <button class="filter-type type-collaboration" data-f="Collab" onclick="filterByType('Collab',this)">Collab</button>
+          <button class="filter-type type-character" data-f="Character" onclick="filterByType('Character',this)">Character</button>
+          <button class="filter-type type-water"     data-f="Water" onclick="filterByType('Water',this)">Water</button>
+          <button class="filter-type type-regular"   data-f="Regular" onclick="filterByType('Regular',this)">Regular</button>
+          <button class="filter-type type-special"   data-f="Special" onclick="filterByType('Special',this)">Special</button>
         </div>
       </div>
     </div>
