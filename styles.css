@@ -1171,6 +1171,7 @@ html:not(.in-app) .in-app-only { display: none !important; }
     padding: 34px 14px 12px; gap: 4px;
   }
   .active-banner-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; line-height: 1.2; }
+  [data-skin="classic"] .active-banner-name { font-family: var(--font-ui); }
   .active-banner-countdown { margin-top: auto; flex-direction: row; align-items: baseline; gap: 12px; }
   .active-banner-countdown-label { display: none; }
   .active-banner-timer { font-size: 14px; font-weight: 800; }
@@ -1295,6 +1296,8 @@ html:not(.in-app) .in-app-only { display: none !important; }
     transform: translateY(calc(100% + 110px));
   }
   html.in-app body.sheet-open .import-box { transform: none; }
+  html.in-app .tl-modal-overlay { padding: 16px 14px 96px; }
+  html.in-app .tl-modal { max-height: 100%; }
   .import-box::before, .import-box::after { display: none; }
   .import-box hr { display: none; }
   .sheet-grip { width: 40px; height: 4px; border-radius: 4px; background: var(--hairline-2); margin: 0 auto 6px; }
