@@ -845,7 +845,6 @@ function renderProfileSelect() {
   const uidEl  = document.getElementById('mProfileUid');
   if (nameEl) nameEl.textContent = cur ? cur.name : '';
   if (uidEl)  uidEl.textContent  = cur?.accountKey ? `UID ${cur.accountKey}` : '';
-  document.getElementById('mProfileDot')?.classList.toggle('bound', !!cur?.accountKey);
 }
 
 function toggleMobileBannerView() {
