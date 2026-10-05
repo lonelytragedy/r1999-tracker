@@ -1,4 +1,4 @@
-const CACHE        = 'r1999-tracker-v14';
+const CACHE        = 'r1999-tracker-v15';
 const STATIC_CACHE = 'r1999-static-v1';
 const NET_WAIT_MS  = 3500;
 
@@ -22,7 +22,8 @@ const STATIC_CORE = [
   'static/fonts/playfair-latin.woff2',
   'static/fonts/playfair-cyrillic.woff2',
   'static/ui/flourish.svg',
-  'static/ui/logo.png',
+  'static/ui/logo.svg',
+  'static/ui/favicon.svg',
   'static/ui/favicon.ico',
   'static/ui/flag_ru.png',
   'static/ui/flag_en.png',
