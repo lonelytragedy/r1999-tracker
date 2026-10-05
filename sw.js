@@ -22,7 +22,7 @@ const STATIC_CORE = [
   'static/fonts/playfair-latin.woff2',
   'static/fonts/playfair-cyrillic.woff2',
   'static/ui/flourish.svg',
-  'static/ui/logo.svg',
+  'static/ui/logo-mark.svg',
   'static/ui/favicon.svg',
   'static/ui/favicon.ico',
   'static/ui/flag_ru.png',
