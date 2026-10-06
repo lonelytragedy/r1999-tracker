@@ -1,271 +1,273 @@
 const BANNERS = {
-  "The Future's Foundation": { name: "The Future's Foundation", type: "Character", rateUp6: ["Cornerstone"]},
-  "往昔应我声": { name: "Speak and the Past Will Echo", type: "Character", rateUp6: ["Everecho"]},
-  "殓骨悼词": { name: "The Mourner's Eulogy", type: "Character", rateUp6: ["Charon"]},
-  "贝壳漂流记": { name: "A Shell on the Waves", type: "Character", rateUp6: ["Fatutu"]},
-  "湖的应许": {name: "Promise of the Water", type:"Water"},
+  "The Future's Foundation": { name: "The Future's Foundation", type: "Character", rateUp6: ["Cornerstone"] },
+  "往昔应我声": { name: "Speak and the Past Will Echo", type: "Character", rateUp6: ["Everecho"] },
+  "殓骨悼词": { name: "The Mourner's Eulogy", type: "Character", rateUp6: ["Charon"] },
+  "贝壳漂流记": { name: "A Shell on the Waves", type: "Character", rateUp6: ["Fatutu"] },
+  "湖的应许": { name: "Promise of the Water", type: "Water" },
   "为什么故事集": { name: "The Book of Whys", type: "Character", rateUp6: ["Flutterpage"] },
   "现实破译法": { name: "Deciphering Reality", type: "Character", rateUp6: ["Enigma"] },
   "虹色五线谱": { name: "Playing in Rainbow Clef", type: "Character", rateUp6: ["Barcarola"] },
   "晴日决胜局": { name: "Clash 'n' Slash", type: "Character", rateUp6: ["J"] },
-  "零重力漫游": { name: "Wirewalking in Zero Gravity", type: "Character", rateUp6: ["Kiperina"]},
+  "零重力漫游": { name: "Wirewalking in Zero Gravity", type: "Character", rateUp6: ["Kiperina"] },
   "渡影归真": { name: "Conduit of the Unseen", type: "Character", rateUp6: ["Ramona"] },
   "奇异吸引子": { name: "The Strange Attractor", type: "Character", rateUp6: ["Lorentz Butterfly"] },
   "虚影的实鉴": { name: "Observation into the Mirrors", type: "Character", rateUp6: ["Kakania"] },
-  "鸿羽若有凌云志" : { name: "Soaring Aspirations", type: "Character", rateUp6: ["Cheng Heguang"] },
-  "幕间蒙太奇" : { name: "A Life in Montage", type: "Character", rateUp6: ["Noire"] },
-  "赤心如昼明" : { name: "Moonbeam Guardian", type: "Limited", rateUp6: ["Liang Yue"]},
-  "湖心追述" : { name: "From the Lake's Heart", type: "Water", rateUp6: ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]},
-  "湖的许诺" : { name: "Promise of the Water", type: "Water"},
-  "神话咫尺之处" : { name: "The Myth at Her Fingertips", type: "Limited", rateUp6: ["Nautika"]},
-  "故事的新啼" : { name: "A Newly Hatched Chapter", type: "Limited", rateUp6: ["Rhiannon"]},
-  "石心瓦解时" : { name: "A Beating Heart Beneath the Stone", type: "Character", rateUp6: ["Sentinel"]},
-  "剥茧为名" : { name: "Beneath the Guise of Her Cocoon", type: "Character", rateUp6: ["Ms. Stranger"]},
-  "子夜独角戏" : { name: "The Midnight Flutist", type: "Character", rateUp6: ["Rubuska"]},
-  "剪春注我" : { name: "Her Heart-Cut Spring", type: "Limited", rateUp6: ["Paper Heron"]},
-  "湖的启示" : { name: "Revelation of the Water", type: "Water" },
-  "鳞与石的世纪" : { name: "Serpentine Century", type: "Character", rateUp6: ["Hissabeth"] },
-  "度朔飞琼" : { name: "The Snow of Dushuo", type: "Special" },
-  "湖的企盼" : { name: "Yearning of the Water", type: "Water" },
-  "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character", rateUp6: ["Igor"]},
-  "午夜摇篮曲" : { name: "Blue Lullaby", type: "Character", rateUp6: ["Tuesday"]},
-  "修缮往日": { name: "From the Ruin of the Past", type: "Character", rateUp6: ["Moldir"]},
-  "誓言无有烬时": { name: "The Oath Unyielding", type: "Character", rateUp6: ["Marsha"]},
-  "银色拟剧论": { name: "Analysis of Metallic Dramaturgy", type: "Collab", rateUp6: ["The Twins"], version: "3.6.5"},
-  "思维动力学":   { name: "Cognitive Dynamics", type: "Character", rateUp6: ["Ulrich"]},
-  "永恒折射角":   { name: "The Brilliance Within", type: "Character", rateUp6: ["Brume"]},
-  "仙子振翅入夜": { name: "The Fairies Shining at Night", type: "Character", rateUp6: ["Tooth Fairy"]},
-  "命运亦需捧场": { name: "On Fate's Cue", type: "Limited", rateUp6: ["Beryl"]},
-  "湖的馈赠":     { name: "Boon of the Water", type: "Water"},
-  "天真与渴盼":   { name: "Longing for Innocence", type: "Limited", rateUp6: ["Anjo Nala"]},
-  "湖的涟漪":     { name: "Ripples on the Water", type: "Water"},
-  "火花雀儿":     { name: "The Chirps of Flame", type: "Character", rateUp6: ["Spathodea"]},
-  "第一滴雨":     { name: "The First Drop of Rain", type: "Regular"},
-  "于湖中央":     { name: "Amongst the Lake", type: "Regular"}
+  "鸿羽若有凌云志": { name: "Soaring Aspirations", type: "Character", rateUp6: ["Cheng Heguang"] },
+  "幕间蒙太奇": { name: "A Life in Montage", type: "Character", rateUp6: ["Noire"] },
+  "赤心如昼明": { name: "Moonbeam Guardian", type: "Limited", rateUp6: ["Liang Yue"] },
+  "湖心追述": { name: "From the Lake's Heart", type: "Water", rateUp6: ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"] },
+  "湖的许诺": { name: "Promise of the Water", type: "Water" },
+  "神话咫尺之处": { name: "The Myth at Her Fingertips", type: "Limited", rateUp6: ["Nautika"] },
+  "故事的新啼": { name: "A Newly Hatched Chapter", type: "Limited", rateUp6: ["Rhiannon"] },
+  "石心瓦解时": { name: "A Beating Heart Beneath the Stone", type: "Character", rateUp6: ["Sentinel"] },
+  "剥茧为名": { name: "Beneath the Guise of Her Cocoon", type: "Character", rateUp6: ["Ms. Stranger"] },
+  "子夜独角戏": { name: "The Midnight Flutist", type: "Character", rateUp6: ["Rubuska"] },
+  "剪春注我": { name: "Her Heart-Cut Spring", type: "Limited", rateUp6: ["Paper Heron"] },
+  "湖的启示": { name: "Revelation of the Water", type: "Water" },
+  "鳞与石的世纪": { name: "Serpentine Century", type: "Character", rateUp6: ["Hissabeth"] },
+  "度朔飞琼": { name: "The Snow of Dushuo", type: "Special" },
+  "湖的企盼": { name: "Yearning of the Water", type: "Water" },
+  "铁与血的亲证": { name: "Witness of Iron and Blood", type: "Character", rateUp6: ["Igor"] },
+  "午夜摇篮曲": { name: "Blue Lullaby", type: "Character", rateUp6: ["Tuesday"] },
+  "修缮往日": { name: "From the Ruin of the Past", type: "Character", rateUp6: ["Moldir"] },
+  "誓言无有烬时": { name: "The Oath Unyielding", type: "Character", rateUp6: ["Marsha"] },
+  "银色拟剧论": { name: "Analysis of Metallic Dramaturgy", type: "Collab", rateUp6: ["The Twins"], version: "3.6.5" },
+  "思维动力学": { name: "Cognitive Dynamics", type: "Character", rateUp6: ["Ulrich"] },
+  "永恒折射角": { name: "The Brilliance Within", type: "Character", rateUp6: ["Brume"] },
+  "仙子振翅入夜": { name: "The Fairies Shining at Night", type: "Character", rateUp6: ["Tooth Fairy"] },
+  "命运亦需捧场": { name: "On Fate's Cue", type: "Limited", rateUp6: ["Beryl"] },
+  "湖的馈赠": { name: "Boon of the Water", type: "Water" },
+  "天真与渴盼": { name: "Longing for Innocence", type: "Limited", rateUp6: ["Anjo Nala"] },
+  "湖的涟漪": { name: "Ripples on the Water", type: "Water" },
+  "火花雀儿": { name: "The Chirps of Flame", type: "Character", rateUp6: ["Spathodea"] },
+  "第一滴雨": { name: "The First Drop of Rain", type: "Regular" },
+  "于湖中央": { name: "Amongst the Lake", type: "Regular" }
 };
 
 const ACTIVE_BANNERS = [
-    {
+  {
+    key:      "铁与血的亲证",
+    startUTC: "2026-10-06T10:00:00Z",
+    endUTC:   "2026-10-20T09:59:00Z",
+    image:    "static/banners/Witness_of_Iron_and_Blood.webp",
+    rateUp:   ["Igor", "Mr. Duncan", "Click"]
+  },
+  {
     key:      "往昔应我声",
     startUTC: "2026-09-24T10:00:00Z",
     endUTC:   "2026-10-15T09:59:00Z",
     image:    "static/banners/Speak_and_the_Past_Will_Echo.webp",
-    rateUp:  ["Everecho", "Bkornblume", "Dikke"]
+    rateUp:   ["Everecho", "Bkornblume", "Dikke"]
   },
-    {
+  {
     key:      "渡影归真",
     startUTC: "2026-09-22T10:00:00Z",
     endUTC:   "2026-10-06T09:59:00Z",
     image:    "static/banners/Conduit_of_the_Unseen.webp",
-    rateUp:  ["Ramona", "Tennant", "Baby Blue"]
+    rateUp:   ["Ramona", "Tennant", "Baby Blue"]
   },
-    {
+  {
     key:      "湖的涟漪",
     startUTC: "2026-09-24T10:00:00Z",
     endUTC:   "2026-11-05T09:59:00Z",
     image:    "static/banners/Ripples_on_the_Water_3.8.webp",
-    rateUp:  ["Hissabeth", "J", "Regulus", "Mercuria", "Ms. NewBabel", "A Knight"]
+    rateUp:   ["Hissabeth", "J", "Regulus", "Mercuria", "Ms. NewBabel", "A Knight"]
   },
-    {
+  {
     key:      "The Future's Foundation",
     startUTC: "2026-10-15T10:00:00Z",
     endUTC:   "2026-11-05T09:59:00Z",
-    rateUp:  ["Cornerstone", "Diggers", "Desert Flannel"]
+    image:    "static/banners/The_Futures_Foundation.webp",
+    rateUp:   ["Cornerstone", "Diggers", "Desert Flannel"]
   },
-    {
+  {
     key:      "湖的企盼",
     startUTC: "2026-10-01T05:00:00Z",
     endUTC:   "2026-10-15T04:59:00Z",
     image:    "static/banners/Yearning_of_the_Water_3.8.webp",
-    rateUp:  ["Lorentz Butterfly", "Enigma"]
+    rateUp:   ["Lorentz Butterfly", "Enigma"]
   },
   {
     key:      "殓骨悼词",
     startUTC: "2026-09-08T10:00:00Z",
     endUTC:   "2026-09-22T09:59:00Z",
     image:    "static/banners/The_Mourners_Eulogy.webp",
-    rateUp:  ["Charon", "Satsuki", "Yenisei"]
+    rateUp:   ["Charon", "Satsuki", "Yenisei"]
   },
   {
     key:      "贝壳漂流记",
     startUTC: "2026-08-25T10:00:00Z",
     endUTC:   "2026-09-08T09:59:00Z",
     image:    "static/banners/A_Shell_on_the_Waves.webp",
-    rateUp:  ["Fatutu", "Necrologist", "Bkornblume"]
+    rateUp:   ["Fatutu", "Necrologist", "Bkornblume"]
   },
   {
     key:      "湖的涟漪",
     startUTC: "2026-08-13T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
     image:    "static/banners/Ripples_on_the_Water_3.7.webp",
-    rateUp:  ["Regulus", "Semmelweis", "Recoleta", "Melania", "Medicine Pocket", "Mercuria", "Spathodea"]
+    rateUp:   ["Regulus", "Semmelweis", "Recoleta", "Melania", "Medicine Pocket", "Mercuria", "Spathodea"]
   },
   {
     key:      "故事的新啼",
     startUTC: "2026-08-13T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
     image:    "static/banners/A_Newly_Hatched_Chapter.webp",
-    rateUp:  ["Rhiannon", "Ulu", "Avgust"]
+    rateUp:   ["Rhiannon", "Ulu", "Avgust"]
   },
   {
     key:      "石心瓦解时",
     startUTC: "2026-08-11T10:00:00Z",
     endUTC:   "2026-08-25T09:59:00Z",
     image:    "static/banners/A_Beating_Heart_Beneath_the_Stone.webp",
-    rateUp:  ["Sentinel", "Balloon Party", "Diggers"]
+    rateUp:   ["Sentinel", "Balloon Party", "Diggers"]
   },
   {
     key:      "神话咫尺之处",
     startUTC: "2026-08-14T10:00:00Z",
     endUTC:   "2026-09-03T09:59:00Z",
     image:    "static/banners/The_Myth_at_Her_Fingertips.webp",
-    rateUp:  ["Nautika", "Blonney", "Dikke"]
+    rateUp:   ["Nautika", "Blonney", "Dikke"]
   },
   {
     key:      "湖的应许",
     startUTC: "2026-08-22T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
-    image: "static/banners/Promise_of_the_Water_3.7.webp",
-    rateUp:  ["Druvis III", "Lilya", "A Knight", "Sotheby", "Regulus", "Centurion", "An-an Lee", "Medicine Pocket",
-              "Eternity", "Ms. NewBabel", "Voyager", "Melania", "Pickles", "Tooth Fairy", "Jessica", "Kaalaa Baunaa",
-              "Shamane", "37", "6", "Spathodea", "Ezra", "Getian", "Semmelweis", "Isolde", "Marcus", "Vila",
-              "Windsong", "Kakania", "J", "Mercuria", "Tuesday", "Argus", "Lopera", "Willow", "Flutterpage",
-              "Barcarola", "Fatutu", "Noire", "Ulrich", "Recoleta", "Aleph", "Hissabeth", "Kiperina", "Moldir",
-              "Sentinel", "Charon", "Rubuska", "Corvus", "Brume", "Marsha", "Igor", "Cheng Heguang", "Coppelia",
-              "Lorentz Butterfly", "Ramona"]
+    image:    "static/banners/Promise_of_the_Water_3.7.webp",
+    rateUp:   ["Druvis III", "Lilya", "A Knight", "Sotheby", "Regulus", "Centurion", "An-an Lee", "Medicine Pocket", "Eternity", "Ms. NewBabel", "Voyager", "Melania", "Pickles", "Tooth Fairy", "Jessica", "Kaalaa Baunaa", "Shamane", "37", "6", "Spathodea", "Ezra", "Getian", "Semmelweis", "Isolde", "Marcus", "Vila", "Windsong", "Kakania", "J", "Mercuria", "Tuesday", "Argus", "Lopera", "Willow", "Flutterpage", "Barcarola", "Fatutu", "Noire", "Ulrich", "Recoleta", "Aleph", "Hissabeth", "Kiperina", "Moldir", "Sentinel", "Charon", "Rubuska", "Corvus", "Brume", "Marsha", "Igor", "Cheng Heguang", "Coppelia", "Lorentz Butterfly", "Ramona"]
   },
   {
     key:      "湖心追述",
     startUTC: "2026-09-01T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
-    image: "static/banners/From_the_Lakes_Heart_3.7.webp",
-    rateUp:  ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]
+    image:    "static/banners/From_the_Lakes_Heart_3.7.webp",
+    rateUp:   ["Jiu Niangzi", "Lucy", "Anjo Nala", "Liang Yue"]
   },
   {
     key:      "剥茧为名",
     startUTC: "2026-09-03T10:00:00Z",
     endUTC:   "2026-09-24T09:59:00Z",
-	image: "static/banners/Beneath_the_Guise_of_Her_Cocoon.webp",
-    rateUp:  ["Ms. Stranger", "X", "Barbara"]
+    image:    "static/banners/Beneath_the_Guise_of_Her_Cocoon.webp",
+    rateUp:   ["Ms. Stranger", "X", "Barbara"]
   },
   {
     key:      "为什么故事集",
     startUTC: "2026-07-28T10:00:00Z",
     endUTC:   "2026-08-11T09:59:00Z",
     image:    "static/banners/The_Book_of_Whys.webp",
-    rateUp:  ["Flutterpage", "Necrologist", "Name Day"]
+    rateUp:   ["Flutterpage", "Necrologist", "Name Day"]
   },
   {
     key:      "湖的涟漪",
     startUTC: "2026-07-23T10:00:00Z",
     endUTC:   "2026-08-13T09:59:00Z",
     image:    "static/banners/Ripples_on_the_Water_Atomic.webp",
-    rateUp:  ["Windsong", "Lopera", "Regulus", "An-an Lee", "Tooth Fairy", "Isolde"]
+    rateUp:   ["Windsong", "Lopera", "Regulus", "An-an Lee", "Tooth Fairy", "Isolde"]
   },
   {
     key:      "银色拟剧论",
     startUTC: "2026-07-23T10:00:00Z",
     endUTC:   "2026-08-13T09:59:00Z",
     image:    "static/banners/Analysis_of_Metallic_Dramaturgy.webp",
-    rateUp:  ["The Twins", "Satsuki", "Brimley"]
+    rateUp:   ["The Twins", "Satsuki", "Brimley"]
   },
   {
     key:      "湖的企盼",
     startUTC: "2026-08-01T05:00:00Z",
     endUTC:   "2026-08-14T09:59:00Z",
-    rateUp:  ["Igor", "Cheng Heguang"]
+    rateUp:   ["Igor", "Cheng Heguang"]
   },
   {
     key:      "誓言无有烬时",
     startUTC: "2026-07-14T10:00:00Z",
     endUTC:   "2026-07-28T09:59:00Z",
     image:    "static/banners/The_Oath_Unyielding.webp",
-    rateUp:  ["Marsha", "Avgust", "Horropedia"]
+    rateUp:   ["Marsha", "Avgust", "Horropedia"]
   },
   {
     key:      "现实破译法",
     startUTC: "2026-07-02T10:00:00Z",
     endUTC:   "2026-07-23T09:59:00Z",
     image:    "static/banners/Deciphering_Reality.webp",
-    rateUp:  ["Enigma", "Sweetheart", "Charlie"]
+    rateUp:   ["Enigma", "Sweetheart", "Charlie"]
   },
   {
     key:      "湖的涟漪",
     startUTC: "2026-07-02T10:00:00Z",
     endUTC:   "2026-07-23T09:59:00Z",
     image:    "static/banners/Ripples_on_the_Water_3.6.webp",
-    rateUp:  ["Recoleta", "Melania", "Tooth Fairy", "Willow", "Tuesday", "Isolde"]
+    rateUp:   ["Recoleta", "Melania", "Tooth Fairy", "Willow", "Tuesday", "Isolde"]
   },
   {
     key:      "虹色五线谱",
     startUTC: "2026-06-30T10:00:00Z",
     endUTC:   "2026-07-14T09:59:00Z",
     image:    "static/banners/Playing_in_Rainbow_Clef.webp",
-    rateUp:  ["Barcarola", "Bkornblume", "Charlie"]
+    rateUp:   ["Barcarola", "Bkornblume", "Charlie"]
   },
   {
     key:      "晴日决胜局",
     startUTC: "2026-06-16T10:00:00Z",
     endUTC:   "2026-06-30T09:59:00Z",
     image:    "static/banners/Clash_n_Slash.webp",
-    rateUp:  ["J", "Sweetheart", "Click"]
+    rateUp:   ["J", "Sweetheart", "Click"]
   },
   {
     key:      "零重力漫游",
     startUTC: "2026-06-02T10:00:00Z",
     endUTC:   "2026-06-16T09:59:00Z",
     image:    "static/banners/Wirewalking_in_Zero_Gravity.webp",
-    rateUp:  ["Kiperina", "Dikke", "Desert Flannel"]
+    rateUp:   ["Kiperina", "Dikke", "Desert Flannel"]
   },
   {
     key:      "湖的涟漪",
     startUTC: "2026-05-28T10:00:00Z",
     endUTC:   "2026-07-02T09:59:00Z",
     image:    "static/banners/Ripples_on_the_Water_3.5.webp",
-    rateUp:  ["Spathodea", "Tuesday", "Isolde", "Willow", "Sotheby", "Tooth Fairy"]
+    rateUp:   ["Spathodea", "Tuesday", "Isolde", "Willow", "Sotheby", "Tooth Fairy"]
   },
   {
     key:      "湖的企盼",
     startUTC: "2026-06-01T05:00:00Z",
     endUTC:   "2026-06-15T04:59:00Z",
     image:    "static/banners/Yearning_of_the_Water_3.5.webp",
-    rateUp:  ["Corvus", "Brume"]
+    rateUp:   ["Corvus", "Brume"]
   },
   {
     key:      "渡影归真",
     startUTC: "2026-06-18T10:00:00Z",
     endUTC:   "2026-07-02T09:59:00Z",
     image:    "static/banners/Conduit_of_the_Unseen.webp",
-    rateUp: ["Ramona", "Loggerhead", "Kanjira"]
+    rateUp:   ["Ramona", "Loggerhead", "Kanjira"]
   },
   {
     key:      "奇异吸引子",
     startUTC: "2026-05-28T10:00:00Z",
     endUTC:   "2026-06-18T09:59:00Z",
     image:    "static/banners/The_Strange_Attractor.webp",
-    rateUp: ["Lorentz Butterfly", "X", "Barbara"]
+    rateUp:   ["Lorentz Butterfly", "X", "Barbara"]
   },
   {
-    key:     "虚影的实鉴",
+    key:      "虚影的实鉴",
     startUTC: "2026-05-19T10:00:00Z",
     endUTC:   "2026-06-02T09:59:00Z",
     image:    "static/banners/Observation_into_the_Mirrors.webp",
-    rateUp: ["Kakania", "Mr. Duncan", "Yenisei"]
+    rateUp:   ["Kakania", "Mr. Duncan", "Yenisei"]
   },
 ];
 
 const CHARACTERS = {
-  3149: { name: "The Twins", rarity: 6},
-  3147: { name: "Ms. Stranger", rarity: 6},
-  3146: { name: "Rhiannon", rarity: 6},
-  3145: { name: "Everecho", rarity: 6},
-  3144: { name: "Coppelia", rarity: 6},
-  3143: { name: "Enigma", rarity: 6},
-  3142: { name: "Ramona", rarity: 6},
+  3149: { name: "The Twins", rarity: 6 },
+  3147: { name: "Ms. Stranger", rarity: 6 },
+  3146: { name: "Rhiannon", rarity: 6 },
+  3145: { name: "Everecho", rarity: 6 },
+  3144: { name: "Coppelia", rarity: 6 },
+  3143: { name: "Enigma", rarity: 6 },
+  3142: { name: "Ramona", rarity: 6 },
   3141: { name: "Paper Heron", rarity: 6 },
-  3140: { name: "Cornerstone", rarity: 6},
-  3139: { name: "Lorentz Butterfly", rarity: 6},
-  3137: { name: "Cheng Heguang", rarity: 6},
+  3140: { name: "Cornerstone", rarity: 6 },
+  3139: { name: "Lorentz Butterfly", rarity: 6 },
+  3137: { name: "Cheng Heguang", rarity: 6 },
   3135: { name: "Brume", rarity: 6 },
   3134: { name: "Beryl", rarity: 6 },
   3132: { name: "Corvus", rarity: 6 },
@@ -357,7 +359,7 @@ const CHARACTERS = {
   3011: { name: "Sweetheart", rarity: 5 },
   3010: { name: "X", rarity: 5 },
 
-  3138: { name: "Reed", rarity: 4},
+  3138: { name: "Reed", rarity: 4 },
   3136: { name: "Lady by the Lake", rarity: 4 },
   3101: { name: "White Rum", rarity: 4 },
   3058: { name: "Erick", rarity: 4 },
