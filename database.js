@@ -1,5 +1,6 @@
 const BANNERS = {
-  "The Future's Foundation": { name: "The Future's Foundation", type: "Character", rateUp6: ["Cornerstone"] },
+  "碎裂品": { name: "The Shattered Product", type: "Character", rateUp6: ["Aleph"] },
+  "明日之础": { name: "The Future's Foundation", type: "Character", rateUp6: ["Cornerstone"] },
   "往昔应我声": { name: "Speak and the Past Will Echo", type: "Character", rateUp6: ["Everecho"] },
   "殓骨悼词": { name: "The Mourner's Eulogy", type: "Character", rateUp6: ["Charon"] },
   "贝壳漂流记": { name: "A Shell on the Waves", type: "Character", rateUp6: ["Fatutu"] },
@@ -46,6 +47,13 @@ const BANNERS = {
 
 const ACTIVE_BANNERS = [
   {
+    key:      "碎裂品",
+    startUTC: "2026-10-20T10:00:00Z",
+    endUTC:   "2026-11-03T09:59:00Z",
+    image:    "static/banners/The_Shattered_Product.webp",
+    rateUp:   ["Aleph", "Kanjira", "Loggerhead"]
+  },
+  {
     key:      "铁与血的亲证",
     startUTC: "2026-10-06T10:00:00Z",
     endUTC:   "2026-10-20T09:59:00Z",
@@ -74,7 +82,7 @@ const ACTIVE_BANNERS = [
     rateUp:   ["Hissabeth", "J", "Regulus", "Mercuria", "Ms. NewBabel", "A Knight"]
   },
   {
-    key:      "The Future's Foundation",
+    key:      "明日之础",
     startUTC: "2026-10-15T10:00:00Z",
     endUTC:   "2026-11-05T09:59:00Z",
     image:    "static/banners/The_Futures_Foundation.webp",
