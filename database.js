@@ -1,4 +1,5 @@
 const BANNERS = {
+  "烈火悬流无尽": { name: "The Reign of Flames Undying", type: "Limited", rateUp6: ["Hedone", "Blonney", "Ulu"], version: "3.9" },
   "碎裂品": { name: "The Shattered Product", type: "Character", rateUp6: ["Aleph"] },
   "明日之础": { name: "The Future's Foundation", type: "Character", rateUp6: ["Cornerstone"] },
   "往昔应我声": { name: "Speak and the Past Will Echo", type: "Character", rateUp6: ["Everecho"] },
@@ -46,6 +47,27 @@ const BANNERS = {
 };
 
 const ACTIVE_BANNERS = [
+  {
+    key:      "烈火悬流无尽",
+    startUTC: "2026-11-05T10:00:00Z",
+    endUTC:   "2026-11-26T09:59:00Z",
+    image:    "static/banners/The_Reign_of_Flames_Undying.webp",
+    rateUp:   ["Hedone", "Blonney", "Ulu"]
+  },
+  {
+    key:      "湖的涟漪",
+    startUTC: "2026-11-05T10:00:00Z",
+    endUTC:   "2026-12-17T09:59:00Z",
+    image:    "static/banners/Ripples_on_the_Water.webp",
+    rateUp:   ["Moldir", "Noire", "Regulus", "Hissabeth", "Recoleta", "Melania"]
+  },
+  {
+    key:      "思维动力学",
+    startUTC: "2026-11-03T10:00:00Z",
+    endUTC:   "2026-11-17T09:59:00Z",
+    image:    "static/banners/Cognitive_Dynamics.webp",
+    rateUp:   ["Ulrich", "Charlie", "Sweetheart"]
+  },
   {
     key:      "碎裂品",
     startUTC: "2026-10-20T10:00:00Z",
@@ -265,6 +287,7 @@ const ACTIVE_BANNERS = [
 ];
 
 const CHARACTERS = {
+  3156: { name: "Hedone", rarity: 6 },
   3149: { name: "The Twins", rarity: 6 },
   3147: { name: "Ms. Stranger", rarity: 6 },
   3146: { name: "Rhiannon", rarity: 6 },
