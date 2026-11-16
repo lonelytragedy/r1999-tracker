@@ -76,15 +76,32 @@
     <span class="offline-bar-text"><b data-i18n="offlineBarTitle"></b><span data-i18n="offlineBarText"></span></span>
   </div>
 
-  <div class="imp-modal-overlay" id="importModal" hidden onclick="if(event.target===this)closeImportModal()">
-    <div class="imp-modal" role="dialog" aria-modal="true" aria-labelledby="impModalTitle">
-      <div class="imp-modal-head">
-        <div>
-          <div class="imp-modal-title" id="impModalTitle" data-i18n="impModalTitle"></div>
-          <div class="imp-modal-sub" data-i18n="impModalSub"></div>
-        </div>
-        <button type="button" class="imp-modal-close" onclick="closeImportModal()" data-i18n-title="mClose" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  <div class="sheet-backdrop m-only" id="sheetBackdrop" onclick="closeImportSheet()"></div>
+  <div class="box import-box" id="importBox" role="dialog" aria-labelledby="importTitle">
+    <div class="sheet-grip m-only"></div>
+    <div class="box-header">
+      <h2 id="importTitle"><span class="d-only" data-i18n="dbManagement"></span><span class="m-only" data-i18n="mAddPulls"></span></h2>
+      <button type="button" class="m-only sheet-close" onclick="closeImportSheet()" data-i18n-title="mClose" aria-label="Close">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <button type="button" class="m-only in-app-only m-autolink" onclick="openNativeImport()">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      <span data-i18n="mAutoLink"></span>
+    </button>
+
+    <hr style="border:0; border-top:1px solid rgba(216,180,106,0.15); margin:12px 0;">
+
+    <div class="d-only imp-hero">
+      <div class="imp-hero-text">
+        <div class="imp-hero-title" data-i18n="impHeroTitle"></div>
+        <div class="imp-hero-hint" data-i18n="impHeroHint"></div>
       </div>
+      <button type="button" class="imp-open-btn" onclick="toggleImportPanel()" aria-expanded="false" aria-controls="impPanel"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg><span data-i18n="impOpenBtn"></span><svg class="icon imp-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    </div>
+
+    <div class="d-only imp-panel" id="impPanel">
+      <div class="imp-panel-inner">
       <div class="imp-tabs" role="tablist">
         <button type="button" class="imp-tab" role="tab" data-tab="ps"><span data-i18n="impTabPs"></span><span class="imp-badge" data-i18n="impFast"></span></button>
         <button type="button" class="imp-tab" role="tab" data-tab="exe"><span data-i18n="impTabExe"></span></button>
@@ -137,35 +154,11 @@
           </div>
         </div>
       </div>
-      <div class="imp-urlbar">
-        <div class="imp-sec-label" data-i18n="impUrlLabel"></div>
-        <div class="imp-url-slot"></div>
-        <div class="imp-url-meta"><span data-i18n="impProfileLabel"></span>: <b id="impProfileName"></b></div>
+        <div class="imp-urlbar">
+          <div class="imp-sec-label" data-i18n="impUrlLabel"></div>
+          <div class="imp-url-slot"></div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="sheet-backdrop m-only" id="sheetBackdrop" onclick="closeImportSheet()"></div>
-  <div class="box import-box" id="importBox" role="dialog" aria-labelledby="importTitle">
-    <div class="sheet-grip m-only"></div>
-    <div class="box-header">
-      <h2 id="importTitle"><span class="d-only" data-i18n="dbManagement"></span><span class="m-only" data-i18n="mAddPulls"></span></h2>
-      <button type="button" class="m-only sheet-close" onclick="closeImportSheet()" data-i18n-title="mClose" aria-label="Close">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-      </button>
-    </div>
-    <button type="button" class="m-only in-app-only m-autolink" onclick="openNativeImport()">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-      <span data-i18n="mAutoLink"></span>
-    </button>
-
-    <hr style="border:0; border-top:1px solid rgba(216,180,106,0.15); margin:12px 0;">
-
-    <div class="d-only imp-hero">
-      <div class="imp-hero-text">
-        <div class="imp-hero-title" data-i18n="impHeroTitle"></div>
-        <div class="imp-hero-hint" data-i18n="impHeroHint"></div>
-      </div>
-      <button type="button" class="imp-open-btn" onclick="openImportModal()" data-i18n="impOpenBtn" data-icon="download"></button>
     </div>
 
     <span class="url-import-home" hidden></span>

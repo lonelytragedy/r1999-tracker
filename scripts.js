@@ -477,38 +477,46 @@ function closeImportSheet() {
   closeImportModal();
 }
 
-function _impUrlHome() {
-  return document.querySelector('#importBox .url-import-home');
+function _impPlaceUrl() {
+  const urlBox = document.querySelector('.url-import');
+  const slot = document.querySelector('#impPanel .imp-url-slot');
+  const home = document.querySelector('#importBox .url-import-home');
+  if (!urlBox || !slot || !home) return;
+  if (MOBILE_MQ.matches) home.after(urlBox);
+  else slot.appendChild(urlBox);
 }
 
-function openImportModal() {
-  const modal = document.getElementById('importModal');
-  if (!modal || !modal.hidden) return;
-  const urlBox = document.querySelector('.url-import');
-  if (urlBox) modal.querySelector('.imp-url-slot').appendChild(urlBox);
-  const prof = profiles.find(p => p.id === currentProfile);
-  document.getElementById('impProfileName').textContent = prof ? prof.name : '';
-  let tab = 'ps';
-  try { tab = localStorage.getItem('r1999_import_tab') || 'ps'; } catch (_) {}
-  setImportTab(tab);
-  modal.hidden = false;
-  document.body.classList.add('imp-modal-open');
-  requestAnimationFrame(() => modal.classList.add('visible'));
+function toggleImportPanel(force) {
+  const box = document.getElementById('importBox');
+  const open = typeof force === 'boolean' ? force : !box.classList.contains('imp-open');
+  box.classList.toggle('imp-open', open);
+  box.querySelector('.imp-open-btn')?.setAttribute('aria-expanded', open);
+  try { localStorage.setItem('r1999_import_open', open ? '1' : '0'); } catch (_) {}
+  if (open) document.getElementById('urlInput')?.focus({ preventScroll: true });
 }
 
 function closeImportModal() {
-  const modal = document.getElementById('importModal');
-  if (!modal || modal.hidden) return;
-  const urlBox = modal.querySelector('.url-import');
-  const home = _impUrlHome();
-  if (urlBox && home) home.after(urlBox);
-  modal.classList.remove('visible');
-  modal.hidden = true;
-  document.body.classList.remove('imp-modal-open');
+  const box = document.getElementById('importBox');
+  if (box?.classList.contains('imp-open')) toggleImportPanel(false);
+}
+
+function initImportPanel() {
+  _impPlaceUrl();
+  let tab = 'ps', open = null;
+  try {
+    tab = localStorage.getItem('r1999_import_tab') || 'ps';
+    open = localStorage.getItem('r1999_import_open');
+  } catch (_) {}
+  setImportTab(tab);
+  const box = document.getElementById('importBox');
+  const isOpen = open === null ? true : open === '1';
+  box.classList.toggle('imp-open', isOpen);
+  box.querySelector('.imp-open-btn')?.setAttribute('aria-expanded', isOpen);
 }
 
 function setImportTab(tab) {
-  const modal = document.getElementById('importModal');
+  const modal = document.getElementById('impPanel');
+  if (!modal) return;
   if (!modal.querySelector(`.imp-pane[data-pane="${tab}"]`)) tab = 'ps';
   modal.querySelectorAll('.imp-tab').forEach(b => {
     const on = b.dataset.tab === tab;
@@ -540,7 +548,8 @@ document.addEventListener('click', e => {
   const tab = e.target.closest('.imp-tab');
   if (tab) setImportTab(tab.dataset.tab);
 });
-MOBILE_MQ.addEventListener?.('change', e => { if (e.matches) closeImportModal(); });
+MOBILE_MQ.addEventListener?.('change', _impPlaceUrl);
+document.addEventListener('DOMContentLoaded', initImportPanel);
 
 function openNativeImport() {
   closeImportSheet();
