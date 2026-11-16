@@ -509,7 +509,7 @@ function initImportPanel() {
   } catch (_) {}
   setImportTab(tab);
   const box = document.getElementById('importBox');
-  const isOpen = open === null ? true : open === '1';
+  const isOpen = open === '1';
   box.classList.toggle('imp-open', isOpen);
   box.querySelector('.imp-open-btn')?.setAttribute('aria-expanded', isOpen);
 }
