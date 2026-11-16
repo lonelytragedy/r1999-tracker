@@ -87,6 +87,9 @@ function applyI18n() {
     if (el.dataset.icon) el.innerHTML = icon(el.dataset.icon) + `<span>${escapeHTML(t(el.dataset.i18n))}</span>`;
     else el.textContent = t(el.dataset.i18n);
   });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.placeholder = t(el.dataset.i18nPlaceholder);
   });
@@ -471,7 +474,73 @@ function openImportSheet() {
 
 function closeImportSheet() {
   document.body.classList.remove('sheet-open');
+  closeImportModal();
 }
+
+function _impUrlHome() {
+  return document.querySelector('#importBox .url-import-home');
+}
+
+function openImportModal() {
+  const modal = document.getElementById('importModal');
+  if (!modal || !modal.hidden) return;
+  const urlBox = document.querySelector('.url-import');
+  if (urlBox) modal.querySelector('.imp-url-slot').appendChild(urlBox);
+  const prof = profiles.find(p => p.id === currentProfile);
+  document.getElementById('impProfileName').textContent = prof ? prof.name : '';
+  let tab = 'ps';
+  try { tab = localStorage.getItem('r1999_import_tab') || 'ps'; } catch (_) {}
+  setImportTab(tab);
+  modal.hidden = false;
+  document.body.classList.add('imp-modal-open');
+  requestAnimationFrame(() => modal.classList.add('visible'));
+}
+
+function closeImportModal() {
+  const modal = document.getElementById('importModal');
+  if (!modal || modal.hidden) return;
+  const urlBox = modal.querySelector('.url-import');
+  const home = _impUrlHome();
+  if (urlBox && home) home.after(urlBox);
+  modal.classList.remove('visible');
+  modal.hidden = true;
+  document.body.classList.remove('imp-modal-open');
+}
+
+function setImportTab(tab) {
+  const modal = document.getElementById('importModal');
+  if (!modal.querySelector(`.imp-pane[data-pane="${tab}"]`)) tab = 'ps';
+  modal.querySelectorAll('.imp-tab').forEach(b => {
+    const on = b.dataset.tab === tab;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on);
+  });
+  modal.querySelectorAll('.imp-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === tab));
+  try { localStorage.setItem('r1999_import_tab', tab); } catch (_) {}
+}
+
+async function copyImportCommand(btn) {
+  const text = document.getElementById('impPsCmd').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (_) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  }
+  btn.classList.add('copied');
+  setTimeout(() => btn.classList.remove('copied'), 1500);
+  showToast(t('impCopied'), 'success', 2000);
+}
+
+document.addEventListener('click', e => {
+  const tab = e.target.closest('.imp-tab');
+  if (tab) setImportTab(tab.dataset.tab);
+});
+MOBILE_MQ.addEventListener?.('change', e => { if (e.matches) closeImportModal(); });
 
 function openNativeImport() {
   closeImportSheet();

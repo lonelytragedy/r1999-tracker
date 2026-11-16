@@ -1,4 +1,4 @@
-const CACHE        = 'r1999-tracker-v15';
+const CACHE        = 'r1999-tracker-v16';
 const STATIC_CACHE = 'r1999-static-v1';
 const NET_WAIT_MS  = 3500;
 

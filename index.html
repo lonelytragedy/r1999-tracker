@@ -76,6 +76,74 @@
     <span class="offline-bar-text"><b data-i18n="offlineBarTitle"></b><span data-i18n="offlineBarText"></span></span>
   </div>
 
+  <div class="imp-modal-overlay" id="importModal" hidden onclick="if(event.target===this)closeImportModal()">
+    <div class="imp-modal" role="dialog" aria-modal="true" aria-labelledby="impModalTitle">
+      <div class="imp-modal-head">
+        <div>
+          <div class="imp-modal-title" id="impModalTitle" data-i18n="impModalTitle"></div>
+          <div class="imp-modal-sub" data-i18n="impModalSub"></div>
+        </div>
+        <button type="button" class="imp-modal-close" onclick="closeImportModal()" data-i18n-title="mClose" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      </div>
+      <div class="imp-tabs" role="tablist">
+        <button type="button" class="imp-tab" role="tab" data-tab="ps"><span data-i18n="impTabPs"></span><span class="imp-badge" data-i18n="impFast"></span></button>
+        <button type="button" class="imp-tab" role="tab" data-tab="exe"><span data-i18n="impTabExe"></span></button>
+        <button type="button" class="imp-tab" role="tab" data-tab="fiddler"><span data-i18n="impTabFiddler"></span></button>
+        <button type="button" class="imp-tab" role="tab" data-tab="json"><span data-i18n="impTabJson"></span></button>
+      </div>
+      <div class="imp-panes">
+        <div class="imp-pane" data-pane="ps">
+          <ol class="imp-steps">
+            <li><span data-i18n-html="impPs1"></span></li>
+          </ol>
+          <div class="imp-code">
+            <code id="impPsCmd">Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/main/getlink.ps1'))</code>
+            <button type="button" onclick="copyImportCommand(this)" data-i18n="impCopy" data-icon="copy"></button>
+          </div>
+          <ol class="imp-steps" start="2">
+            <li><span data-i18n-html="impPs2"></span></li>
+            <li><span data-i18n-html="impPs3"></span></li>
+          </ol>
+          <div class="imp-note"><span data-i18n="impPsNote"></span> <a href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/blob/main/getlink.ps1" target="_blank" rel="noopener" data-i18n="impSource"></a></div>
+        </div>
+        <div class="imp-pane" data-pane="exe">
+          <ol class="imp-steps">
+            <li><span data-i18n-html="impExe1"></span></li>
+            <li><span data-i18n-html="impExe2"></span></li>
+            <li><span data-i18n-html="impExe3"></span></li>
+          </ol>
+          <div class="imp-actions">
+            <a class="imp-act" href="https://github.com/lonelytragedy/r1999-SummonHistoryLinkGrabber/releases/latest" target="_blank" rel="noopener" data-i18n="impExeDl" data-icon="download"></a>
+            <span class="imp-note" data-i18n="impExeHint"></span>
+          </div>
+        </div>
+        <div class="imp-pane" data-pane="fiddler">
+          <ol class="imp-steps">
+            <li><span data-i18n-html="impFid1"></span></li>
+            <li><span data-i18n-html="impFid2"></span></li>
+            <li><span data-i18n-html="impFid3"></span></li>
+          </ol>
+          <div class="imp-actions">
+            <a class="imp-act" href="https://www.telerik.com/download/fiddler" target="_blank" rel="noopener" data-i18n="impFidDl" data-icon="download"></a>
+            <a class="imp-link" href="guide.html" data-i18n="impFidGuide"></a>
+          </div>
+        </div>
+        <div class="imp-pane" data-pane="json">
+          <ol class="imp-steps">
+            <li><span data-i18n-html="impJson1"></span></li>
+          </ol>
+          <div class="imp-actions">
+            <button type="button" class="imp-act" onclick="document.getElementById('fileInput').click()" data-i18n="selectFileBtn" data-icon="fileJson"></button>
+          </div>
+        </div>
+      </div>
+      <div class="imp-urlbar">
+        <div class="imp-sec-label" data-i18n="impUrlLabel"></div>
+        <div class="imp-url-slot"></div>
+        <div class="imp-url-meta"><span data-i18n="impProfileLabel"></span>: <b id="impProfileName"></b></div>
+      </div>
+    </div>
+  </div>
   <div class="sheet-backdrop m-only" id="sheetBackdrop" onclick="closeImportSheet()"></div>
   <div class="box import-box" id="importBox" role="dialog" aria-labelledby="importTitle">
     <div class="sheet-grip m-only"></div>
@@ -92,6 +160,15 @@
 
     <hr style="border:0; border-top:1px solid rgba(216,180,106,0.15); margin:12px 0;">
 
+    <div class="d-only imp-hero">
+      <div class="imp-hero-text">
+        <div class="imp-hero-title" data-i18n="impHeroTitle"></div>
+        <div class="imp-hero-hint" data-i18n="impHeroHint"></div>
+      </div>
+      <button type="button" class="imp-open-btn" onclick="openImportModal()" data-i18n="impOpenBtn" data-icon="download"></button>
+    </div>
+
+    <span class="url-import-home" hidden></span>
     <div class="url-import">
       <label class="m-only m-url-label" for="urlInput" data-i18n="mUrlLabel"></label>
       <input type="text" id="urlInput" data-i18n-placeholder="urlPlaceholder">
@@ -106,6 +183,7 @@
         <button onclick="document.getElementById('fileInput').click()" data-i18n="selectFileBtn" data-icon="fileJson"></button>
         <span style="font-size:14px; color:#9aa0a6; margin-left:8px;" data-i18n="selectFileHint"></span>
       </div>
+      <span class="d-only imp-sec-label" data-i18n="impProfileLabel"></span>
       <div class="profiles">
         <select id="profileSelect" onchange="switchProfile(this.value)"></select>
         <button onclick="addProfile()" aria-label="+"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
@@ -116,6 +194,7 @@
     <hr style="border:0; border-top:1px solid rgba(216,180,106,0.15); margin:12px 0;">
 
     <div class="db-buttons-row">
+      <span class="d-only imp-sec-label" data-i18n="impBackupLabel"></span>
       <input type="file" id="dbInput" style="display:none">
       <button class="db-btn" onclick="exportDB()" data-i18n="exportDbBtn" data-icon="download"></button>
       <button class="db-btn" onclick="document.getElementById('dbInput').click()" data-i18n="importDbBtn" data-icon="upload"></button>
