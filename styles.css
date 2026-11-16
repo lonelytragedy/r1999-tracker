@@ -1374,8 +1374,8 @@ html:not(.in-app) .in-app-only { display: none !important; }
 
 .imp-hero {
   display: flex; align-items: center; justify-content: space-between; gap: 18px;
-  padding: 16px 18px; border: 1px solid var(--hairline-2); border-radius: 12px;
-  background: linear-gradient(90deg, rgba(224, 145, 63, 0.09), rgba(224, 145, 63, 0.02));
+  padding: 16px 18px; border: 1px solid var(--hairline); border-radius: 12px;
+  background: rgba(0, 0, 0, 0.14);
 }
 .imp-hero-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .imp-hero-hint { font-size: 13px; color: var(--text-dim); }
@@ -1409,7 +1409,7 @@ html:not(.in-app) .in-app-only { display: none !important; }
 .imp-panel-inner { min-height: 0; overflow: hidden; }
 .import-box:not(.imp-open) .imp-panel-inner { visibility: hidden; }
 .imp-panel-inner > .imp-tabs { margin-top: 14px; }
-.imp-hero + .imp-panel .imp-panel-inner { border: 1px solid var(--hairline-2); border-top: 0; border-radius: 0 0 12px 12px; }
+.imp-hero + .imp-panel .imp-panel-inner { border: 1px solid var(--hairline); border-top: 0; border-radius: 0 0 12px 12px; }
 .import-box.imp-open .imp-hero { border-radius: 12px 12px 0 0; }
 .import-box.imp-open .imp-panel-inner > .imp-tabs { margin-top: 0; }
 .imp-tabs { display: flex; gap: 2px; padding: 4px 16px 0; border-bottom: 1px solid var(--hairline); overflow-x: auto; scrollbar-width: none; }
@@ -1456,11 +1456,10 @@ button.imp-tab:active:not(.settings-gear) { transform: none; }
 .imp-link { font-size: 13.5px; }
 .imp-actions { display: flex; align-items: center; gap: 14px; margin: 16px 0 0 36px; flex-wrap: wrap; }
 .imp-actions .imp-note { margin: 0; }
-.imp-urlbar { padding: 16px 20px 18px; border-top: 1px solid var(--hairline); background: rgba(0, 0, 0, 0.16); }
+.imp-urlbar { padding: 16px 20px 18px; border-top: 1px solid var(--hairline); }
 .imp-urlbar .imp-sec-label { margin-bottom: 10px; }
 .imp-urlbar .url-import input[type="text"], .imp-urlbar .url-import button { height: 44px; }
 
-[data-skin="classic"] .imp-hero { background: linear-gradient(90deg, rgba(124, 140, 255, 0.08), rgba(124, 140, 255, 0.02)); }
 [data-skin="classic"] .imp-hero-title { font-family: var(--font-ui); letter-spacing: -0.01em; }
 [data-skin="classic"] .imp-open-btn, [data-skin="classic"] .imp-act { background: linear-gradient(180deg, #8a97ff, #6b7bf0); border-color: #7c8cff; color: #0d0f14; box-shadow: 0 6px 20px -8px rgba(124, 140, 255, 0.6); }
 [data-skin="classic"] .imp-open-btn:hover, [data-skin="classic"] .imp-act:hover { background: linear-gradient(180deg, #97a2ff, #7684f5); }
