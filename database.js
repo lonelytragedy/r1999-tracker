@@ -48,6 +48,13 @@ const BANNERS = {
 
 const ACTIVE_BANNERS = [
   {
+    key:      "永恒折射角",
+    startUTC: "2026-11-17T10:00:00Z",
+    endUTC:   "2026-12-01T09:59:00Z",
+    image:    "static/banners/The_Brilliance_Within.webp",
+    rateUp:   ["Brume", "Horropedia", "Name Day"]
+  },
+  {
     key:      "烈火悬流无尽",
     startUTC: "2026-11-05T10:00:00Z",
     endUTC:   "2026-11-26T09:59:00Z",
