@@ -1,5 +1,5 @@
 const BANNERS = {
-  "烈火悬流无尽": { name: "The Reign of Flames Undying", type: "Limited", rateUp6: ["Hedone", "Blonney", "Ulu"], version: "3.9" },
+  "烈火悬流无尽": { name: "The Reign of Flames Undying", type: "Character", rateUp6: ["Hedone", "Blonney", "Ulu"], version: "3.9" },
   "碎裂品": { name: "The Shattered Product", type: "Character", rateUp6: ["Aleph"] },
   "明日之础": { name: "The Future's Foundation", type: "Character", rateUp6: ["Cornerstone"] },
   "往昔应我声": { name: "Speak and the Past Will Echo", type: "Character", rateUp6: ["Everecho"] },
